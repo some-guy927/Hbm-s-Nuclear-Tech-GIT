@@ -5,9 +5,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.hbm.inventory.container.ContainerMachineBattery;
+import com.hbm.inventory.gui.GUIMachineBattery;
 import com.hbm.blocks.machine.MachineBattery;
 import com.hbm.lib.Library;
 import com.hbm.lib.ForgeDirection;
+import com.hbm.tileentity.IGUIProvider;
 import com.hbm.tileentity.TileEntityMachineBase;
 
 import api.hbm.energy.IEnergyConductor;
@@ -16,6 +19,8 @@ import api.hbm.energy.IEnergyUser;
 import api.hbm.energy.IPowerNet;
 import api.hbm.energy.PowerNet;
 import api.hbm.energy.IBatteryItem;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.inventory.Container;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -23,16 +28,19 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Optional;
 
 import li.cil.oc.api.machine.Arguments;
 import li.cil.oc.api.machine.Callback;
 import li.cil.oc.api.machine.Context;
 import li.cil.oc.api.network.SimpleComponent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 
 @Optional.InterfaceList({@Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = "OpenComputers")})
-public class TileEntityMachineBattery extends TileEntityMachineBase implements ITickable, IEnergyUser, SimpleComponent {
+public class TileEntityMachineBattery extends TileEntityMachineBase implements ITickable, IEnergyUser, SimpleComponent, IGUIProvider {
 
 	public long[] log = new long[20];
 	public long power = 0;
@@ -422,5 +430,16 @@ public class TileEntityMachineBattery extends TileEntityMachineBase implements I
 		if(prio == 2) priority = ConnectionPriority.NORMAL;
 		if(prio == 3) priority = ConnectionPriority.HIGH;
 		return new Object[] {null};
+	}
+
+	@Override
+	public Container provideContainer(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new ContainerMachineBattery(player.inventory, this);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public GuiScreen provideGUI(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new GUIMachineBattery(player.inventory, this);
 	}
 }

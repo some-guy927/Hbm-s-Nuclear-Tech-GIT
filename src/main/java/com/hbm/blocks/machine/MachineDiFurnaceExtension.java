@@ -40,7 +40,7 @@ public class MachineDiFurnaceExtension extends BlockContainer {
             TileEntity te = worldIn.getTileEntity(pos.down());
 
             if (te instanceof TileEntityDiFurnace) {
-                playerIn.openGui(MainRegistry.instance, ModBlocks.guiID_test_difurnace, worldIn, pos.getX(), pos.getY() - 1, pos.getZ());
+                playerIn.openGui(MainRegistry.instance, 0, worldIn, pos.getX(), pos.getY() - 1, pos.getZ());
                 return true;
             }
         }

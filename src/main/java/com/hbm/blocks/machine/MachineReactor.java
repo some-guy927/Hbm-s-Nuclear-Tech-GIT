@@ -1,7 +1,6 @@
 package com.hbm.blocks.machine;
 
 import com.hbm.blocks.BlockDummyable;
-import com.hbm.blocks.ModBlocks;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.TileEntityProxyInventory;
 import com.hbm.tileentity.machine.TileEntityMachineReactor;
@@ -43,7 +42,7 @@ public class MachineReactor extends BlockDummyable {
 			TileEntityMachineReactor entity = (TileEntityMachineReactor) world.getTileEntity(new BlockPos(pos[0], pos[1], pos[2]));
 			if(entity != null)
 			{
-				player.openGui(MainRegistry.instance, ModBlocks.guiID_reactor, world, pos[0], pos[1], pos[2]);
+				player.openGui(MainRegistry.instance, 0, world, pos[0], pos[1], pos[2]);
 			}
 			return true;
 		} else {

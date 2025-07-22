@@ -216,6 +216,7 @@ public final class HBMSoundHandler {
 	public static SoundEvent cough;
 	public static SoundEvent ufoBeam;
 	public static SoundEvent ufoBlast;
+	public static SoundEvent bobble;
 	
 	public static SoundEvent transitionSealOpen;
 	public static SoundEvent garage;
@@ -368,6 +369,7 @@ public final class HBMSoundHandler {
 		broadcast1 = register("block.broadcast1");
 		broadcast2 = register("block.broadcast2");
 		broadcast3 = register("block.broadcast3");
+		bobble = register("block.bobble");
 		geiger1 = register("item.geiger1");
 		geiger2 = register("item.geiger2");
 		geiger3 = register("item.geiger3");

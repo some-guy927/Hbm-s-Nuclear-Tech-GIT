@@ -33,7 +33,7 @@ public class TileEntitySiloHatch extends TileEntityLockableBase implements ITick
 	public void update() {
 		if(!world.isRemote){
 			if(!this.isLocked()){
-				boolean rs = world.getRedstonePowerFromNeighbors(pos) > 0;
+				boolean rs = world.isBlockPowered(pos);
 				if(rs){
 					tryOpen();
 				} else {

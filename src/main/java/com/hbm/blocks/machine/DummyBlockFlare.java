@@ -44,7 +44,7 @@ public class DummyBlockFlare extends DummyOldBase {
 	public void breakBlock(World world, BlockPos pos, IBlockState state) {
 		if(!safeBreak) {
     		TileEntity te = world.getTileEntity(pos);
-    		if(te != null && te instanceof TileEntityDummy) {
+    		if(te instanceof TileEntityDummy && ((TileEntityDummy) te).target != null) {
     			if(!world.isRemote)
     				world.destroyBlock(((TileEntityDummy)te).target, true);
     		}

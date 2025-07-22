@@ -46,7 +46,7 @@ public class SoyuzCapsule extends BlockContainer {
 		} else if(!player.isSneaking())
 		{
 			
-			player.openGui(MainRegistry.instance, ModBlocks.guiID_capsule, world, pos.getX(), pos.getY(), pos.getZ());
+			player.openGui(MainRegistry.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
 				
 			return true;
 		} else {

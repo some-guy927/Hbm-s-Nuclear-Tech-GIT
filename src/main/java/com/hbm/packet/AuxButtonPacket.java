@@ -17,7 +17,7 @@ import com.hbm.tileentity.machine.TileEntityMachineMiningLaser;
 import com.hbm.tileentity.machine.TileEntityMachineMissileAssembly;
 import com.hbm.tileentity.machine.TileEntityMachineReactorLarge;
 import com.hbm.tileentity.machine.TileEntityMachineReactorSmall;
-import com.hbm.tileentity.machine.TileEntityMachineRadar;
+import com.hbm.tileentity.machine.TileEntityMachineRadarNT;
 import com.hbm.tileentity.machine.TileEntityReactorControl;
 import com.hbm.tileentity.machine.TileEntitySoyuzLauncher;
 
@@ -126,18 +126,18 @@ public class AuxButtonPacket implements IMessage {
 				if(!p.world.isBlockLoaded(pos))
 					return;
 				//try {
-					TileEntity te = p.world.getTileEntity(pos);
-					
-					if (te instanceof TileEntityMachineReactorSmall) {
-						TileEntityMachineReactorSmall reactor = (TileEntityMachineReactorSmall)te;
-						
-						if(m.id == 0)
-							reactor.retracting = m.value == 1;
-						if(m.id == 1) {
-							reactor.compress(m.value);
-						}
-						reactor.markDirty();
+				TileEntity te = p.world.getTileEntity(pos);
+
+				if (te instanceof TileEntityMachineReactorSmall) {
+					TileEntityMachineReactorSmall reactor = (TileEntityMachineReactorSmall) te;
+
+					if (m.id == 0)
+						reactor.retracting = m.value == 1;
+					if (m.id == 1) {
+						reactor.compress(m.value);
 					}
+					reactor.markDirty();
+				}
 					/*if (te instanceof TileEntityRadioRec) {
 						TileEntityRadioRec radio = (TileEntityRadioRec)te;
 						
@@ -150,166 +150,173 @@ public class AuxButtonPacket implements IMessage {
 						}
 					}
 					
-					*/if (te instanceof TileEntityForceField) {
-						TileEntityForceField field = (TileEntityForceField)te;
-						
-						field.isOn = !field.isOn;
-					}
-					
-					if (te instanceof TileEntityReactorControl) {
-						TileEntityReactorControl control = (TileEntityReactorControl)te;
-						
-						if(m.id == 1)
-							control.auto = m.value == 1;
-						
-						if(control.link != null) {
-							TileEntity reac = p.world.getTileEntity(control.link);
-							
-							if (reac instanceof TileEntityMachineReactorSmall) {
-								TileEntityMachineReactorSmall reactor = (TileEntityMachineReactorSmall)reac;
-								
-								if(m.id == 0)
-									reactor.retracting = m.value == 0;
-								
-								if(m.id == 2) {
-									reactor.compress(m.value);
-								}
-							}
-							
-							if (reac instanceof TileEntityMachineReactorLarge) {
-								TileEntityMachineReactorLarge reactor = (TileEntityMachineReactorLarge)reac;
-								
-								if(m.id == 0) {
-									reactor.rods = m.value;
-								}
-								
-								if(m.id == 2) {
-									reactor.compress(m.value);
-								}
+					*/
+				if (te instanceof TileEntityForceField) {
+					TileEntityForceField field = (TileEntityForceField) te;
+
+					field.isOn = !field.isOn;
+				}
+
+				if (te instanceof TileEntityReactorControl) {
+					TileEntityReactorControl control = (TileEntityReactorControl) te;
+
+					if (m.id == 1)
+						control.auto = m.value == 1;
+
+					if (control.link != null) {
+						TileEntity reac = p.world.getTileEntity(control.link);
+
+						if (reac instanceof TileEntityMachineReactorSmall) {
+							TileEntityMachineReactorSmall reactor = (TileEntityMachineReactorSmall) reac;
+
+							if (m.id == 0)
+								reactor.retracting = m.value == 0;
+
+							if (m.id == 2) {
+								reactor.compress(m.value);
 							}
 						}
-						
-					}
-					TileEntity reac = p.world.getTileEntity(new BlockPos(m.x, m.y, m.z));
-					if (reac instanceof TileEntityMachineReactorLarge) {
-						TileEntityMachineReactorLarge reactor = (TileEntityMachineReactorLarge)reac;
-						
-						if(m.id == 0) {
-							reactor.rods = m.value;
-						}
-						
-						if(m.id == 1) {
-							reactor.compress(m.value);
-						}
-					}
-					
-					if (te instanceof TileEntityMachineMissileAssembly) {
-						TileEntityMachineMissileAssembly assembly = (TileEntityMachineMissileAssembly)te;
-						
-						assembly.construct();
-					}
-					
-					if (te instanceof TileEntityLaunchTable) {
-						TileEntityLaunchTable launcher = (TileEntityLaunchTable)te;
-						
-						launcher.padSize = PartSize.values()[m.value];
-					}
-					
-					if (te instanceof TileEntityRailgun) {
-						TileEntityRailgun gun = (TileEntityRailgun)te;
-						
-						if(m.id == 0) {
-							if(gun.setAngles(false)) {
-								p.world.playSound(null, m.x, m.y, m.z, HBMSoundHandler.buttonYes, SoundCategory.BLOCKS, 1.0F, 1.0F);
-								p.world.playSound(null, m.x, m.y, m.z, HBMSoundHandler.railgunOrientation, SoundCategory.BLOCKS, 1.0F, 1.0F);
-								PacketDispatcher.wrapper.sendToAll(new RailgunCallbackPacket(m.x, m.y, m.z, gun.pitch, gun.yaw));
-							} else {
-								p.world.playSound(null, m.x, m.y, m.z, HBMSoundHandler.buttonNo, SoundCategory.BLOCKS, 1.0F, 1.0F);
+
+						if (reac instanceof TileEntityMachineReactorLarge) {
+							TileEntityMachineReactorLarge reactor = (TileEntityMachineReactorLarge) reac;
+
+							if (m.id == 0) {
+								reactor.rods = m.value;
 							}
-						}
-						
-						if(m.id == 1) {
-							if(gun.canFire()) {
-								gun.fireDelay = TileEntityRailgun.cooldownDurationTicks;
-								PacketDispatcher.wrapper.sendToAll(new RailgunFirePacket(m.x, m.y, m.z));
-								p.world.playSound(null, m.x, m.y, m.z, HBMSoundHandler.buttonYes, SoundCategory.BLOCKS, 1.0F, 1.0F);
-								p.world.playSound(null, m.x, m.y, m.z, HBMSoundHandler.railgunCharge, SoundCategory.BLOCKS, 10.0F, 1.0F);
-							} else {
-								p.world.playSound(null, m.x, m.y, m.z, HBMSoundHandler.buttonNo, SoundCategory.BLOCKS, 1.0F, 1.0F);
+
+							if (m.id == 2) {
+								reactor.compress(m.value);
 							}
 						}
 					}
-					if (te instanceof TileEntityBarrel) {
-						TileEntityBarrel barrel = (TileEntityBarrel)te;
 
-						barrel.mode = (short) ((barrel.mode + 1) % TileEntityBarrel.modes);
-						barrel.markDirty();
+				}
+				TileEntity reac = p.world.getTileEntity(new BlockPos(m.x, m.y, m.z));
+				if (reac instanceof TileEntityMachineReactorLarge) {
+					TileEntityMachineReactorLarge reactor = (TileEntityMachineReactorLarge) reac;
+
+					if (m.id == 0) {
+						reactor.rods = m.value;
 					}
-					if (te instanceof TileEntityCoreEmitter) {
-						TileEntityCoreEmitter core = (TileEntityCoreEmitter)te;
 
-						if(m.id == 0) {
-							core.watts = m.value;
-						}
-						if(m.id == 1) {
-							core.isOn = !core.isOn;
-						}
+					if (m.id == 1) {
+						reactor.compress(m.value);
 					}
-					
-					if (te instanceof TileEntityCoreStabilizer) {
-						TileEntityCoreStabilizer core = (TileEntityCoreStabilizer)te;
+				}
 
-						if(m.id == 0) {
-							core.watts = m.value;
-						}
-					}
-					
-					if (te instanceof TileEntitySoyuzLauncher) {
-						TileEntitySoyuzLauncher launcher = (TileEntitySoyuzLauncher)te;
+				if (te instanceof TileEntityMachineMissileAssembly) {
+					TileEntityMachineMissileAssembly assembly = (TileEntityMachineMissileAssembly) te;
 
-						if(m.id == 0)
-							launcher.mode = (byte) m.value;
-						if(m.id == 1)
-							launcher.startCountdown();
-					}
-					if (te instanceof TileEntityMachineBattery) {
-						TileEntityMachineBattery bat = (TileEntityMachineBattery)te;
+					assembly.construct();
+				}
 
-						if(m.id == 0) {
-							bat.redLow = (short) ((bat.redLow + 1) % 4);
-							bat.markDirty();
-						}
+				if (te instanceof TileEntityLaunchTable) {
+					TileEntityLaunchTable launcher = (TileEntityLaunchTable) te;
 
-						if(m.id == 1) {
-							bat.redHigh = (short) ((bat.redHigh + 1) % 4);
-							bat.markDirty();
-						}
+					launcher.padSize = PartSize.values()[m.value];
+				}
 
-						if(m.id == 2) {
-							switch(bat.priority) {
-								case LOW: bat.priority = ConnectionPriority.NORMAL; break;
-								case NORMAL: bat.priority = ConnectionPriority.HIGH; break;
-								case HIGH: bat.priority = ConnectionPriority.LOW; break;
-							}
-							bat.markDirty();
+				if (te instanceof TileEntityRailgun) {
+					TileEntityRailgun gun = (TileEntityRailgun) te;
+
+					if (m.id == 0) {
+						if (gun.setAngles(false)) {
+							p.world.playSound(null, m.x, m.y, m.z, HBMSoundHandler.buttonYes, SoundCategory.BLOCKS, 1.0F, 1.0F);
+							p.world.playSound(null, m.x, m.y, m.z, HBMSoundHandler.railgunOrientation, SoundCategory.BLOCKS, 1.0F, 1.0F);
+							PacketDispatcher.wrapper.sendToAll(new RailgunCallbackPacket(m.x, m.y, m.z, gun.pitch, gun.yaw));
+						} else {
+							p.world.playSound(null, m.x, m.y, m.z, HBMSoundHandler.buttonNo, SoundCategory.BLOCKS, 1.0F, 1.0F);
 						}
 					}
-					if (te instanceof TileEntityMachineMiningLaser) {
-						TileEntityMachineMiningLaser laser = (TileEntityMachineMiningLaser)te;
 
-						laser.isOn = !laser.isOn;
+					if (m.id == 1) {
+						if (gun.canFire()) {
+							gun.fireDelay = TileEntityRailgun.cooldownDurationTicks;
+							PacketDispatcher.wrapper.sendToAll(new RailgunFirePacket(m.x, m.y, m.z));
+							p.world.playSound(null, m.x, m.y, m.z, HBMSoundHandler.buttonYes, SoundCategory.BLOCKS, 1.0F, 1.0F);
+							p.world.playSound(null, m.x, m.y, m.z, HBMSoundHandler.railgunCharge, SoundCategory.BLOCKS, 10.0F, 1.0F);
+						} else {
+							p.world.playSound(null, m.x, m.y, m.z, HBMSoundHandler.buttonNo, SoundCategory.BLOCKS, 1.0F, 1.0F);
+						}
+					}
+				}
+				if (te instanceof TileEntityBarrel) {
+					TileEntityBarrel barrel = (TileEntityBarrel) te;
+
+					barrel.mode = (short) ((barrel.mode + 1) % TileEntityBarrel.modes);
+					barrel.markDirty();
+				}
+				if (te instanceof TileEntityCoreEmitter) {
+					TileEntityCoreEmitter core = (TileEntityCoreEmitter) te;
+
+					if (m.id == 0) {
+						core.watts = m.value;
+					}
+					if (m.id == 1) {
+						core.isOn = !core.isOn;
+					}
+				}
+
+				if (te instanceof TileEntityCoreStabilizer) {
+					TileEntityCoreStabilizer core = (TileEntityCoreStabilizer) te;
+
+					if (m.id == 0) {
+						core.watts = m.value;
+					}
+				}
+
+				if (te instanceof TileEntitySoyuzLauncher) {
+					TileEntitySoyuzLauncher launcher = (TileEntitySoyuzLauncher) te;
+
+					if (m.id == 0)
+						launcher.mode = (byte) m.value;
+					if (m.id == 1)
+						launcher.startCountdown();
+				}
+				if (te instanceof TileEntityMachineBattery) {
+					TileEntityMachineBattery bat = (TileEntityMachineBattery) te;
+
+					if (m.id == 0) {
+						bat.redLow = (short) ((bat.redLow + 1) % 4);
+						bat.markDirty();
 					}
 
-					if(te instanceof TileEntityMachineRadar) {
-						TileEntityMachineRadar radar = (TileEntityMachineRadar)te;
-						radar.handleButtonPacket(m.value, m.id);
+					if (m.id == 1) {
+						bat.redHigh = (short) ((bat.redHigh + 1) % 4);
+						bat.markDirty();
 					}
-					/// yes ///
-					if(te instanceof TileEntityMachineBase) {
-						TileEntityMachineBase base = (TileEntityMachineBase)te;
-						base.handleButtonPacket(m.value, m.id);
+
+					if (m.id == 2) {
+						switch (bat.priority) {
+							case LOW:
+								bat.priority = ConnectionPriority.NORMAL;
+								break;
+							case NORMAL:
+								bat.priority = ConnectionPriority.HIGH;
+								break;
+							case HIGH:
+								bat.priority = ConnectionPriority.LOW;
+								break;
+						}
+						bat.markDirty();
 					}
-					
+				}
+				if (te instanceof TileEntityMachineMiningLaser) {
+					TileEntityMachineMiningLaser laser = (TileEntityMachineMiningLaser) te;
+
+					laser.isOn = !laser.isOn;
+				}
+
+				if (te instanceof TileEntityMachineRadarNT) {
+					TileEntityMachineRadarNT radar = (TileEntityMachineRadarNT) te;
+					radar.handleButtonPacket(m.value, m.id);
+				}
+				/// yes ///
+				if (te instanceof TileEntityMachineBase) {
+					TileEntityMachineBase base = (TileEntityMachineBase) te;
+					base.handleButtonPacket(m.value, m.id);
+				}
+
 				//} catch (Exception x) { }
 			});
 			

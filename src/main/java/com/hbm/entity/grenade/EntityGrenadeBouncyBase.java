@@ -190,7 +190,7 @@ public abstract class EntityGrenadeBouncyBase extends Entity implements IProject
 			String s = "null";
 
 			if (thrower != null && thrower instanceof EntityPlayer)
-				s = ((EntityPlayer) thrower).getDisplayName().getUnformattedText();
+				s = (thrower).getDisplayName().getUnformattedText();
 
 			if (GeneralConfig.enableExtendedLogging)
 				MainRegistry.logger.log(Level.INFO, "[GREN] Set off grenade at " + ((int) posX) + " / " + ((int) posY) + " / " + ((int) posZ) + " by " + s + "!");

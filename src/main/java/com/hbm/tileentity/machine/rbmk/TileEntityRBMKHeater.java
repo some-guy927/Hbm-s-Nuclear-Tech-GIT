@@ -3,6 +3,8 @@ package com.hbm.tileentity.machine.rbmk;
 import java.util.Map;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.inventory.container.ContainerRBMKHeater;
+import com.hbm.inventory.gui.GUIRBMKHeater;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemForgeFluidIdentifier;
 import com.hbm.entity.projectile.EntityRBMKDebris.DebrisType;
@@ -15,12 +17,17 @@ import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.inventory.control_panel.DataValue;
 import com.hbm.inventory.control_panel.DataValueFloat;
 import com.hbm.inventory.control_panel.DataValueString;
+import com.hbm.tileentity.IGUIProvider;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKConsole.ColumnType;
 
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -30,8 +37,10 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class TileEntityRBMKHeater extends TileEntityRBMKSlottedBase implements IFluidHandler, ITankPacketAcceptor {
+public class TileEntityRBMKHeater extends TileEntityRBMKSlottedBase implements IFluidHandler, ITankPacketAcceptor, IGUIProvider {
 
 	public static final double TU_PER_DEGREE = 3_000D; //based on 1mB of water absorbing 200 TU as well as 0.1°C from an RBMK column
 	public FluidTank[] tanks;
@@ -269,5 +278,16 @@ public class TileEntityRBMKHeater extends TileEntityRBMKSlottedBase implements I
 		data.put("t1_fluidAmount", new DataValueFloat((float) tanks[1].getFluidAmount()));
 
 		return data;
+	}
+
+	@Override
+	public Container provideContainer(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new ContainerRBMKHeater(player.inventory, this);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public GuiScreen provideGUI(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new GUIRBMKHeater(player.inventory, this);
 	}
 }

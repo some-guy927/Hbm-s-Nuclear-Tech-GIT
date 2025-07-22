@@ -1,13 +1,21 @@
 package com.hbm.inventory.container;
 
+import com.hbm.inventory.gui.GUITurretFritz;
 import com.hbm.items.ModItems;
+import com.hbm.tileentity.IGUIProvider;
 import com.hbm.tileentity.turret.TileEntityTurretBaseNT;
 
+import com.hbm.tileentity.turret.TileEntityTurretFritz;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.SlotItemHandler;
 
 public class ContainerTurretBase extends Container {

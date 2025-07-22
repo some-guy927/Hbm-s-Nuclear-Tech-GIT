@@ -2,6 +2,8 @@ package com.hbm.tileentity.machine;
 
 import java.util.Random;
 
+import com.hbm.inventory.container.ContainerCrateTungsten;
+import com.hbm.inventory.gui.GUICrateTungsten;
 import com.hbm.items.ModItems;
 import com.hbm.items.tool.ItemKeyPin;
 import com.hbm.lib.HBMSoundHandler;
@@ -10,24 +12,31 @@ import com.hbm.items.weapon.ItemCrucible;
 import com.hbm.packet.AuxParticlePacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.inventory.DFCRecipes;
+import com.hbm.tileentity.IGUIProvider;
 import com.hbm.tileentity.INBTPacketReceiver;
 
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import vazkii.quark.api.IDropoffManager;
 
 @Optional.InterfaceList({@Optional.Interface(iface = "vazkii.quark.api.IDropoffManager", modid = "quark")})
-public class TileEntityCrateTungsten extends TileEntityLockableBase implements IDropoffManager, ITickable, ILaserable, INBTPacketReceiver {
+public class TileEntityCrateTungsten extends TileEntityLockableBase implements IDropoffManager, ITickable, ILaserable, INBTPacketReceiver, IGUIProvider {
 
 	public ItemStackHandler inventory;
 
@@ -169,5 +178,16 @@ public class TileEntityCrateTungsten extends TileEntityLockableBase implements I
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
 		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory) : super.getCapability(capability, facing);
+	}
+
+	@Override
+	public Container provideContainer(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new ContainerCrateTungsten(player.inventory, this);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public GuiScreen provideGUI(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new GUICrateTungsten(player.inventory, this);
 	}
 }

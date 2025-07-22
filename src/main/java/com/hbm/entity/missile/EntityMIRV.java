@@ -1,6 +1,7 @@
 package com.hbm.entity.missile;
 
 import api.hbm.entity.IRadarDetectable;
+import api.hbm.entity.IRadarDetectableNT;
 
 import com.hbm.config.BombConfig;
 import com.hbm.entity.effect.EntityNukeTorex;
@@ -10,6 +11,8 @@ import com.hbm.entity.particle.EntitySmokeFX;
 import com.hbm.explosion.ExplosionLarge;
 import com.hbm.interfaces.IConstantRenderer;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.init.Blocks;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;

@@ -95,7 +95,7 @@ public class MachinePumpjack extends BlockContainer implements IMultiBlock {
 		} else if(!player.isSneaking()) {
 			TileEntity te = world.getTileEntity(pos);
 			if(te instanceof TileEntityMachinePumpjack) {
-				player.openGui(MainRegistry.instance, ModBlocks.guiID_machine_pumpjack, world, pos.getX(), pos.getY(), pos.getZ());
+				player.openGui(MainRegistry.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
 
 			}
 			return true;

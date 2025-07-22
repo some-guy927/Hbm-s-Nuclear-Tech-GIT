@@ -4,6 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.hbm.handler.BulletConfigSyncingUtil;
+import com.hbm.inventory.gui.GUITurretFriendly;
+
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileEntityTurretFriendly extends TileEntityTurretChekhov {
 
@@ -30,5 +37,11 @@ public class TileEntityTurretFriendly extends TileEntityTurretChekhov {
 	@Override
 	public int getDelay() {
 		return 5;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public GuiScreen provideGUI(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new GUITurretFriendly(player.inventory, this);
 	}
 }

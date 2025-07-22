@@ -54,7 +54,7 @@ public class BlockAMSLimiter extends BlockContainer implements IMultiBlock {
 			TileEntityAMSLimiter entity = (TileEntityAMSLimiter) world.getTileEntity(pos);
 			if(entity != null)
 			{
-				player.openGui(MainRegistry.instance, ModBlocks.guiID_ams_limiter, world, pos.getX(), pos.getY(), pos.getZ());
+				player.openGui(MainRegistry.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
 			}
 			return true;
 		} else {

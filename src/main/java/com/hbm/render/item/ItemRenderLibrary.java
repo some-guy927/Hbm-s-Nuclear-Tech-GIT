@@ -9,9 +9,11 @@ import com.hbm.animloader.AnimationWrapper.EndResult;
 import com.hbm.animloader.AnimationWrapper.EndType;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.machine.rbmk.RBMKBase;
+import com.hbm.blocks.generic.BlockBobble.BobbleType;
 import com.hbm.items.ModItems;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.amlfrom1710.Tessellator;
+import com.hbm.render.tileentity.RenderBobble;
 import com.hbm.render.tileentity.RenderDemonLamp;
 
 import net.minecraft.block.Block;
@@ -1073,18 +1075,18 @@ public class ItemRenderLibrary {
 	            GlStateManager.shadeModel(GL11.GL_FLAT);
 			}});
 
-		renderers.put(Item.getItemFromBlock(ModBlocks.machine_radar), new ItemRenderBase() {
-			public void renderInventory() {
-				GL11.glTranslated(0, -4, 0);
-				GL11.glScaled(6, 6, 6);
-			}
-			public void renderCommon() {
-	            GlStateManager.disableCull();
-		        bindTexture(ResourceManager.radar_base_tex); ResourceManager.radar.renderPart("Base");
-				GL11.glTranslated(-0.125, 0, 0);
-				bindTexture(ResourceManager.radar_dish_tex); ResourceManager.radar.renderPart("Dish");
-	            GlStateManager.enableCull();
-			}});
+//		renderers.put(Item.getItemFromBlock(ModBlocks.machine_radar), new ItemRenderBase() {
+//			public void renderInventory() {
+//				GL11.glTranslated(0, -4, 0);
+//				GL11.glScaled(6, 6, 6);
+//			}
+//			public void renderCommon() {
+//	            GlStateManager.disableCull();
+//		        bindTexture(ResourceManager.radar_base_tex); ResourceManager.radar.renderPart("Base");
+//				GL11.glTranslated(-0.125, 0, 0);
+//				bindTexture(ResourceManager.radar_dish_tex); ResourceManager.radar.renderPart("Dish");
+//	            GlStateManager.enableCull();
+//			}});
 
 		renderers.put(Item.getItemFromBlock(ModBlocks.sat_dock), new ItemRenderBase() {
 			public void renderInventory() {
@@ -1910,6 +1912,16 @@ public class ItemRenderLibrary {
 				GlStateManager.shadeModel(GL11.GL_SMOOTH);
 				ResourceManager.bm_box_lever.renderAll();
 				GlStateManager.shadeModel(GL11.GL_FLAT);
+			}
+		});
+		renderers.put(Item.getItemFromBlock(ModBlocks.bobblehead), new ItemRenderBase(){
+			public void renderInventory() {
+				GL11.glTranslated(0, -3.5, 0);
+				GL11.glScaled(10, 10, 10);
+			}
+			public void renderCommon(ItemStack stack) {
+				GL11.glScaled(0.5, 0.5, 0.5);
+				RenderBobble.instance.renderBobble(BobbleType.values()[stack.getItemDamage()]);
 			}
 		});
 	}

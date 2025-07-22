@@ -1,5 +1,6 @@
 package com.hbm.items.tool;
 
+import com.hbm.inventory.gui.GUIScreenSatInterface;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemSatChip;
 import com.hbm.main.MainRegistry;
@@ -8,9 +9,12 @@ import com.hbm.packet.SatPanelPacket;
 import com.hbm.saveddata.satellites.Satellite;
 import com.hbm.saveddata.satellites.SatelliteSavedData;
 
+import com.hbm.tileentity.IGUIProvider;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -19,7 +23,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemSatInterface extends ItemSatChip {
+public class ItemSatInterface extends ItemSatChip implements IGUIProvider {
 
 	@SideOnly(Side.CLIENT)
 	public static Satellite currentSat;
@@ -33,9 +37,9 @@ public class ItemSatInterface extends ItemSatChip {
 		if(world.isRemote) {
 
 			if(this == ModItems.sat_interface)
-				player.openGui(MainRegistry.instance, ModItems.guiID_item_sat_interface, world, 0, 0, 0);
+				player.openGui(MainRegistry.instance, 0, world, 0, 0, 0);
 			if(this == ModItems.sat_coord)
-				player.openGui(MainRegistry.instance, ModItems.guiID_item_sat_coord, world, 0, 0, 0);
+				player.openGui(MainRegistry.instance, 0, world, 0, 0, 0);
 		}
 		
 		return ActionResult.newResult(EnumActionResult.PASS, player.getHeldItem(handIn));
@@ -64,5 +68,16 @@ public class ItemSatInterface extends ItemSatChip {
     	if(sat != null && entity.ticksExisted % 2 == 0) {
     		PacketDispatcher.sendTo(new SatPanelPacket(sat), (EntityPlayerMP) entity);
     	}
+	}
+
+	@Override
+	public Container provideContainer(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return null;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public GuiScreen provideGUI(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new GUIScreenSatInterface(player);
 	}
 }

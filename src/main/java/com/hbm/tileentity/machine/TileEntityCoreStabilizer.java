@@ -1,12 +1,18 @@
 package com.hbm.tileentity.machine;
 
+import com.hbm.inventory.container.ContainerCoreStabilizer;
+import com.hbm.inventory.gui.GUICoreStabilizer;
 import com.hbm.items.machine.ItemLens;
 import com.hbm.packet.AuxGaugePacket;
 import com.hbm.packet.PacketDispatcher;
+import com.hbm.tileentity.IGUIProvider;
 import com.hbm.tileentity.TileEntityMachineBase;
 
 import api.hbm.energy.IEnergyUser;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -15,12 +21,13 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 
-public class TileEntityCoreStabilizer extends TileEntityMachineBase implements ITickable, IEnergyUser {
+public class TileEntityCoreStabilizer extends TileEntityMachineBase implements ITickable, IEnergyUser, IGUIProvider {
 
 	public long power;
 	public static final long maxPower = 10000000000000L;
@@ -155,5 +162,16 @@ public class TileEntityCoreStabilizer extends TileEntityMachineBase implements I
 		compound.setInteger("watts", watts);
 		compound.setBoolean("isOn", isOn);
 		return super.writeToNBT(compound);
+	}
+
+	@Override
+	public Container provideContainer(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new ContainerCoreStabilizer(player, this);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public GuiScreen provideGUI(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new GUICoreStabilizer(player, this);
 	}
 }

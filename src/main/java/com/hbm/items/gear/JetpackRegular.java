@@ -69,8 +69,9 @@ public class JetpackRegular extends JetpackBase {
 		if(getFuel(stack) > 0 && props.getKeyPressed(EnumKeybind.JETPACK) && props.isJetpackActive()) {
 			player.fallDistance = 0;
 
-			if(player.motionY < 0.4D)
+			if(player.motionY < 0.4D) {
 				player.motionY += 0.1D;
+			}
 
 			world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.flamethrowerShoot, SoundCategory.PLAYERS, 0.25F, 1.5F);
 			this.useUpFuel(player, stack, 5);

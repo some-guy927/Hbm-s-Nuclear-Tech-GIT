@@ -80,14 +80,15 @@ public class NBTControlPacket implements IMessage {
 				try {
 					
 					NBTTagCompound nbt = m.buffer.readCompoundTag();
-					
 					if(nbt != null) {
 						if(te instanceof IControlReceiver) {
 							
 							IControlReceiver tile = (IControlReceiver)te;
 							
-							if(tile.hasPermission(p))
+							if(tile.hasPermission(p)) {
+								tile.receiveControl(p, nbt);
 								tile.receiveControl(nbt);
+							}
 						}
 					}
 					

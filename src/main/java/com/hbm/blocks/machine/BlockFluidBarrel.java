@@ -104,7 +104,7 @@ public class BlockFluidBarrel extends BlockContainer {
 			return true;
 			
 		} else if(!player.isSneaking()) {
-			player.openGui(MainRegistry.instance, ModBlocks.guiID_barrel, world, pos.getX(), pos.getY(), pos.getZ());
+			player.openGui(MainRegistry.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
 			return true;
 			
 		} else {

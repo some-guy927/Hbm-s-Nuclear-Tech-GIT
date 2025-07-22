@@ -111,7 +111,7 @@ public class MachineCentrifuge extends BlockContainer implements IMultiBlock {
 		} else if (!player.isSneaking()) {
 			TileEntityMachineCentrifuge entity = (TileEntityMachineCentrifuge) world.getTileEntity(pos);
 			if (entity != null) {
-				player.openGui(MainRegistry.instance, ModBlocks.guiID_centrifuge, world, pos.getX(), pos.getY(), pos.getZ());
+				player.openGui(MainRegistry.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
 			}
 			return true;
 		} else {

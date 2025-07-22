@@ -41,7 +41,7 @@ public class MachineSatLinker extends BlockContainer {
 			TileEntityMachineSatLinker entity = (TileEntityMachineSatLinker) world.getTileEntity(pos);
 			if(entity != null)
 			{
-				player.openGui(MainRegistry.instance, ModBlocks.guiID_satlinker, world, pos.getX(), pos.getY(), pos.getZ());
+				player.openGui(MainRegistry.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
 			}
 			return true;
 		} else {

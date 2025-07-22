@@ -1,12 +1,13 @@
 package com.hbm.main;
 
-
 import java.lang.reflect.Field;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.Map.Entry;
 
+import com.hbm.handler.threading.PacketThreading;
+import com.hbm.tileentity.machine.TileEntityMachineRadarNT;
 import com.hbm.crafting.handlers.MKUCraftingHandler;
 import com.hbm.items.gear.ModShield;
 import net.minecraft.entity.item.EntityArmorStand;
@@ -549,6 +550,14 @@ public class ModEventHandler {
 			BossSpawnHandler.rollTheDice(event.world);
 			TimedGenerator.automaton(event.world, 100);
 		}
+
+		if(event.phase == Phase.END) {
+			// As ByteBufs are added to the queue in `com.hbm.packet.toclient.PacketThreading`, they are processed by the packet thread.
+			// This waits until the thread is finished, which most of the time will be instantly since it has plenty of time to process in parallel to everything else.
+			PacketThreading.waitUntilThreadFinished();
+
+			NetworkHandler.flush(); // Flush ALL network packets.
+		}
 	}
 	
 	@SubscribeEvent
@@ -556,6 +565,7 @@ public class ModEventHandler {
 		if(e.phase == Phase.START){
 			JetpackHandler.serverTick();
 			RTTYSystem.updateBroadcastQueue();
+			TileEntityMachineRadarNT.updateSystem();
 		} else {
 			EntityHitDataHandler.updateSystem();
 		}
@@ -1151,5 +1161,4 @@ public class ModEventHandler {
 		System.out.println("On Recipe Register");
 		return false;
 	}
-	
 }

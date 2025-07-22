@@ -6,6 +6,7 @@ import java.util.List;
 import com.hbm.config.WeaponConfig;
 import com.hbm.handler.BulletConfigSyncingUtil;
 import com.hbm.handler.BulletConfiguration;
+import com.hbm.inventory.gui.GUITurretHoward;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.packet.AuxParticlePacketNT;
@@ -13,9 +14,14 @@ import com.hbm.packet.PacketDispatcher;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.util.EntityDamageUtil;
 
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 
 public class TileEntityTurretHoward extends TileEntityTurretBaseNT {
@@ -169,5 +175,11 @@ public class TileEntityTurretHoward extends TileEntityTurretBaseNT {
 	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound nbt){
 		nbt.setInteger("loaded", loaded);
 		return super.writeToNBT(nbt);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public GuiScreen provideGUI(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new GUITurretHoward(player.inventory, this);
 	}
 }

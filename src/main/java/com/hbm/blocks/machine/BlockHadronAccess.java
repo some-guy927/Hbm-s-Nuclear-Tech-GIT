@@ -59,7 +59,7 @@ public class BlockHadronAccess extends BlockContainer {
 
 			for(int i = 1; i < 3; i++) {
 				if(world.getBlockState(new BlockPos(pos.getX() + dir.offsetX * i, pos.getY() + dir.offsetY * i, pos.getZ() + dir.offsetZ * i)).getBlock() == ModBlocks.hadron_core) {
-					FMLNetworkHandler.openGui(player, MainRegistry.instance, ModBlocks.guiID_hadron, world, pos.getX() + dir.offsetX * i, pos.getY() + dir.offsetY * i, pos.getZ() + dir.offsetZ * i);
+					FMLNetworkHandler.openGui(player, MainRegistry.instance, 0, world, pos.getX() + dir.offsetX * i, pos.getY() + dir.offsetY * i, pos.getZ() + dir.offsetZ * i);
 				}
 			}
 

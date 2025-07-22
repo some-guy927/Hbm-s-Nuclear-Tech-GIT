@@ -110,7 +110,7 @@ public class MachineCoal extends BlockContainer {
 		} else if (!player.isSneaking()) {
 			TileEntityMachineCoal entity = (TileEntityMachineCoal) world.getTileEntity(pos);
 			if (entity != null) {
-				player.openGui(MainRegistry.instance, ModBlocks.guiID_machine_coal, world, pos.getX(), pos.getY(),
+				player.openGui(MainRegistry.instance, 0, world, pos.getX(), pos.getY(),
 						pos.getZ());
 			}
 			return true;

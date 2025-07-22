@@ -73,7 +73,7 @@ public class MachineOilWell extends BlockDummyable {
 			TileEntityMachineOilWell entity = (TileEntityMachineOilWell) world.getTileEntity(new BlockPos(posC[0], posC[1], posC[2]));
 			if(entity != null)
 			{
-				player.openGui(MainRegistry.instance, ModBlocks.guiID_machine_well, world, posC[0], posC[1], posC[2]);
+				player.openGui(MainRegistry.instance, 0, world, posC[0], posC[1], posC[2]);
 			}
 			return true;
 		} else {

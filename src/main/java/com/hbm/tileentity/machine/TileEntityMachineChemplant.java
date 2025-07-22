@@ -10,6 +10,8 @@ import com.hbm.handler.MultiblockHandler;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.inventory.ChemplantRecipes;
 import com.hbm.inventory.RecipesCommon.AStack;
+import com.hbm.inventory.container.ContainerMachineChemplant;
+import com.hbm.inventory.gui.GUIMachineChemplant;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemChemistryTemplate;
 import com.hbm.lib.Library;
@@ -19,11 +21,14 @@ import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.LoopedSoundPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.TEChemplantPacket;
+import com.hbm.tileentity.IGUIProvider;
 import com.hbm.tileentity.TileEntityMachineBase;
 
 import api.hbm.energy.IEnergyUser;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -34,6 +39,7 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -52,7 +58,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.oredict.OreDictionary;
 import org.jetbrains.annotations.NotNull;
 
-public class TileEntityMachineChemplant extends TileEntityMachineBase implements IEnergyUser, ITankPacketAcceptor, ITickable {
+public class TileEntityMachineChemplant extends TileEntityMachineBase implements IEnergyUser, ITankPacketAcceptor, ITickable, IGUIProvider {
 
 	public static final long maxPower = 2000000;
 	public long power;
@@ -1031,6 +1037,16 @@ public class TileEntityMachineChemplant extends TileEntityMachineBase implements
 			}
 			return null;
 		}
+	}
 
+	@Override
+	public Container provideContainer(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new ContainerMachineChemplant(player.inventory, this);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public GuiScreen provideGUI(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new GUIMachineChemplant(player.inventory, this);
 	}
 }

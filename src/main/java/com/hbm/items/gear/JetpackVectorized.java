@@ -73,9 +73,9 @@ public class JetpackVectorized extends JetpackBase {
 		}
 		if(getFuel(stack) > 0 && props.getKeyPressed(EnumKeybind.JETPACK) && props.isJetpackActive()) {
 
-			if(player.motionY < 0.4D)
+			if(player.motionY < 0.4D) {
 				player.motionY += 0.1D;
-
+			}
 			Vec3d look = player.getLookVec();
 
 			if(Vec3.createVectorHelper(player.motionX, player.motionY, player.motionZ).length() < 2) {

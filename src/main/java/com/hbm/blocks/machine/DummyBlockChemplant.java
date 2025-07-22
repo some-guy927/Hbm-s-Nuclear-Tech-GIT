@@ -40,10 +40,10 @@ public class DummyBlockChemplant extends DummyOldBase {
 	public void breakBlock(World world, BlockPos pos, IBlockState state) {
 		if(!safeBreak) {
     		TileEntity te = world.getTileEntity(pos);
-    		if(te != null && te instanceof TileEntityDummy) {
+    		if(te instanceof TileEntityDummy && ((TileEntityDummy) te).target != null) {
     			BlockPos abc = ((TileEntityDummy)te).target;
     			//world.getBlock(a, b, c).breakBlock(world, a, b, c, block, i);
-    			if(!world.isRemote && abc != null)
+    			if(!world.isRemote)
     				world.destroyBlock(abc, true);
     		}
     	}
@@ -98,7 +98,7 @@ public class DummyBlockChemplant extends DummyOldBase {
     			TileEntityMachineChemplant entity = (TileEntityMachineChemplant) world.getTileEntity(abc);
     			if(entity != null)
     			{
-    				player.openGui(MainRegistry.instance, ModBlocks.guiID_machine_chemplant, world, abc.getX(), abc.getY(), abc.getZ());
+    				player.openGui(MainRegistry.instance, 0, world, abc.getX(), abc.getY(), abc.getZ());
     			}
     		}
 			return true;

@@ -1,14 +1,24 @@
 package com.hbm.tileentity.bomb;
 
+import com.hbm.entity.missile.EntityMissileAntiBallistic;
+import com.hbm.interfaces.IBomb;
+import com.hbm.inventory.container.ContainerLaunchPadTier1;
+import com.hbm.inventory.gui.GUILaunchPadTier1;
 import com.hbm.lib.Library;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.items.ModItems;
-import com.hbm.interfaces.IBomb;
+import com.hbm.interfaces.IBomb.BombReturnCode;
 import com.hbm.packet.AuxGaugePacket;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.TEMissilePacket;
+import com.hbm.tileentity.IGUIProvider;
+import com.hbm.tileentity.IRadarCommandReceiver;
 import com.hbm.tileentity.TileEntityLoadedBase;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.entity.Entity;
+import net.minecraft.inventory.Container;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Optional;
 
 import api.hbm.energy.IEnergyUser;
@@ -32,7 +42,7 @@ import li.cil.oc.api.machine.Context;
 import li.cil.oc.api.network.SimpleComponent;
 
 @Optional.InterfaceList({@Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = "OpenComputers")})
-public class TileEntityLaunchPad extends TileEntityLoadedBase implements ITickable, IEnergyUser, SimpleComponent {
+public class TileEntityLaunchPad extends TileEntityLoadedBase implements ITickable, IEnergyUser, SimpleComponent, IGUIProvider {
 
 	public ItemStackHandler inventory;
 
@@ -187,6 +197,47 @@ public class TileEntityLaunchPad extends TileEntityLoadedBase implements ITickab
 		return false;
 	}
 
+//	public boolean canLaunch() {
+//		return this.isMissileValid() && this.hasFuel() && this.isReadyForLaunch();
+//	}
+//
+//	public BombReturnCode launchToEntity(Entity entity) {
+//		if(!canLaunch()) return BombReturnCode.ERROR_MISSING_COMPONENT;
+//
+//		Entity e = instantiateMissile((int) Math.floor(entity.posX), (int) Math.floor(entity.posZ));
+//		if(e != null) {
+//
+//			if(e instanceof EntityMissileAntiBallistic abm) {
+//				abm.tracking = entity;
+//			}
+//
+//			finalizeLaunch(e);
+//			return BombReturnCode.LAUNCHED;
+//		}
+//		return BombReturnCode.ERROR_MISSING_COMPONENT;
+//	}
+//
+//	public BombReturnCode launchToCoordinate(int targetX, int targetZ) {
+//		if(!canLaunch()) return BombReturnCode.ERROR_MISSING_COMPONENT;
+//
+//		Entity e = instantiateMissile(targetX, targetZ);
+//		if(e != null) {
+//			finalizeLaunch(e);
+//			return BombReturnCode.LAUNCHED;
+//		}
+//		return BombReturnCode.ERROR_MISSING_COMPONENT;
+//	}
+//
+//	@Override
+//	public boolean sendCommandPosition(int x, int y, int z) {
+//		return this.launchToCoordinate(x, z) == BombReturnCode.LAUNCHED;
+//	}
+//
+//	@Override
+//	public boolean sendCommandEntity(Entity target) {
+//		return this.launchToEntity(target) == BombReturnCode.LAUNCHED;
+//	}
+
 	// opencomputers interface
 
 	@Override
@@ -209,5 +260,16 @@ public class TileEntityLaunchPad extends TileEntityLoadedBase implements ITickab
 			((IBomb)b).explode(world, pos);
 		}
 		return new Object[] {null};
+	}
+
+	@Override
+	public Container provideContainer(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new ContainerLaunchPadTier1(player.inventory, this);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public GuiScreen provideGUI(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new GUILaunchPadTier1(player.inventory, this);
 	}
 }

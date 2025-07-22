@@ -1,5 +1,7 @@
 package com.hbm.tileentity.machine;
 
+import com.hbm.inventory.container.ContainerMachineUUCreator;
+import com.hbm.inventory.gui.GUIMachineUUCreator;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
@@ -7,13 +9,19 @@ import com.hbm.lib.Library;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.interfaces.ITankPacketAcceptor;
+import com.hbm.tileentity.IGUIProvider;
 import com.hbm.tileentity.TileEntityMachineBase;
-
 import api.hbm.energy.IEnergyUser;
+
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -25,7 +33,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 
-public class TileEntityMachineUUCreator extends TileEntityMachineBase implements IEnergyUser, IFluidHandler, ITickable, ITankPacketAcceptor {
+public class TileEntityMachineUUCreator extends TileEntityMachineBase implements IEnergyUser, IFluidHandler, ITickable, ITankPacketAcceptor, IGUIProvider {
 	
 	public int[] log = new int[20];
 	public static final long rfPerMbOfUU = 1_000_000L;
@@ -243,5 +251,16 @@ public class TileEntityMachineUUCreator extends TileEntityMachineBase implements
 	@Override
 	public long getMaxPower() {
 		return maxPower;
+	}
+
+	@Override
+	public Container provideContainer(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new ContainerMachineUUCreator(player.inventory, this);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public GuiScreen provideGUI(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new GUIMachineUUCreator(player.inventory, this);
 	}
 }

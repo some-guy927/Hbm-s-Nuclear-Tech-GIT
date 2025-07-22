@@ -8,6 +8,8 @@ import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.handler.MissileStruct;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.interfaces.IBomb;
+import com.hbm.inventory.container.ContainerCompactLauncher;
+import com.hbm.inventory.gui.GUIMachineCompactLauncher;
 import com.hbm.items.ModItems;
 import com.hbm.items.weapon.ItemCustomMissile;
 import com.hbm.items.weapon.ItemMissile;
@@ -23,7 +25,11 @@ import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.TEMissileMultipartPacket;
 import com.hbm.render.amlfrom1710.Vec3;
+import com.hbm.tileentity.IGUIProvider;
 import com.hbm.tileentity.TileEntityLoadedBase;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.inventory.Container;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Optional;
 
 import api.hbm.energy.IEnergyUser;
@@ -61,7 +67,7 @@ import li.cil.oc.api.machine.Context;
 import li.cil.oc.api.network.SimpleComponent;
 
 @Optional.InterfaceList({@Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = "OpenComputers")})
-public class TileEntityCompactLauncher extends TileEntityLoadedBase implements ITickable, IEnergyUser, IFluidHandler, ITankPacketAcceptor, SimpleComponent {
+public class TileEntityCompactLauncher extends TileEntityLoadedBase implements ITickable, IEnergyUser, IFluidHandler, ITankPacketAcceptor, SimpleComponent, IGUIProvider {
 
 	public ItemStackHandler inventory;
 
@@ -595,5 +601,16 @@ public class TileEntityCompactLauncher extends TileEntityLoadedBase implements I
 			((IBomb)b).explode(world, pos);
 		}
 		return new Object[] {null};
+	}
+
+	@Override
+	public Container provideContainer(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new ContainerCompactLauncher(player.inventory, this);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public GuiScreen provideGUI(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new GUIMachineCompactLauncher(player.inventory, this);
 	}
 }

@@ -1,5 +1,9 @@
 package com.hbm.entity.missile;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import api.hbm.entity.IRadarDetectable;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.bomb.BlockTaint;
 import com.hbm.entity.logic.EntityChunky;
@@ -20,7 +24,7 @@ import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.LoopedEntitySoundPacket;
 import com.hbm.render.amlfrom1710.Vec3;
 
-import api.hbm.entity.IRadarDetectable;
+import api.hbm.entity.IRadarDetectableNT;
 import net.minecraft.init.Blocks;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -38,7 +42,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class EntityMissileCustom extends EntityChunky implements IRadarDetectable, IConstantRenderer {
+public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarDetectableNT, IConstantRenderer, IRadarDetectable {
 
 	public static final DataParameter<Integer> HEALTH = EntityDataManager.createKey(EntityMissileCustom.class, DataSerializers.VARINT);
 	public static final DataParameter<MissileStruct> TEMPLATE = EntityDataManager.createKey(EntityMissileCustom.class, MissileStruct.SERIALIZER);
@@ -412,4 +416,52 @@ public class EntityMissileCustom extends EntityChunky implements IRadarDetectabl
 
 		return RadarTargetType.PLAYER;
 	}
+
+	@Override
+	public String getTranslationKey() {
+
+		ItemMissile part = this.dataManager.get(TEMPLATE).fuselage;
+		PartSize top = part.top;
+		PartSize bottom = part.bottom;
+
+		if(top == PartSize.SIZE_10 && bottom == PartSize.SIZE_10) return "radar.target.custom10";
+		if(top == PartSize.SIZE_10 && bottom == PartSize.SIZE_15) return "radar.target.custom1015";
+		if(top == PartSize.SIZE_15 && bottom == PartSize.SIZE_15) return "radar.target.custom15";
+		if(top == PartSize.SIZE_15 && bottom == PartSize.SIZE_20) return "radar.target.custom1520";
+		if(top == PartSize.SIZE_20 && bottom == PartSize.SIZE_20) return "radar.target.custom20";
+
+		return "radar.target.custom";
+	}
+
+	@Override
+	public int getBlipLevel() {
+
+		ItemMissile part = this.dataManager.get(TEMPLATE).fuselage;
+		PartSize top = part.top;
+		PartSize bottom = part.bottom;
+
+		if(top == PartSize.SIZE_10 && bottom == PartSize.SIZE_10) return IRadarDetectableNT.TIER10;
+		if(top == PartSize.SIZE_10 && bottom == PartSize.SIZE_15) return IRadarDetectableNT.TIER10_15;
+		if(top == PartSize.SIZE_15 && bottom == PartSize.SIZE_15) return IRadarDetectableNT.TIER15;
+		if(top == PartSize.SIZE_15 && bottom == PartSize.SIZE_20) return IRadarDetectableNT.TIER15_20;
+		if(top == PartSize.SIZE_20 && bottom == PartSize.SIZE_20) return IRadarDetectableNT.TIER20;
+
+		return IRadarDetectableNT.TIER1;
+	}
+
+	@Override
+	public boolean canBeSeenBy(Object radar) {
+		return true;
+	}
+
+	@Override
+	public boolean paramsApplicable(RadarScanParams params) {
+		return params.scanMissiles;
+	}
+
+	@Override
+	public boolean suppliesRedstone(RadarScanParams params) {
+		return !params.smartMode || !(this.motionY >= 0);
+	}
+
 }

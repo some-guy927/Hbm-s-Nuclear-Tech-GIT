@@ -1,7 +1,6 @@
 package com.hbm.blocks.machine;
 
 import com.hbm.blocks.BlockDummyable;
-import com.hbm.blocks.ModBlocks;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.main.MainRegistry;
@@ -58,7 +57,7 @@ public class MachineCyclotron extends BlockDummyable {
 				}
 			}
 
-			player.openGui(MainRegistry.instance, ModBlocks.guiID_machine_cyclotron, world, pos1[0], pos1[1], pos1[2]);
+			player.openGui(MainRegistry.instance, 0, world, pos1[0], pos1[1], pos1[2]);
 			return true;
 		} else {
 			return false;

@@ -1,14 +1,20 @@
 package com.hbm.tileentity.machine;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.inventory.container.ContainerCoreTitanium;
+import com.hbm.inventory.gui.GUICoreTitanium;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.lib.Library;
 import com.hbm.items.ModItems;
+import com.hbm.tileentity.IGUIProvider;
 import com.hbm.tileentity.INBTPacketReceiver;
 import com.hbm.tileentity.TileEntityMachineBase;
 
 import api.hbm.energy.IEnergyUser;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
@@ -18,9 +24,11 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 
-public class TileEntityCoreTitanium extends TileEntityMachineBase implements ITickable, IEnergyUser, INBTPacketReceiver {
+public class TileEntityCoreTitanium extends TileEntityMachineBase implements ITickable, IEnergyUser, INBTPacketReceiver, IGUIProvider {
 
 	public int progress = 0;
 	public int progressStep = 1;
@@ -301,5 +309,16 @@ public class TileEntityCoreTitanium extends TileEntityMachineBase implements ITi
 	@Override
 	public boolean canExtractItem(int slot, ItemStack itemStack, int amount){
 		return slot > 10 && slot != 22;
+	}
+
+	@Override
+	public Container provideContainer(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new ContainerCoreTitanium(player.inventory, this);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public GuiScreen provideGUI(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new GUICoreTitanium(player.inventory, this);
 	}
 }

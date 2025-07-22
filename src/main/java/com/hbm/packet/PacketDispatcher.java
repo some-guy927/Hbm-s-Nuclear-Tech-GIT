@@ -2,6 +2,7 @@ package com.hbm.packet;
 
 import com.hbm.lib.RefStrings;
 
+import com.hbm.main.NetworkHandler;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -9,8 +10,8 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 
 public class PacketDispatcher {
-	
-	public static final SimpleNetworkWrapper wrapper = NetworkRegistry.INSTANCE.newSimpleChannel(RefStrings.MODID);
+
+	public static final NetworkHandler wrapper = new NetworkHandler(RefStrings.MODID);
 	
 	public static void registerPackets(){
 		int i = 0;
@@ -89,6 +90,8 @@ public class PacketDispatcher {
 		wrapper.registerMessage(ItemBobmazonPacket.Handler.class, ItemBobmazonPacket.class, i++, Side.SERVER);
 		//Update packet for force field
 		wrapper.registerMessage(TEFFPacket.Handler.class, TEFFPacket.class, i++, Side.CLIENT);
+		//Siren packet for looped sounds Drillgon200: Wrong descriptions, but eh, whatever.
+		//wrapper.registerMessage(TERadarPacket.Handler.class, TERadarPacket.class, i++, Side.CLIENT);
 		//Packet for causing pipes to rebuild their connections
 		wrapper.registerMessage(PipeUpdatePacket.Handler.class, PipeUpdatePacket.class, i++, Side.CLIENT);
 		//Packet for updating entities being zapped
@@ -136,6 +139,8 @@ public class PacketDispatcher {
 		wrapper.registerMessage(ControlPanelUpdatePacket.Handler.class, ControlPanelUpdatePacket.class, i++, Side.CLIENT);
 // 		wrapper.registerMessage(ControlPanelLinkerServerPacket.Handler.class, ControlPanelUpdatePacket.class, i++, Side.SERVER);
 //		wrapper.registerMessage(ControlPanelLinkerClientPacket.Handler.class, ControlPanelUpdatePacket.class, i++, Side.CLIENT);
+		//Packet to send ByteBuf data to tile entities(faster than NBT one but not really convenient)
+		wrapper.registerMessage(BufPacket.Handler.class, BufPacket.class, i++, Side.CLIENT);
 	}
 	
 	public static void sendTo(IMessage message, EntityPlayerMP player){

@@ -8,6 +8,9 @@ import java.util.Map.Entry;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
 
+import com.hbm.blocks.generic.BlockBobble;
+import com.hbm.render.tileentity.IItemRendererProvider;
+
 import com.hbm.interfaces.*;
 import com.hbm.render.item.*;
 import com.hbm.tileentity.machine.TileEntityMachineReactorSmall;
@@ -372,7 +375,11 @@ public class ModEventHandlerClient {
 			for(Integer i: ((IHasCustomMetaModels) item).getMetaValues()){
 				ModelLoader.setCustomModelResourceLocation(item, (int)i, ((IHasCustomMetaModels) item).getResourceLocation((int)i));
 			}
-		} else {
+		} else if(item == Item.getItemFromBlock(ModBlocks.bobblehead)){
+			for(int i = 1; i < BlockBobble.BobbleType.values().length; i++)
+				ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(item.getRegistryName(), "inventory"));
+		}
+		else {
 			ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(item.getRegistryName(), "inventory"));
 		}
 	}
@@ -591,6 +598,14 @@ public class ModEventHandlerClient {
 		
 		for(Entry<Item, ItemRenderBase> entry : ItemRenderLibrary.renderers.entrySet()){
 			swapModels(entry.getKey(), reg);
+		}
+
+		for (Object renderer : TileEntityRendererDispatcher.instance.renderers.values()) {
+			if (renderer instanceof IItemRendererProvider prov) {
+				for (Item item : prov.getItemsForRenderer()) {
+					swapModels(item, reg);
+				}
+			}
 		}
 
 		MainRegistry.proxy.registerMissileItems(reg);

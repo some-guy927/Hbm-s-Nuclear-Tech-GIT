@@ -5,11 +5,13 @@ import com.hbm.items.machine.ItemCassette.TrackType;
 import com.hbm.sound.SoundLoopSiren;
 import com.hbm.tileentity.machine.TileEntityMachineSiren;
 
+import com.typesafe.config.ConfigException;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -62,53 +64,55 @@ public class TESirenPacket implements IMessage {
 		@SideOnly(Side.CLIENT)
 		public IMessage onMessage(TESirenPacket m, MessageContext ctx) {
             if(m == null) return null;
-			TileEntity te = Minecraft.getMinecraft().world.getTileEntity(new BlockPos(m.x, m.y, m.z));
+			Minecraft.getMinecraft().addScheduledTask(() -> {
+				TileEntity te = Minecraft.getMinecraft().world.getTileEntity(new BlockPos(m.x, m.y, m.z));
 
-			if (te instanceof TileEntityMachineSiren) {
-				
-				SoundLoopSiren sound = null;
-				for(int i = 0; i < SoundLoopSiren.list.size(); i++)  {
-					if(SoundLoopSiren.list.get(i).getTE() == te)
-						sound = SoundLoopSiren.list.get(i);
-				}
-				
-				if(m.active) {
-					
-					if(sound == null) {
-						//Start sound
-						if(m.id > 0) {
-							boolean b = TrackType.getEnum(m.id).getType().name().equals(SoundType.LOOP.name());
-							SoundLoopSiren s = new SoundLoopSiren(TrackType.getEnum(m.id).getSoundLocation(), te, TrackType.getEnum(m.id).getType());
-							s.setRepeat(b);
-							s.intendedVolume = TrackType.getEnum(m.id).getVolume();
-							Minecraft.getMinecraft().getSoundHandler().playSound(s);
-						}
-					} else {
-						SoundEvent loc = TrackType.getEnum(m.id).getSoundLocation();
-						
-						if(loc != null) {
-						String path = loc.getSoundName().toString();
-						
-							if(!sound.getPath().equals(path)) {
-								//Track switched, stop and restart
-								sound.stop();
-								if(m.id > 0)
-									Minecraft.getMinecraft().getSoundHandler().playSound(new SoundLoopSiren(TrackType.getEnum(m.id).getSoundLocation(), te, TrackType.getEnum(m.id).getType()));
+				if (te instanceof TileEntityMachineSiren) {
+
+					SoundLoopSiren sound = null;
+					for (int i = 0; i < SoundLoopSiren.list.size(); i++) {
+						if (SoundLoopSiren.list.get(i).getTE() == te)
+							sound = SoundLoopSiren.list.get(i);
+					}
+
+					if (m.active) {
+
+						if (sound == null) {
+							//Start sound
+							if (m.id > 0) {
+								boolean b = TrackType.getEnum(m.id).getType().name().equals(SoundType.LOOP.name());
+								SoundLoopSiren s = new SoundLoopSiren(TrackType.getEnum(m.id).getSoundLocation(), te, TrackType.getEnum(m.id).getType());
+								s.setRepeat(b);
+								s.intendedVolume = TrackType.getEnum(m.id).getVolume();
+								Minecraft.getMinecraft().getSoundHandler().playSound(s);
 							}
+						} else {
+							SoundEvent loc = TrackType.getEnum(m.id).getSoundLocation();
+
+							if (loc != null) {
+								String path = loc.getSoundName().toString();
+
+								if (!sound.getPath().equals(path)) {
+									//Track switched, stop and restart
+									sound.stop();
+									if (m.id > 0)
+										Minecraft.getMinecraft().getSoundHandler().playSound(new SoundLoopSiren(TrackType.getEnum(m.id).getSoundLocation(), te, TrackType.getEnum(m.id).getType()));
+								}
+							}
+
+							sound.intendedVolume = TrackType.getEnum(m.id).getVolume();
 						}
-						
-						sound.intendedVolume = TrackType.getEnum(m.id).getVolume();
-					}
-					
-				} else {
-					
-					if(sound != null) {
-						//Stop sound
-						sound.stop();
-						SoundLoopSiren.list.remove(sound);
+
+					} else {
+
+						if (sound != null) {
+							//Stop sound
+							sound.stop();
+							SoundLoopSiren.list.remove(sound);
+						}
 					}
 				}
-			}
+			});
 			return null;
 		}
 	}

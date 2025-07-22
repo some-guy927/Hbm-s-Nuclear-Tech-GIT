@@ -5,6 +5,8 @@ import com.hbm.config.MachineConfig;
 import com.hbm.entity.particle.EntityGasFX;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
+import com.hbm.inventory.container.ContainerMachineFrackingTower;
+import com.hbm.inventory.gui.GUIMachineFrackingTower;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
 import com.hbm.inventory.UpgradeManager;
@@ -12,13 +14,18 @@ import com.hbm.items.machine.ItemMachineUpgrade.UpgradeType;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
+import com.hbm.tileentity.IGUIProvider;
 import com.hbm.world.feature.OilSpot;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
@@ -27,7 +34,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 
-public class TileEntityMachineFrackingTower extends TileEntityOilDrillBase {
+public class TileEntityMachineFrackingTower extends TileEntityOilDrillBase implements IGUIProvider {
 
     private final UpgradeManager upgradeManager = new UpgradeManager();
 
@@ -308,5 +315,16 @@ public class TileEntityMachineFrackingTower extends TileEntityOilDrillBase {
     @SideOnly(Side.CLIENT)
     public double getMaxRenderDistanceSquared() {
         return 65536.0D;
+    }
+
+    @Override
+    public Container provideContainer(int ID, EntityPlayer player, World world, int x, int y, int z) {
+        return new ContainerMachineFrackingTower(player.inventory, this);
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public GuiScreen provideGUI(int ID, EntityPlayer player, World world, int x, int y, int z) {
+        return new GUIMachineFrackingTower(player.inventory, this);
     }
 }

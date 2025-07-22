@@ -1,20 +1,32 @@
 package com.hbm.tileentity.machine;
 
+import com.hbm.inventory.container.ContainerMachineRTG;
+import com.hbm.inventory.gui.GUIMachineRTG;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.items.machine.ItemRTGPellet;
+import com.hbm.tileentity.IGUIProvider;
+import com.hbm.tileentity.TileEntityLoadedBase;
 import com.hbm.tileentity.TileEntityMachineBase;
 import com.hbm.util.RTGUtil;
-
 import api.hbm.energy.IEnergyGenerator;
+
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityMachineRTG extends TileEntityMachineBase implements ITickable, IEnergyGenerator {
+public class TileEntityMachineRTG extends TileEntityMachineBase implements ITickable, IEnergyGenerator, IGuiProvider {
 	
 	public int heat;
 	public final int heatMax = 6000;
@@ -95,7 +107,7 @@ public class TileEntityMachineRTG extends TileEntityMachineBase implements ITick
 			return player.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <=64;
 		}
 	}
-	
+
 	private int detectHeat;
 	private long detectPower;
 	
@@ -128,6 +140,17 @@ public class TileEntityMachineRTG extends TileEntityMachineBase implements ITick
 	@Override
 	public long getMaxPower() {
 		return maxPower;
+	}
+
+	@Override
+	public Container provideContainer(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new ContainerMachineRTG(player.inventory, this);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public GuiScreen provideGUI(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new GUIMachineRTG(player.inventory, this);
 	}
 
     @Override

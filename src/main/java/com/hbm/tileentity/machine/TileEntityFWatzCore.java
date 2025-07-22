@@ -6,9 +6,12 @@ import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.inventory.SAFERecipes;
+import com.hbm.inventory.container.ContainerFWatzCore;
+import com.hbm.inventory.gui.GUIFWatzCore;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemFWatzCore;
 import com.hbm.lib.Library;
+import com.hbm.tileentity.IGUIProvider;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.tileentity.TileEntityMachineBase;
@@ -16,16 +19,19 @@ import com.hbm.world.FWatz;
 import com.hbm.tileentity.INBTPacketReceiver;
 
 import api.hbm.energy.IEnergyGenerator;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
@@ -37,10 +43,11 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.ItemStackHandler;
 
 import java.util.List;
 
-public class TileEntityFWatzCore extends TileEntityMachineBase implements IControlReceiver, ITickable, IEnergyGenerator, IFluidHandler, ITankPacketAcceptor {
+public class TileEntityFWatzCore extends TileEntityMachineBase implements IControlReceiver, ITickable, IEnergyGenerator, IFluidHandler, ITankPacketAcceptor, IGuiProvider {
 
 	public long power;
 	public final static long maxPower = 1000000000000L;
@@ -327,7 +334,7 @@ public class TileEntityFWatzCore extends TileEntityMachineBase implements IContr
         if(slot == 2 && itemStack.getItem() instanceof ItemFWatzCore core && !core.isBaby) return true;
         return slot == 5 || slot == 6;
     }
-	
+
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
 		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
@@ -348,6 +355,17 @@ public class TileEntityFWatzCore extends TileEntityMachineBase implements IContr
 
 	public long getMaxPower() {
 		return maxPower;
+	}
+
+	@Override
+	public Container provideContainer(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new ContainerFWatzCore(player.inventory, this);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public GuiScreen provideGUI(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new GUIFWatzCore(player.inventory, this);
 	}
 
     AxisAlignedBB bb = null;

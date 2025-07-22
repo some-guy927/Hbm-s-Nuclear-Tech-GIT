@@ -3,13 +3,15 @@ package com.hbm.entity.missile;
 import java.util.ArrayList;
 import java.util.List;
 
+import api.hbm.entity.IRadarDetectable;
+import api.hbm.entity.IRadarDetectableNT;
 import com.hbm.explosion.ExplosionLarge;
 import com.hbm.items.ModItems;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-public class EntityMissileGeneric extends EntityMissileBaseAdvanced {
+public class EntityMissileGeneric extends EntityMissileBaseAdvanced implements IRadarDetectable {
 
 	public EntityMissileGeneric(World worldIn) {
 		super(worldIn);
@@ -46,4 +48,28 @@ public class EntityMissileGeneric extends EntityMissileBaseAdvanced {
 		return new ItemStack(ModItems.warhead_generic_small);
 	}
 
+	@Override
+	public String getTranslationKey() {
+		return "radar.target.tier1";
+	}
+
+	@Override
+	public int getBlipLevel() {
+		return IRadarDetectableNT.TIER1;
+	}
+
+	@Override
+	public boolean canBeSeenBy(Object radar) {
+		return true;
+	}
+
+	@Override
+	public boolean paramsApplicable(RadarScanParams params) {
+		return params.scanMissiles;
+	}
+
+	@Override
+	public boolean suppliesRedstone(RadarScanParams params) {
+		return !params.smartMode || !(this.motionY >= 0);
+	}
 }

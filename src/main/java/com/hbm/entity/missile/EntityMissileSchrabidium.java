@@ -3,6 +3,8 @@ package com.hbm.entity.missile;
 import java.util.ArrayList;
 import java.util.List;
 
+import api.hbm.entity.IRadarDetectable;
+import api.hbm.entity.IRadarDetectableNT;
 import com.hbm.config.BombConfig;
 import com.hbm.entity.effect.EntityCloudFleija;
 import com.hbm.entity.logic.EntityNukeExplosionMK3;
@@ -13,7 +15,7 @@ import net.minecraft.world.World;
 
 import static com.hbm.inventory.material.Mats.MAT_ALUMINIUM;
 
-public class EntityMissileSchrabidium extends EntityMissileBaseAdvanced {
+public class EntityMissileSchrabidium extends EntityMissileBaseAdvanced implements IRadarDetectable {
 
 	public EntityMissileSchrabidium(World p_i1582_1_) {
 		super(p_i1582_1_);
@@ -70,5 +72,30 @@ public class EntityMissileSchrabidium extends EntityMissileBaseAdvanced {
 	@Override
 	public RadarTargetType getTargetType() {
 		return RadarTargetType.MISSILE_TIER0;
+	}
+
+	@Override
+	public String getTranslationKey() {
+		return "radar.target.tier0";
+	}
+
+	@Override
+	public int getBlipLevel() {
+		return IRadarDetectableNT.TIER0;
+	}
+
+	@Override
+	public boolean canBeSeenBy(Object radar) {
+		return true;
+	}
+
+	@Override
+	public boolean paramsApplicable(RadarScanParams params) {
+		return params.scanMissiles;
+	}
+
+	@Override
+	public boolean suppliesRedstone(RadarScanParams params) {
+		return !params.smartMode || !(this.motionY >= 0);
 	}
 }

@@ -2,8 +2,14 @@ package com.hbm.tileentity.machine;
 
 import com.hbm.inventory.BreederRecipes;
 import com.hbm.inventory.BreederRecipes.BreederRecipe;
+import com.hbm.inventory.container.ContainerReactor;
+import com.hbm.inventory.gui.GUIMachineReactor;
+import com.hbm.tileentity.IGUIProvider;
 import com.hbm.tileentity.TileEntityMachineBase;
 
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -11,11 +17,12 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 
-public class TileEntityMachineReactor extends TileEntityMachineBase implements ITickable {
+public class TileEntityMachineReactor extends TileEntityMachineBase implements ITickable, IGUIProvider {
 
 	public int progress;
 	public int charge;
@@ -275,4 +282,14 @@ public class TileEntityMachineReactor extends TileEntityMachineBase implements I
 		heat = data.getByte("heat");
 	}
 
+	@Override
+	public Container provideContainer(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new ContainerReactor(player.inventory, this);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public GuiScreen provideGUI(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new GUIMachineReactor(player.inventory, this);
+	}
 }

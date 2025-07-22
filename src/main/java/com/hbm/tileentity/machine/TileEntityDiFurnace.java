@@ -3,17 +3,25 @@ package com.hbm.tileentity.machine;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.machine.MachineDiFurnace;
 import com.hbm.inventory.DiFurnaceRecipes;
+import com.hbm.inventory.container.ContainerDiFurnace;
+import com.hbm.inventory.gui.GUITestDiFurnace;
+import com.hbm.tileentity.IGUIProvider;
 import com.hbm.tileentity.TileEntityMachineBase;
 
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 
-public class TileEntityDiFurnace extends TileEntityMachineBase implements ITickable, ICapabilityProvider {
+public class TileEntityDiFurnace extends TileEntityMachineBase implements ITickable, ICapabilityProvider, IGUIProvider {
 
 	
 	public int dualCookTime;
@@ -216,5 +224,16 @@ public class TileEntityDiFurnace extends TileEntityMachineBase implements ITicka
 		}
 		if(mark)
 			markDirty();
+	}
+
+	@Override
+	public Container provideContainer(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new ContainerDiFurnace(player.inventory, this);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public GuiScreen provideGUI(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new GUITestDiFurnace(player.inventory, this);
 	}
 }

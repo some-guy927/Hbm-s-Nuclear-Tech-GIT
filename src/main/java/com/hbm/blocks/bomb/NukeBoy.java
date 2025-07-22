@@ -66,7 +66,7 @@ public class NukeBoy extends BlockContainer implements IBomb {
 		} else if(!player.isSneaking()) {
 			TileEntityNukeBoy entity = (TileEntityNukeBoy) world.getTileEntity(pos);
 			if(entity != null) {
-				player.openGui(MainRegistry.instance, ModBlocks.guiID_nuke_boy, world, pos.getX(), pos.getY(), pos.getZ());
+				player.openGui(MainRegistry.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
 			}
 			return true;
 		} else {

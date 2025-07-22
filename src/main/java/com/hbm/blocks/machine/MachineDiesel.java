@@ -47,7 +47,7 @@ public class MachineDiesel extends BlockContainer {
 			TileEntityMachineDiesel entity = (TileEntityMachineDiesel) world.getTileEntity(pos);
 			if(entity != null)
 			{
-				player.openGui(MainRegistry.instance, ModBlocks.guiID_machine_diesel, world, pos.getX(), pos.getY(), pos.getZ());
+				player.openGui(MainRegistry.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
 			}
 			return true;
 		} else {

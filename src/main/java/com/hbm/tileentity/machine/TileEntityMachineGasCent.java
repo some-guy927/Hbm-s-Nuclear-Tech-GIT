@@ -7,6 +7,10 @@ import java.util.List;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.interfaces.ITankPacketAcceptor;
+import com.hbm.inventory.MachineRecipes;
+import com.hbm.inventory.MachineRecipes.GasCentOutput;
+import com.hbm.inventory.container.ContainerMachineGasCent;
+import com.hbm.inventory.gui.GUIMachineGasCent;
 import com.hbm.inventory.GasCentrifugeRecipes;
 import com.hbm.inventory.GasCentrifugeRecipes.*;
 import com.hbm.inventory.UpgradeManager;
@@ -15,14 +19,19 @@ import com.hbm.items.machine.ItemMachineUpgrade;
 import com.hbm.lib.Library;
 import com.hbm.packet.LoopedSoundPacket;
 import com.hbm.packet.PacketDispatcher;
+import com.hbm.tileentity.IGUIProvider;
 import com.hbm.tileentity.TileEntityMachineBase;
-
 import api.hbm.energy.IEnergyUser;
+
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
@@ -34,7 +43,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 
-public class TileEntityMachineGasCent extends TileEntityMachineBase implements ITickable, IEnergyUser, ITankPacketAcceptor, IFluidHandler {
+public class TileEntityMachineGasCent extends TileEntityMachineBase implements ITickable, IEnergyUser, ITankPacketAcceptor, IFluidHandler, IGUIProvider {
 
 	
 	public long power;
@@ -109,7 +118,7 @@ public class TileEntityMachineGasCent extends TileEntityMachineBase implements I
 				return false;
 
             List<GasCentOutput> list = hasCentUpgrade && recipe.outputListB != null ? recipe.outputListB : recipe.outputListA;
-			
+
 			for(int i = 0; i < list.size(); i++) {
 				
 				int slot = i + 5;
@@ -164,7 +173,7 @@ public class TileEntityMachineGasCent extends TileEntityMachineBase implements I
     public boolean hasCentUpgrade(){
         return inventory.getStackInSlot(1).getItem() == ModItems.upgrade_gc_speed;
     }
-	
+
 	@Override
 	public void update() {
 		
@@ -371,5 +380,16 @@ public class TileEntityMachineGasCent extends TileEntityMachineBase implements I
 		} else {
 			return super.getCapability(capability, facing);
 		}
+	}
+
+	@Override
+	public Container provideContainer(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new ContainerMachineGasCent(player.inventory, this);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public GuiScreen provideGUI(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new GUIMachineGasCent(player.inventory, this);
 	}
 }

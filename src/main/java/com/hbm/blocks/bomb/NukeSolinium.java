@@ -66,7 +66,7 @@ public class NukeSolinium extends BlockContainer implements IBomb {
 		} else if(!player.isSneaking()) {
 			TileEntityNukeSolinium entity = (TileEntityNukeSolinium) world.getTileEntity(pos);
 			if(entity != null) {
-				player.openGui(MainRegistry.instance, ModBlocks.guiID_nuke_solinium, world, pos.getX(), pos.getY(), pos.getZ());
+				player.openGui(MainRegistry.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
 			}
 			return true;
 		} else {

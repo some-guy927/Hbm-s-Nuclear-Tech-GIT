@@ -81,7 +81,7 @@ public class MachineFrackingTower extends BlockDummyable {
             TileEntityMachineFrackingTower frackingTower = (TileEntityMachineFrackingTower)world.getTileEntity(new BlockPos(pos[0], pos[1], pos[2]));
 
             if (frackingTower != null)
-                player.openGui(MainRegistry.instance, ModBlocks.guiID_machine_fracking_tower, world, pos[0], pos[1], pos[2]);
+                player.openGui(MainRegistry.instance, 0, world, pos[0], pos[1], pos[2]);
 
             return true;
         } else {

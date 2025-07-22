@@ -47,7 +47,7 @@ public class WasteDrum extends BlockContainer implements ITooltipProvider {
 			TileEntityWasteDrum entity = (TileEntityWasteDrum) world.getTileEntity(pos);
 			if(entity != null)
 			{
-				player.openGui(MainRegistry.instance, ModBlocks.guiID_waste_drum, world, pos.getX(), pos.getY(), pos.getZ());
+				player.openGui(MainRegistry.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
 			}
 			return true;
 		} else {

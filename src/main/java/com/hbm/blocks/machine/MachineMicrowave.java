@@ -1,6 +1,5 @@
 package com.hbm.blocks.machine;
 
-import com.hbm.blocks.ModBlocks;
 import com.hbm.tileentity.machine.TileEntityMicrowave;
 
 import net.minecraft.block.material.Material;
@@ -14,7 +13,7 @@ import net.minecraft.world.World;
 public class MachineMicrowave extends BlockMachineBase {
 
 	public MachineMicrowave(Material materialIn, String s) {
-		super(materialIn, ModBlocks.guiID_microwave, s);
+		super(materialIn, 0, s);
 	}
 	
 	@Override

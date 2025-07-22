@@ -18,6 +18,7 @@ import com.hbm.tileentity.machine.TileEntityCrateDesh;
 import com.hbm.tileentity.machine.TileEntitySafe;
 import com.hbm.hazard.HazardSystem;
 
+import net.minecraft.tileentity.TileEntityLockable;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
@@ -188,20 +189,8 @@ public class BlockStorageCrate extends BlockContainer {
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();
-			if(entity instanceof TileEntityCrateIron && ((TileEntityCrateIron)entity).canAccess(player)) {
-				player.openGui(MainRegistry.instance, ModBlocks.guiID_crate_iron, world, x, y, z);
-			}
-			if(entity instanceof TileEntityCrateSteel && ((TileEntityCrateSteel)entity).canAccess(player)) {
-				player.openGui(MainRegistry.instance, ModBlocks.guiID_crate_steel, world, x, y, z);
-			}
-			if(entity instanceof TileEntityCrateTungsten && ((TileEntityCrateTungsten)entity).canAccess(player)) {
-				player.openGui(MainRegistry.instance, ModBlocks.guiID_crate_tungsten, world, x, y, z);
-			}
-			if(entity instanceof TileEntityCrateDesh && ((TileEntityCrateDesh)entity).canAccess(player)) {
-				player.openGui(MainRegistry.instance, ModBlocks.guiID_crate_desh, world, x, y, z);
-			}
-			if(entity instanceof TileEntitySafe && ((TileEntitySafe)entity).canAccess(player)) {
-				player.openGui(MainRegistry.instance, ModBlocks.guiID_safe, world, x, y, z);
+			if(((TileEntityLockableBase)entity).canAccess(player)) {
+				player.openGui(MainRegistry.instance, 0, world, x, y, z);
 			}
 			return true;
 		} else {

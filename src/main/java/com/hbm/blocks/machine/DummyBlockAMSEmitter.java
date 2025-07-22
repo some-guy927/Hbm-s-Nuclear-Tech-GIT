@@ -50,7 +50,7 @@ public class DummyBlockAMSEmitter extends BlockContainer implements IDummy {
 	public void breakBlock(World world, BlockPos pos, IBlockState state) {
 		if(!safeBreak) {
     		TileEntity te = world.getTileEntity(pos);
-    		if(te != null && te instanceof TileEntityDummy) {
+    		if(te instanceof TileEntityDummy && ((TileEntityDummy) te).target != null) {
     			if(!world.isRemote)
     				world.destroyBlock(((TileEntityDummy)te).target, true);
     		}
@@ -72,7 +72,7 @@ public class DummyBlockAMSEmitter extends BlockContainer implements IDummy {
     			TileEntityAMSEmitter entity = (TileEntityAMSEmitter) world.getTileEntity(a);
     			if(entity != null)
     			{
-    				player.openGui(MainRegistry.instance, ModBlocks.guiID_ams_emitter, world, a.getX(), a.getY(), a.getZ());
+    				player.openGui(MainRegistry.instance, 0, world, a.getX(), a.getY(), a.getZ());
     			}
     		}
 			return true;

@@ -66,7 +66,7 @@ public class BombMulti extends BlockContainer implements IBomb {
 			TileEntityBombMulti entity = (TileEntityBombMulti) world.getTileEntity(pos);
 			if(entity != null)
 			{
-				player.openGui(MainRegistry.instance, ModBlocks.guiID_bomb_multi, world, pos.getX(), pos.getY(), pos.getZ());
+				player.openGui(MainRegistry.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
 			}
 			return true;
 		} else {

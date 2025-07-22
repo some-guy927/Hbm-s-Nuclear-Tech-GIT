@@ -3,6 +3,8 @@ package com.hbm.entity.missile;
 import java.util.ArrayList;
 import java.util.List;
 
+import api.hbm.entity.IRadarDetectable;
+import api.hbm.entity.IRadarDetectableNT;
 import com.hbm.config.WeaponConfig;
 import com.hbm.explosion.ExplosionLarge;
 import com.hbm.lib.ModDamageSource;
@@ -21,7 +23,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-public class EntityMissileAntiBallistic extends EntityMissileBaseAdvanced {
+public class EntityMissileAntiBallistic extends EntityMissileBaseAdvanced implements IRadarDetectable {
 
     private static final int explosionRange = 25;
     private static final int dmg = 50;
@@ -124,5 +126,30 @@ public class EntityMissileAntiBallistic extends EntityMissileBaseAdvanced {
 	@Override
 	public void onImpact() {
 		ExplosionLarge.explode(world, posX, posY, posZ, 10.0F, true, true, true);
+	}
+
+	@Override
+	public String getTranslationKey() {
+		return "radar.target.abm";
+	}
+
+	@Override
+	public int getBlipLevel() {
+		return IRadarDetectableNT.TIER_AB;
+	}
+
+	@Override
+	public boolean canBeSeenBy(Object radar) {
+		return true;
+	}
+
+	@Override
+	public boolean paramsApplicable(RadarScanParams params) {
+		return params.scanMissiles;
+	}
+
+	@Override
+	public boolean suppliesRedstone(RadarScanParams params) {
+		return false;
 	}
 }

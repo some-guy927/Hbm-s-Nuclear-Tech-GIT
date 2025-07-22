@@ -27,6 +27,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.*;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import net.minecraftforge.energy.CapabilityEnergy;
 import org.apache.logging.log4j.Level;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -77,6 +78,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.oredict.OreDictionary;
+import org.jetbrains.annotations.NotNull;
 
 @Spaghetti("this whole class")
 public class Library {
@@ -409,6 +411,12 @@ public class Library {
 		}
 		
 		return power;
+	}
+
+	/** @return true if is instance of IBatteryItem or has FE capability */
+	public static boolean isItemBattery(@NotNull ItemStack stack){
+		if(stack.isEmpty()) return false;
+		return stack.getItem() instanceof IBatteryItem || stack.hasCapability(CapabilityEnergy.ENERGY, null);
 	}
 
 	public static boolean isArrayEmpty(Object[] array) {

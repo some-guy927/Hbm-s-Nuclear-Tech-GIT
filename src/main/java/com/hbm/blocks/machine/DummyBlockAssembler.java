@@ -40,7 +40,7 @@ public class DummyBlockAssembler extends DummyOldBase {
 	public void breakBlock(World world, BlockPos pos, IBlockState state) {
 		if(!safeBreak) {
     		TileEntity te = world.getTileEntity(pos);
-    		if(te != null && te instanceof TileEntityDummy) {
+    		if(te instanceof TileEntityDummy && ((TileEntityDummy) te).target != null) {
     			if(!world.isRemote)
     				world.destroyBlock(((TileEntityDummy)te).target, true);
     		}
@@ -92,7 +92,7 @@ public class DummyBlockAssembler extends DummyOldBase {
     			TileEntityMachineAssembler entity = (TileEntityMachineAssembler) world.getTileEntity(((TileEntityDummy)te).target);
     			if(entity != null)
     			{
-    				player.openGui(MainRegistry.instance, ModBlocks.guiID_machine_assembler, world, ((TileEntityDummy)te).target.getX(), ((TileEntityDummy)te).target.getY(), ((TileEntityDummy)te).target.getZ());
+    				player.openGui(MainRegistry.instance, 0, world, ((TileEntityDummy)te).target.getX(), ((TileEntityDummy)te).target.getY(), ((TileEntityDummy)te).target.getZ());
     			}
     		}
 			return true;

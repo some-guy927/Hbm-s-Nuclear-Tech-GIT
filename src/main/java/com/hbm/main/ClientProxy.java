@@ -20,6 +20,7 @@ import com.hbm.render.util.RenderOverhead;
 import com.hbm.tileentity.machine.*;
 import com.hbm.tileentity.machine.oil.*;
 import com.hbm.tileentity.network.TileEntityCraneSplitter;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import com.hbm.tileentity.network.energy.*;
 import net.minecraft.item.ItemStack;
 import org.apache.logging.log4j.Level;
@@ -35,6 +36,7 @@ import com.hbm.blocks.bomb.DigammaMatter;
 import com.hbm.blocks.generic.BMPowerBox;
 import com.hbm.blocks.generic.BlockModDoor;
 import com.hbm.blocks.generic.TrappedBrick;
+import com.hbm.blocks.generic.BlockBobble.TileEntityBobble;
 import com.hbm.blocks.machine.BlockSeal;
 import com.hbm.blocks.machine.rbmk.RBMKDebrisRadiating;
 import com.hbm.blocks.network.energy.BlockCableGauge.TileEntityCableGauge;
@@ -660,7 +662,9 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAMSLimiter.class, new RenderAMSLimiter());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineSatDock.class, new RenderSatDock());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityForceField.class, new RenderMachineForceField());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineRadar.class, new RenderRadar());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineRadarNT.class, new RenderRadar());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineRadarLarge.class, new RenderRadarLarge());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineRadarScreen.class, new RenderRadarScreen());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDecoPoleTop.class, new RenderPoleTop());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDecoPoleSatelliteReceiver.class, new RenderPoleSatelliteReceiver());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityObjTester.class, new RenderObjTester());
@@ -761,9 +765,10 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFoundryBasin.class, new RenderFoundryBasin());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFoundryChannel.class, new RenderFoundryChannel());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFoundryOutlet.class, new RenderFoundryOutlet());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDoorGeneric.class, new RenderDoorGeneric());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBobble.class, new RenderBobble());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineStrandCaster.class, new RenderStrandCaster());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDoorGeneric.class, new RenderDoorGeneric());
-		
+
 		RenderingRegistry.registerEntityRenderingHandler(EntityDSmokeFX.class, new MultiCloudRendererFactory(new Item[] {ModItems.d_smoke1, ModItems.d_smoke2, ModItems.d_smoke3, ModItems.d_smoke4, ModItems.d_smoke5, ModItems.d_smoke6, ModItems.d_smoke7, ModItems.d_smoke8}));
 		RenderingRegistry.registerEntityRenderingHandler(EntityOrangeFX.class, new MultiCloudRendererFactory(new Item[] {ModItems.orange1, ModItems.orange2, ModItems.orange3, ModItems.orange4, ModItems.orange5, ModItems.orange6, ModItems.orange7, ModItems.orange8}));
 		RenderingRegistry.registerEntityRenderingHandler(EntityCloudFX.class, new MultiCloudRendererFactory(new Item[]{ModItems.cloud1, ModItems.cloud2, ModItems.cloud3, ModItems.cloud4, ModItems.cloud5, ModItems.cloud6, ModItems.cloud7, ModItems.cloud8}));
@@ -2290,7 +2295,7 @@ public class ClientProxy extends ServerProxy {
 		ModItems.jshotgun.setTileEntityItemStackRenderer(new ItemRenderJShotgun());
 		ModItems.gun_ar15.setTileEntityItemStackRenderer(new ItemRenderWeaponAR15());
 		ModItems.boltgun.setTileEntityItemStackRenderer(new ItemRenderBoltgun());
-		
+
 		ModItems.meteorite_sword_seared.setTileEntityItemStackRenderer(new ItemRendererMeteorSword(1.0F, 0.5F, 0.0F));
 		ModItems.meteorite_sword_reforged.setTileEntityItemStackRenderer(new ItemRendererMeteorSword(0.5F, 1.0F, 1.0F));
 		ModItems.meteorite_sword_hardened.setTileEntityItemStackRenderer(new ItemRendererMeteorSword(0.25F, 0.25F, 0.25F));
@@ -2319,8 +2324,17 @@ public class ClientProxy extends ServerProxy {
 		ModItems.ore_bedrock_enriched.setTileEntityItemStackRenderer(new ItemRendererBedrockOre(0x55595D, 1F));
 		
 		for(Entry<Item, ItemRenderBase> entry : ItemRenderLibrary.renderers.entrySet()){
-			entry.getKey().setTileEntityItemStackRenderer(entry.getValue());
+            entry.getKey().setTileEntityItemStackRenderer(entry.getValue());
 		}
+
+        for (Object renderer : TileEntityRendererDispatcher.instance.renderers.values()) {
+            if (renderer instanceof IItemRendererProvider prov) {
+                for (Item item : prov.getItemsForRenderer()) {
+                    item.setTileEntityItemStackRenderer(prov.getRenderer(item));
+                }
+            }
+        }
+	}
 
         ModItems.titanium_shield.setTileEntityItemStackRenderer(new ItemRenderShield("S1", ResourceManager.titanium_shield_tex, ResourceManager.titanium_shield_blank_tex));
         ModItems.steel_shield.setTileEntityItemStackRenderer(new ItemRenderShield("S2", ResourceManager.steel_shield_tex, ResourceManager.steel_shield_blank_tex));
@@ -2332,7 +2346,7 @@ public class ClientProxy extends ServerProxy {
         ModItems.cmb_shield.setTileEntityItemStackRenderer(new ItemRenderShield("S8", ResourceManager.cmb_shield_tex, ResourceManager.cmb_shield_blank_tex));
         ModItems.schrabidium_shield.setTileEntityItemStackRenderer(new ItemRenderShield("S9", ResourceManager.schrabidium_shield_tex, ResourceManager.schrabidium_shield_blank_tex));
     }
-	
+
 	@Override
 	public AudioWrapper getLoopedSound(SoundEvent sound, SoundCategory cat, float x, float y, float z, float volume, float pitch) {
 		AudioWrapperClient audio = new AudioWrapperClient(sound, cat);

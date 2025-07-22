@@ -5,6 +5,8 @@ import com.hbm.blocks.machine.MachinePumpjack;
 import com.hbm.config.MachineConfig;
 import com.hbm.entity.particle.EntityGasFX;
 import com.hbm.forgefluid.FFUtils;
+import com.hbm.inventory.container.ContainerMachinePumpjack;
+import com.hbm.inventory.gui.GUIMachinePumpjack;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
 import com.hbm.lib.ForgeDirection;
@@ -12,20 +14,25 @@ import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.TEPumpjackPacket;
+import com.hbm.tileentity.IGUIProvider;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class TileEntityMachinePumpjack extends TileEntityOilDrillBase {
+public class TileEntityMachinePumpjack extends TileEntityOilDrillBase implements IGUIProvider {
 
 	public boolean isProgressing;
 	public float rotation;
@@ -246,5 +253,16 @@ public class TileEntityMachinePumpjack extends TileEntityOilDrillBase {
 		} else {
 			return null;
 		}
+	}
+
+	@Override
+	public Container provideContainer(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new ContainerMachinePumpjack(player.inventory, this);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public GuiScreen provideGUI(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new GUIMachinePumpjack(player.inventory, this);
 	}
 }

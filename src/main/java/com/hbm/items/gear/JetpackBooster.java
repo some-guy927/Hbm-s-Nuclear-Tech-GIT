@@ -80,9 +80,9 @@ public class JetpackBooster extends JetpackBase {
 			}
 		}
 		if(getFuel(stack) > 0 && props.isJetpackActive()) {
-			if(player.motionY < 0.6D)
+			if(player.motionY < 0.6D) {
 				player.motionY += 0.1D;
-
+			}
 			Vec3d look = player.getLookVec();
 
 			if(Vec3.createVectorHelper(player.motionX, player.motionY, player.motionZ).length() < 5) {
@@ -90,7 +90,8 @@ public class JetpackBooster extends JetpackBase {
 				player.motionY += look.y * 0.25;
 				player.motionZ += look.z * 0.25;
 
-				if(look.y > 0)
+
+				if (look.y > 0)
 					player.fallDistance = 0;
 			}
 

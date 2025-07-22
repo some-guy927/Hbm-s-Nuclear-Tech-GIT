@@ -44,7 +44,7 @@ public class DummyBlockCentrifuge extends BlockContainer implements IDummy {
 	public void breakBlock(World world, BlockPos pos, IBlockState state) {
 		if(!safeBreak) {
     		TileEntity te = world.getTileEntity(pos);
-    		if(te != null && te instanceof TileEntityDummy) {
+    		if(te instanceof TileEntityDummy && ((TileEntityDummy) te).target != null) {
     			if(!world.isRemote)
     				world.destroyBlock(((TileEntityDummy)te).target, true);
     		}
@@ -102,7 +102,7 @@ public class DummyBlockCentrifuge extends BlockContainer implements IDummy {
     			TileEntityMachineCentrifuge entity = (TileEntityMachineCentrifuge) worldIn.getTileEntity(((TileEntityDummy)te).target);
     			if(entity != null)
     			{
-    				playerIn.openGui(MainRegistry.instance, ModBlocks.guiID_centrifuge, worldIn, a, b, c);
+    				playerIn.openGui(MainRegistry.instance, 0, worldIn, a, b, c);
     			}
     		}
 			return true;

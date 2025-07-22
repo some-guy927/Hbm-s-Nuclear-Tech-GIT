@@ -68,7 +68,11 @@ public class ExplosionLarge {
 	}
 	
 	public static void spawnShock(World world, double x, double y, double z, int count, double strength) {
-		
+
+		if(world == null) {
+			return;
+		}
+
 		NBTTagCompound data = new NBTTagCompound();
 		data.setString("type", "smoke");
 		data.setString("mode", "shock");

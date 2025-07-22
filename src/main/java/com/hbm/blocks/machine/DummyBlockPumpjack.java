@@ -44,7 +44,7 @@ public class DummyBlockPumpjack extends DummyOldBase {
 	public void breakBlock(World world, BlockPos pos, IBlockState state) {
 		if(!safeBreak) {
     		TileEntity te = world.getTileEntity(pos);
-    		if(te != null && te instanceof TileEntityDummy) {
+    		if(((TileEntityDummy)te).target != null && te instanceof TileEntityDummy) {
     			if(!world.isRemote)
     				world.destroyBlock(((TileEntityDummy)te).target, true);
     		}
@@ -99,7 +99,7 @@ public class DummyBlockPumpjack extends DummyOldBase {
     			TileEntityMachinePumpjack entity = (TileEntityMachinePumpjack) world.getTileEntity(a);
     			if(entity != null)
     			{
-    				player.openGui(MainRegistry.instance, ModBlocks.guiID_machine_pumpjack, world, a.getX(), a.getY(), a.getZ());
+    				player.openGui(MainRegistry.instance, 0, world, a.getX(), a.getY(), a.getZ());
     			}
     		}
 			return true;

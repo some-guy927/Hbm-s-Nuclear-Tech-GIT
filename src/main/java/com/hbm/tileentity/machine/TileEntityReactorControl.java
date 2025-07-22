@@ -2,24 +2,32 @@ package com.hbm.tileentity.machine;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.forgefluid.ModForgeFluids;
+import com.hbm.inventory.container.ContainerReactorControl;
+import com.hbm.inventory.gui.GUIReactorControl;
 import com.hbm.items.ModItems;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.TEControlPacket;
 
+import com.hbm.tileentity.IGUIProvider;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRedstoneComparator;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityReactorControl extends TileEntity implements ITickable {
+public class TileEntityReactorControl extends TileEntity implements ITickable, IGUIProvider {
 
 	public ItemStackHandler inventory;
 
@@ -151,12 +159,12 @@ public class TileEntityReactorControl extends TileEntity implements ITickable {
         		}
         		
         		if(!redstoned) {
-        			if(world.getRedstonePowerFromNeighbors(pos) > 0) {
+        			if(world.isBlockPowered(pos)) {
         				redstoned = true;
         				reactor.retracting = !reactor.retracting;
         			}
         		} else {
-        			if(world.getRedstonePowerFromNeighbors(pos) == 0) {
+        			if(world.isBlockPowered(pos)) {
         				redstoned = false;
         			}
         		}
@@ -191,7 +199,7 @@ public class TileEntityReactorControl extends TileEntity implements ITickable {
         			lastRods = rods;
         		
         		if(!redstoned) {
-        			if(world.getRedstonePowerFromNeighbors(pos) > 0) {
+        			if(world.isBlockPowered(pos)) {
         				redstoned = true;
         				
         				if(rods == 0)
@@ -200,7 +208,7 @@ public class TileEntityReactorControl extends TileEntity implements ITickable {
         					rods = 0;
         			}
         		} else {
-        			if(world.getRedstonePowerFromNeighbors(pos) == 0) {
+        			if(world.isBlockPowered(pos)) {
         				redstoned = false;
         			}
         		}
@@ -253,5 +261,16 @@ public class TileEntityReactorControl extends TileEntity implements ITickable {
 		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
 			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory);
 		return super.getCapability(capability, facing);
+	}
+
+	@Override
+	public Container provideContainer(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new ContainerReactorControl(player.inventory, this);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public GuiScreen provideGUI(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new GUIReactorControl(player.inventory, this);
 	}
 }

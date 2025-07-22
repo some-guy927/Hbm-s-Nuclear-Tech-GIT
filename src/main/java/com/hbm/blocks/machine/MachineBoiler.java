@@ -127,31 +127,8 @@ public class MachineBoiler extends BlockContainer {
 		} else if (!player.isSneaking()) {
 			TileEntity te = world.getTileEntity(pos);
 
-			if (te instanceof TileEntityMachineBoiler) {
-
-				TileEntityMachineBoiler entity = (TileEntityMachineBoiler) te;
-
-				if (entity != null) {
-
-					player.openGui(MainRegistry.instance, ModBlocks.guiID_machine_boiler, world, pos.getX(), pos.getY(), pos.getZ());
-				}
-			}
-
-			if(te instanceof TileEntityMachineBoilerElectric) {
-				
-				TileEntityMachineBoilerElectric entity = (TileEntityMachineBoilerElectric) te;
-				if(entity != null)
-				{
-					player.openGui(MainRegistry.instance, ModBlocks.guiID_machine_boiler_electric, world, pos.getX(), pos.getY(), pos.getZ());
-				}
-			}
-			if(te instanceof TileEntityMachineBoilerRTG) {
-				
-				TileEntityMachineBoilerRTG entity = (TileEntityMachineBoilerRTG) te;
-				if(entity != null)
-				{
-					player.openGui(MainRegistry.instance, ModBlocks.guiID_machine_boiler_rtg, world, pos.getX(), pos.getY(), pos.getZ());
-				}
+			if (te != null) {
+				player.openGui(MainRegistry.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
 			}
 			return true;
 		} else {

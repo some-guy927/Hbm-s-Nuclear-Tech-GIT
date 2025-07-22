@@ -123,7 +123,7 @@ public class MachineElectricFurnace extends BlockContainer {
 			TileEntityMachineElectricFurnace entity = (TileEntityMachineElectricFurnace) world.getTileEntity(pos);
 			if(entity != null)
 			{
-				player.openGui(MainRegistry.instance, ModBlocks.guiID_electric_furnace, world, pos.getX(), pos.getY(), pos.getZ());
+				player.openGui(MainRegistry.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
 			}
 			return true;
 		} else {

@@ -2,15 +2,23 @@ package com.hbm.tileentity.machine.rbmk;
 
 import java.util.Map;
 
+import com.hbm.inventory.container.ContainerRBMKControl;
 import com.hbm.inventory.control_panel.DataValue;
 import com.hbm.inventory.control_panel.DataValueFloat;
 import com.hbm.entity.projectile.EntityRBMKDebris.DebrisType;
+import com.hbm.inventory.gui.GUIRBMKControl;
+import com.hbm.tileentity.IGUIProvider;
 
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public abstract class TileEntityRBMKControl extends TileEntityRBMKSlottedBase {
+public abstract class TileEntityRBMKControl extends TileEntityRBMKSlottedBase implements IGUIProvider {
 
 	@SideOnly(Side.CLIENT)
 	public double lastLevel;
@@ -124,5 +132,16 @@ public abstract class TileEntityRBMKControl extends TileEntityRBMKSlottedBase {
 		data.put("level", new DataValueFloat((float) this.level*100));
 
 		return data;
+	}
+
+	@Override
+	public Container provideContainer(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new ContainerRBMKControl(player.inventory, (TileEntityRBMKControlManual) this);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public GuiScreen provideGUI(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new GUIRBMKControl(player.inventory, (TileEntityRBMKControlManual) this);
 	}
 }

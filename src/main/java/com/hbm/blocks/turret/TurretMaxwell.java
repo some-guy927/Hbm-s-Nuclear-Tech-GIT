@@ -1,6 +1,5 @@
 package com.hbm.blocks.turret;
 
-import com.hbm.blocks.ModBlocks;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.TileEntityProxyCombo;
 import com.hbm.tileentity.turret.TileEntityTurretMaxwell;
@@ -25,6 +24,6 @@ public class TurretMaxwell extends TurretBaseNT {
 	
 	@Override
 	public void openGUI(World world, EntityPlayer player, int x, int y, int z){
-		player.openGui(MainRegistry.instance, ModBlocks.guiID_maxwell, world, x, y, z);
+		player.openGui(MainRegistry.instance, 0, world, x, y, z);
 	}
 }

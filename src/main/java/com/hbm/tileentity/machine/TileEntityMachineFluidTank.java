@@ -3,11 +3,17 @@ package com.hbm.tileentity.machine;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.ITankPacketAcceptor;
+import com.hbm.inventory.container.ContainerMachineFluidTank;
 import com.hbm.inventory.control_panel.*;
+import com.hbm.inventory.gui.GUIMachineFluidTank;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
+import com.hbm.tileentity.IGUIProvider;
 import com.hbm.tileentity.TileEntityMachineBase;
 
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -29,7 +35,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-public class TileEntityMachineFluidTank extends TileEntityMachineBase implements ITickable, IFluidHandler, ITankPacketAcceptor, IControllable {
+public class TileEntityMachineFluidTank extends TileEntityMachineBase implements ITickable, IFluidHandler, ITankPacketAcceptor, IControllable, IGUIProvider {
 
 	public FluidTank tank;
 
@@ -276,4 +282,14 @@ public class TileEntityMachineFluidTank extends TileEntityMachineBase implements
 		return getWorld();
 	}
 
+	@Override
+	public Container provideContainer(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new ContainerMachineFluidTank(player.inventory,this);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public GuiScreen provideGUI(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new GUIMachineFluidTank(player.inventory, this);
+	}
 }

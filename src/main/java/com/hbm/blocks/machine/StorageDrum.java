@@ -18,8 +18,8 @@ import net.minecraft.world.World;
 
 public class StorageDrum extends BlockMachineBase implements ITooltipProvider {
 
-	public StorageDrum(Material mat, int guiID, String s) {
-		super(mat, guiID, s);
+	public StorageDrum(Material mat, String s) {
+		super(mat, 0, s);
 	}
 
 	@Override

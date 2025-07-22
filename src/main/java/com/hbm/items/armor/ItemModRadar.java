@@ -6,7 +6,7 @@ import com.hbm.handler.ArmorModHandler;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.capability.HbmLivingProps;
 
-import api.hbm.entity.IRadarDetectable;
+import api.hbm.entity.IRadarDetectableNT;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -56,7 +56,7 @@ public class ItemModRadar extends ItemArmorMod {
 				return false;
 			}
 			
-			if(e instanceof IRadarDetectable && e.motionY <= 0 && isEntityApproaching(entity, e)){
+			if(e instanceof IRadarDetectableNT && e.motionY <= 0 && isEntityApproaching(entity, e)){
 				return true;
 			}
 		}

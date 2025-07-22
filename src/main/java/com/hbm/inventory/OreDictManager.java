@@ -168,8 +168,8 @@ public class OreDictManager {
 	public static final DictFrame ALLOY = new DictFrame("AdvancedAlloy");
 	/** TUNGSTEN */ 
 	public static final DictFrame W = new DictFrame("Tungsten");
-	/** ALUMINUM */ 
-	public static final DictFrame AL = new DictFrame("Aluminum");
+	/** ALUMINiUM */
+	public static final DictFrame AL = new DictFrame("Aluminium"); //No
 	public static final DictFrame STEEL = new DictFrame("Steel");
 	/** TECHNETIUM STEEL */ 
 	public static final DictFrame TCALLOY = new DictFrame("TcAlloy");

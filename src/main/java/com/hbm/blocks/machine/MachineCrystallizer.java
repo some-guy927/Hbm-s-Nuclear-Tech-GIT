@@ -1,7 +1,6 @@
 package com.hbm.blocks.machine;
 
 import com.hbm.blocks.BlockDummyable;
-import com.hbm.blocks.ModBlocks;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.TileEntityProxyCombo;
@@ -53,7 +52,7 @@ public class MachineCrystallizer extends BlockDummyable {
 			TileEntityMachineCrystallizer entity = (TileEntityMachineCrystallizer) world.getTileEntity(new BlockPos(pos1[0], pos1[1], pos1[2]));
 			if(entity != null)
 			{
-				player.openGui(MainRegistry.instance, ModBlocks.guiID_crystallizer, world, pos1[0], pos1[1], pos1[2]);
+				player.openGui(MainRegistry.instance, 0, world, pos1[0], pos1[1], pos1[2]);
 			}
 			return true;
 		} else {

@@ -60,16 +60,19 @@ public class TEMissileMultipartPacket implements IMessage {
             if(m == null) return null;
             Minecraft.getMinecraft().addScheduledTask(() -> {
 
-                TileEntity te = Minecraft.getMinecraft().world.getTileEntity(new BlockPos(m.x, m.y, m.z));
-                if (te != null && te instanceof TileEntityCompactLauncher launcher) {
-                    launcher.load = m.missile;
-                }
-                if (te != null && te instanceof TileEntityLaunchTable launcher) {
-                    launcher.load = m.missile;
-                }
-                if (te != null && te instanceof TileEntityMachineMissileAssembly rack) {
-                    rack.load = m.missile;
-                }
+                Minecraft.getMinecraft().addScheduledTask(() -> {
+				TileEntity te = Minecraft.getMinecraft().world.getTileEntity(new BlockPos(m.x, m.y, m.z));
+
+				if (te != null && te instanceof TileEntityCompactLauncher launcher) {
+					launcher.load = m.missile;
+				}
+
+				if (te != null && te instanceof TileEntityLaunchTable launcher) {
+					launcher.load = m.missile;
+				}
+
+				if (te != null && te instanceof TileEntityMachineMissileAssembly rack) {
+					rack.load = m.missile;}
 
             });
             return null;

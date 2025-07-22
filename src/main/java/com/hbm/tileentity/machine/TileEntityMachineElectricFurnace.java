@@ -1,24 +1,32 @@
 package com.hbm.tileentity.machine;
 
 import com.hbm.blocks.machine.MachineElectricFurnace;
+import com.hbm.inventory.container.ContainerElectricFurnace;
+import com.hbm.inventory.gui.GUIMachineElectricFurnace;
 import com.hbm.lib.Library;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.AuxGaugePacket;
 import com.hbm.packet.PacketDispatcher;
+import com.hbm.tileentity.IGUIProvider;
 import com.hbm.tileentity.TileEntityMachineBase;
 
 import api.hbm.energy.IBatteryItem;
 import api.hbm.energy.IEnergyUser;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 
-public class TileEntityMachineElectricFurnace extends TileEntityMachineBase implements ITickable, IEnergyUser {
+public class TileEntityMachineElectricFurnace extends TileEntityMachineBase implements ITickable, IEnergyUser, IGUIProvider {
 
 	public int dualCookTime;
 	public long power;
@@ -200,9 +208,6 @@ public class TileEntityMachineElectricFurnace extends TileEntityMachineBase impl
 				this.markDirty();
 			}
 		}
-		
-		
-		
 	}
 
 	@Override
@@ -220,4 +225,14 @@ public class TileEntityMachineElectricFurnace extends TileEntityMachineBase impl
 		return maxPower;
 	}
 
+	@Override
+	public Container provideContainer(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new ContainerElectricFurnace(player.inventory, this);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public GuiScreen provideGUI(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new GUIMachineElectricFurnace(player.inventory, this);
+	}
 }

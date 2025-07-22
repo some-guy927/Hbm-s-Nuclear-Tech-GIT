@@ -66,7 +66,7 @@ public class NukeTsar extends BlockContainer implements IBomb {
 		} else if(!player.isSneaking()) {
 			TileEntityNukeTsar entity = (TileEntityNukeTsar) world.getTileEntity(pos);
 			if(entity != null) {
-				player.openGui(MainRegistry.instance, ModBlocks.guiID_nuke_tsar, world, pos.getX(), pos.getY(), pos.getZ());
+				player.openGui(MainRegistry.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
 			}
 			return true;
 		} else {

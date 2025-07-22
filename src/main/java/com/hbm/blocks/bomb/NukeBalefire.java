@@ -21,8 +21,8 @@ import net.minecraft.world.World;
 
 public class NukeBalefire extends BlockMachineBase implements IBomb {
 
-	public NukeBalefire(Material materialIn, int guiID, String s) {
-		super(materialIn, guiID, s);
+	public NukeBalefire(Material materialIn, String s) {
+		super(materialIn, 0, s);
 	}
 	
 	@Override

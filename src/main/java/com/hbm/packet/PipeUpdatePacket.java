@@ -50,6 +50,10 @@ public class PipeUpdatePacket implements IMessage {
 		@Override
 		@SideOnly(Side.CLIENT)
 		public IMessage onMessage(PipeUpdatePacket message, MessageContext ctx) {
+			if (Minecraft.getMinecraft().world == null || message.pos == null) {
+				return null;
+			}
+
 			Minecraft.getMinecraft().addScheduledTask(() -> {
 				TileEntity te = Minecraft.getMinecraft().world.getTileEntity(message.pos);
 				

@@ -3,25 +3,32 @@ package com.hbm.tileentity.machine.oil;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.MachineConfig;
 import com.hbm.forgefluid.FFUtils;
+import com.hbm.inventory.container.ContainerMachineOilWell;
+import com.hbm.inventory.gui.GUIMachineOilWell;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
+import com.hbm.tileentity.IGUIProvider;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.inventory.Container;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class TileEntityMachineOilWell extends TileEntityOilDrillBase {
+public class TileEntityMachineOilWell extends TileEntityOilDrillBase implements IGUIProvider {
 
 	// private static final int[] slots_top = new int[] {1};
 	// private static final int[] slots_bottom = new int[] {2, 0};
@@ -200,11 +207,6 @@ public class TileEntityMachineOilWell extends TileEntityOilDrillBase {
 		}
 	}
 
-
-
-
-
-
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
 		return TileEntity.INFINITE_EXTENT_AABB;
@@ -214,5 +216,16 @@ public class TileEntityMachineOilWell extends TileEntityOilDrillBase {
 	@SideOnly(Side.CLIENT)
 	public double getMaxRenderDistanceSquared() {
 		return 65536.0D;
+	}
+
+	@Override
+	public Container provideContainer(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new ContainerMachineOilWell(player.inventory, this);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public GuiScreen provideGUI(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new GUIMachineOilWell(player.inventory, this);
 	}
 }

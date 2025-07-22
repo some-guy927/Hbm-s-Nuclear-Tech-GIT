@@ -88,7 +88,7 @@ public class MachinePress extends BlockContainer {
 			TileEntityMachinePress entity = (TileEntityMachinePress) world.getTileEntity(pos);
 			if(entity != null)
 			{
-				player.openGui(MainRegistry.instance, ModBlocks.guiID_machine_press, world, pos.getX(), pos.getY(), pos.getZ());
+				player.openGui(MainRegistry.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
 			}
 			return true;
 		} else {

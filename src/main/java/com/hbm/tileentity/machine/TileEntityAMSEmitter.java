@@ -3,6 +3,8 @@ package com.hbm.tileentity.machine;
 import com.hbm.explosion.ExplosionLarge;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.ITankPacketAcceptor;
+import com.hbm.inventory.container.ContainerAMSEmitter;
+import com.hbm.inventory.gui.GUIAMSEmitter;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
@@ -11,13 +13,17 @@ import com.hbm.packet.AuxGaugePacket;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 
+import com.hbm.tileentity.IGUIProvider;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -32,7 +38,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.ItemStackHandler;
 import scala.util.Random;
 
-public class TileEntityAMSEmitter extends TileEntity implements ITickable, IFluidHandler, ITankPacketAcceptor {
+public class TileEntityAMSEmitter extends TileEntity implements ITickable, IFluidHandler, ITankPacketAcceptor, IGUIProvider {
 
 	public ItemStackHandler inventory;
 
@@ -347,4 +353,14 @@ public class TileEntityAMSEmitter extends TileEntity implements ITickable, IFlui
 		}
 	}
 
+	@Override
+	public Container provideContainer(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new ContainerAMSEmitter(player.inventory, this);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public GuiScreen provideGUI(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new GUIAMSEmitter(player.inventory, this);
+	}
 }

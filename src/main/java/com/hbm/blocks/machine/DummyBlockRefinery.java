@@ -44,7 +44,7 @@ public class DummyBlockRefinery extends DummyOldBase {
 	public void breakBlock(World world, BlockPos pos, IBlockState state) {
 		if(!safeBreak) {
     		TileEntity te = world.getTileEntity(pos);
-    		if(te != null && te instanceof TileEntityDummy) {
+    		if(te instanceof TileEntityDummy && ((TileEntityDummy) te).target != null) {
     			if(!world.isRemote)
     				world.destroyBlock(((TileEntityDummy)te).target, true);
     		}
@@ -101,7 +101,7 @@ public class DummyBlockRefinery extends DummyOldBase {
     			TileEntityMachineRefinery entity = (TileEntityMachineRefinery) world.getTileEntity(target);
     			if(entity != null)
     			{
-    				player.openGui(MainRegistry.instance, ModBlocks.guiID_machine_refinery, world, target.getX(), target.getY(), target.getZ());
+    				player.openGui(MainRegistry.instance, 0, world, target.getX(), target.getY(), target.getZ());
     			}
     		}
 			return true;

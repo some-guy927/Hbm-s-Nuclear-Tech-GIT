@@ -12,6 +12,8 @@ import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.handler.RadiationSystemNT;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.interfaces.IRadResistantBlock;
+import com.hbm.inventory.container.ContainerReactorMultiblock;
+import com.hbm.inventory.gui.GUIReactorMultiblock;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemFuelRod;
 import com.hbm.packet.AuxGaugePacket;
@@ -21,9 +23,12 @@ import com.hbm.packet.LargeReactorPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.saveddata.RadiationSavedData;
 
+import com.hbm.tileentity.IGUIProvider;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -33,6 +38,7 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.Fluid;
@@ -44,12 +50,14 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityMachineReactorLarge extends TileEntity implements ITickable, IFluidHandler, ITankPacketAcceptor {
+public class TileEntityMachineReactorLarge extends TileEntity implements ITickable, IFluidHandler, ITankPacketAcceptor, IGUIProvider {
 
 	public ItemStackHandler inventory;
 	public ICapabilityProvider dropProvider;
@@ -999,4 +1007,14 @@ public class TileEntityMachineReactorLarge extends TileEntity implements ITickab
 		return 0;
 	}
 
+	@Override
+	public Container provideContainer(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new ContainerReactorMultiblock(player.inventory, this);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public GuiScreen provideGUI(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new GUIReactorMultiblock(player.inventory, this);
+	}
 }

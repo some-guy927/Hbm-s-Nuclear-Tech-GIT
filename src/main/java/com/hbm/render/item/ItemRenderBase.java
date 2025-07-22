@@ -18,7 +18,12 @@ public class ItemRenderBase extends TEISRBase {
 		case THIRD_PERSON_RIGHT_HAND:
 		case HEAD:
 		case FIXED:
+			GL11.glScaled(0.4, 0.4, 0.4);
+			GL11.glRotated(-90, 0, 1, 0);
+			renderNonInv(itemStackIn);
+			break;
 		case GROUND:
+			GL11.glTranslated(0.5, 0.5, 0.5);
 			GL11.glScaled(0.4, 0.4, 0.4);
 			GL11.glRotated(-90, 0, 1, 0);
 			renderNonInv(itemStackIn);

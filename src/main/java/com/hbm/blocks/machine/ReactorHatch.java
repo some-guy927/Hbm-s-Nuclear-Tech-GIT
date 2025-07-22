@@ -61,7 +61,7 @@ public class ReactorHatch extends BlockContainer {
 				{
 					if(((TileEntityMachineReactorLarge)world.getTileEntity(pos.add(0, 0, 2))).checkBody())
 					{
-						player.openGui(MainRegistry.instance, ModBlocks.guiID_reactor_multiblock, world, pos.getX(), pos.getY(), pos.getZ() + 2);
+						player.openGui(MainRegistry.instance, 0, world, pos.getX(), pos.getY(), pos.getZ() + 2);
 					} else {
 						player.sendMessage(new TextComponentTranslation("chat.bigreactor.structurebad"));
 					}
@@ -75,7 +75,7 @@ public class ReactorHatch extends BlockContainer {
 				{
 					if(((TileEntityMachineReactorLarge)world.getTileEntity(pos.add(0, 0, -2))).checkBody())
 					{
-						player.openGui(MainRegistry.instance, ModBlocks.guiID_reactor_multiblock, world, pos.getX(), pos.getY(), pos.getZ() - 2);
+						player.openGui(MainRegistry.instance, 0, world, pos.getX(), pos.getY(), pos.getZ() - 2);
 					} else {
 						player.sendMessage(new TextComponentTranslation("chat.bigreactor.structurebad"));
 					}
@@ -89,7 +89,7 @@ public class ReactorHatch extends BlockContainer {
 				{
 					if(((TileEntityMachineReactorLarge)world.getTileEntity(pos.add(2, 0, 0))).checkBody())
 					{
-						player.openGui(MainRegistry.instance, ModBlocks.guiID_reactor_multiblock, world, pos.getX() + 2, pos.getY(), pos.getZ());
+						player.openGui(MainRegistry.instance, 0, world, pos.getX() + 2, pos.getY(), pos.getZ());
 					} else {
 						player.sendMessage(new TextComponentTranslation("chat.bigreactor.structurebad"));
 					}
@@ -103,7 +103,7 @@ public class ReactorHatch extends BlockContainer {
 				{
 					if(((TileEntityMachineReactorLarge)world.getTileEntity(pos.add(-2, 0, 0))).checkBody())
 					{
-						player.openGui(MainRegistry.instance, ModBlocks.guiID_reactor_multiblock, world, pos.getX() - 2, pos.getY(), pos.getZ());
+						player.openGui(MainRegistry.instance, 0, world, pos.getX() - 2, pos.getY(), pos.getZ());
 					} else {
 						player.sendMessage(new TextComponentTranslation("chat.bigreactor.structurebad"));
 					}

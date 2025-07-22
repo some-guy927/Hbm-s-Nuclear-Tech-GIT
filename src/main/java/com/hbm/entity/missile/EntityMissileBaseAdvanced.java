@@ -8,7 +8,7 @@ import com.hbm.explosion.ExplosionLarge;
 import com.hbm.interfaces.IConstantRenderer;
 import com.hbm.main.MainRegistry;
 import com.hbm.packet.PacketDispatcher;
-import api.hbm.entity.IRadarDetectable;
+import api.hbm.entity.IRadarDetectableNT;
 import com.hbm.packet.LoopedEntitySoundPacket;
 import com.hbm.render.amlfrom1710.Vec3;
 
@@ -24,10 +24,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeChunkManager;
+import net.minecraftforge.common.ForgeChunkManager.Ticket;
+import net.minecraftforge.common.ForgeChunkManager.Type;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public abstract class EntityMissileBaseAdvanced extends EntityChunky implements IConstantRenderer, IRadarDetectable {
+public abstract class EntityMissileBaseAdvanced extends EntityChunky implements IConstantRenderer, IRadarDetectableNT {
 
 	public static final DataParameter<Integer> HEALTH = EntityDataManager.createKey(EntityMissileBaseAdvanced.class, DataSerializers.VARINT);
 	public static final double particleSpeed = 1.75D;

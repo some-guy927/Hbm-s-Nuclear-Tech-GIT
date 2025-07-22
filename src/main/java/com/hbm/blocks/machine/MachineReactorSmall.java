@@ -123,7 +123,7 @@ public class MachineReactorSmall extends BlockContainer implements IMultiBlock {
 			TileEntityMachineReactorSmall entity = (TileEntityMachineReactorSmall) world.getTileEntity(pos);
 			if(entity != null)
 			{
-				player.openGui(MainRegistry.instance, ModBlocks.guiID_reactor_small, world, pos.getX(), pos.getY(), pos.getZ());
+				player.openGui(MainRegistry.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
 			}
 			return true;
 		} else {

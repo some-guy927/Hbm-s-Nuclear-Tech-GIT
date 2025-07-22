@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.hbm.blocks.generic.BlockBobble;
 import com.hbm.blocks.ICustomBlockItem;
 import com.hbm.blocks.generic.BlockModDoor;
 import com.hbm.blocks.generic.WasteLeaves;
@@ -138,15 +139,7 @@ import static com.hbm.inventory.OreDictManager.*;
 public class ModItems {
 	
 	public static final List<Item> ALL_ITEMS = new ArrayList<Item>();
-	
-	public static final int guiID_item_folder = 1099;
-	public static final int guiID_item_designator = 10100;
-	public static final int guiID_item_sat_interface = 10101;
-	public static final int guiID_item_bobmazon = 10103;
-	public static final int guiID_item_sat_coord = 10104;
-	public static final int guiID_item_book = 10105;
-	public static final int guiID_item_guide = 10106;
-	
+
 	public static final Item redstone_sword = new RedstoneSword(ToolMaterial.STONE, "redstone_sword").setCreativeTab(CreativeTabs.COMBAT);
 	public static final Item big_sword = new BigSword(ToolMaterial.DIAMOND, "big_sword").setCreativeTab(CreativeTabs.COMBAT);
 	
@@ -172,7 +165,8 @@ public class ModItems {
 	public static final Item coltass = new ItemColtanCompass("coltass").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item linker = new ItemTeleLink("linker").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item reactor_sensor = new ItemReactorSensor("reactor_sensor").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
-	
+	public static final Item radar_linker = new ItemRadarLinker("radar_linker").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
+
 	//Syringe
 	public static final Item syringe_empty = new ItemBase("syringe_empty").setFull3D().setCreativeTab(MainRegistry.consumableTab);
 	public static final Item syringe_awesome = new ItemSyringe("syringe_awesome").setCreativeTab(MainRegistry.consumableTab);
@@ -317,7 +311,8 @@ public class ModItems {
 	public static final Item protection_charm = new ItemModCharm("protection_charm").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item meteor_charm = new ItemModCharm("meteor_charm").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item neutrino_lens = new ItemModLens("neutrino_lens").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
-
+	public static final Item cigarette = new ItemCigarette("cigarette").setFull3D().setMaxStackSize(16).setCreativeTab(MainRegistry.consumableTab);
+		
 	//Stamps
 	public static final Item stamp_stone_flat = new ItemStamp("stamp_stone_flat", 16);
 	public static final Item stamp_stone_plate = new ItemStamp("stamp_stone_plate", 16);
@@ -1576,7 +1571,7 @@ public class ModItems {
 	public static final Item cinnebar = new ItemBase("cinnebar").setCreativeTab(MainRegistry.partsTab);
 
     public static final Item chemical_dye = new ItemChemicalDye("chemical_dye").setCreativeTab(MainRegistry.partsTab);
-	
+
 	//Misc/crafting items
 	public static final Item toothpicks = new ItemBase("toothpicks").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ducttape = new ItemBase("ducttape").setCreativeTab(MainRegistry.partsTab);
@@ -1600,7 +1595,7 @@ public class ModItems {
 	public static final Item rag_damp = new ItemBase("rag_damp").setCreativeTab(MainRegistry.partsTab);
 	public static final Item rag_piss = new ItemBase("rag_piss").setCreativeTab(MainRegistry.partsTab);
 	public static final Item filter_coal = new ItemBase("filter_coal").setCreativeTab(MainRegistry.partsTab);
-	
+
 	public static final Item centrifuge_element = new ItemBase("centrifuge_element").setCreativeTab(MainRegistry.partsTab);
 	public static final Item reactor_core = new ItemBase("reactor_core").setCreativeTab(MainRegistry.partsTab);
     public static final Item low_density_element = new ItemBase("low_density_element").setCreativeTab(MainRegistry.partsTab);
@@ -1885,7 +1880,7 @@ public class ModItems {
 			.addBreakAbility(new ToolAbility.RecursionAbility(9));
 	
 	public static final ToolMaterial matDecCobalt = EnumHelper.addToolMaterial("HBM_COBALT2", 4, 1000, 15.0F, 2.5F, 25).setRepairItem(new ItemStack(ModItems.ingot_cobalt));
-	public static final Item cobalt_decorated_sword = new ItemSwordAbility(15F, 0, matDecCobalt, "cobalt_decorated_sword");
+	public static final Item cobalt_decorated_sword = new ItemSwordAbility(15F, 0, matDecCobalt, "cobalt_decorated_sword").addHitAbility(new WeaponAbility.BobbleAbility());
 	public static final Item cobalt_decorated_pickaxe = new ItemToolAbility(6F, -2.8F, 0, matDecCobalt, EnumToolType.PICKAXE, "cobalt_decorated_pickaxe")
 			.addBreakAbility(new ToolAbility.RecursionAbility(4))
 			.addBreakAbility(new ToolAbility.HammerAbility(1))
@@ -1907,8 +1902,9 @@ public class ModItems {
 	public static final ToolMaterial matStarmetal = EnumHelper.addToolMaterial("HBM_STARMETAL", 3, 1000, 20.0F, 2.5F, 30).setRepairItem(new ItemStack(ModItems.ingot_starmetal));
 	public static final Item starmetal_sword = new ItemSwordAbility(25F, 0, matStarmetal, "starmetal_sword")
 			.addHitAbility(new WeaponAbility.BeheaderAbility())
-			.addHitAbility(new WeaponAbility.StunAbility(3));
-    public static final Item starmetal_shield = new ModShield(STAR.ingot(), matStarmetal, "starmetal_shield");
+			.addHitAbility(new WeaponAbility.StunAbility(3))
+			.addHitAbility(new WeaponAbility.BobbleAbility());
+	public static final Item starmetal_shield = new ModShield(STAR.ingot(), matStarmetal, "starmetal_shield");
     public static final Item starmetal_pickaxe = new ItemToolAbility(8F, -2.8F, 0, matStarmetal, EnumToolType.PICKAXE, "starmetal_pickaxe")
 			.addBreakAbility(new ToolAbility.RecursionAbility(6))
 			.addBreakAbility(new ToolAbility.HammerAbility(2))
@@ -3029,7 +3025,8 @@ public class ModItems {
 	public static final Item sat_chip = new ItemSatChip("sat_chip").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
 	public static final Item sat_interface = new ItemSatInterface("sat_interface").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
 	public static final Item sat_coord = new ItemSatInterface("sat_coord").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
-	
+	public static final Item sat_relay = new ItemSatChip("sat_relay").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
+
 	
 	//Missiles
 	public static final Item designator = new ItemDesignator("designator").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
@@ -3480,6 +3477,9 @@ public class ModItems {
 				((ICustomBlockItem)block).registerItem();
 			} else if(block instanceof BlockFuel){
 				ForgeRegistries.ITEMS.register(new ItemFuelBlock(block).setRegistryName(block.getRegistryName()));
+			} else if(block instanceof BlockModDoor){
+			} else if(block instanceof BlockBobble) { //need to fix this probably
+				ForgeRegistries.ITEMS.register(new ItemBlock(block).setRegistryName(block.getRegistryName()).setHasSubtypes(true));
             } else if(block instanceof BlockLeaves bLeaf){
                 if(block instanceof WasteLeaves wLeaf) ForgeRegistries.ITEMS.register(new ItemNTMLeaves(wLeaf).setRegistryName(block.getRegistryName()));
                 else ForgeRegistries.ITEMS.register(new ItemLeaves(bLeaf).setRegistryName(block.getRegistryName()).setTranslationKey("leaves"));

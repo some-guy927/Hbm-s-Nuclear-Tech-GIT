@@ -1,6 +1,5 @@
 package com.hbm.blocks.machine.rbmk;
 
-import com.hbm.blocks.ModBlocks;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKControlAuto;
 
 import net.minecraft.block.state.IBlockState;
@@ -28,7 +27,7 @@ public class RBMKControlAuto extends RBMKBase {
 	
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ){
-		return openInv(worldIn, pos.getX(), pos.getY(), pos.getZ(), playerIn, ModBlocks.guiID_rbmk_control_auto, hand);
+		return openInv(worldIn, pos.getX(), pos.getY(), pos.getZ(), playerIn, 0, hand);
 	}
 	
 	

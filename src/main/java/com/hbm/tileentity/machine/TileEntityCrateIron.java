@@ -1,5 +1,7 @@
 package com.hbm.tileentity.machine;
 
+import com.hbm.inventory.container.ContainerCrateIron;
+import com.hbm.inventory.gui.GUICrateIron;
 import net.minecraftforge.fml.common.Optional;
 import vazkii.quark.api.IDropoffManager;
 
@@ -7,17 +9,23 @@ import com.hbm.items.ModItems;
 import com.hbm.items.tool.ItemKeyPin;
 import com.hbm.lib.HBMSoundHandler;
 
+import com.hbm.tileentity.IGUIProvider;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
 @Optional.InterfaceList({@Optional.Interface(iface = "vazkii.quark.api.IDropoffManager", modid = "quark")})
-public class TileEntityCrateIron extends TileEntityLockableBase implements IDropoffManager {
+public class TileEntityCrateIron extends TileEntityLockableBase implements IGUIProvider, IDropoffManager {
 
 	public ItemStackHandler inventory;
 	
@@ -95,6 +103,17 @@ public class TileEntityCrateIron extends TileEntityLockableBase implements IDrop
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
 		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+	}
+
+	@Override
+	public Container provideContainer(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new ContainerCrateIron(player.inventory, this);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public GuiScreen provideGUI(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new GUICrateIron(player.inventory, this);
 	}
 
 	public boolean acceptsDropoff(EntityPlayer player) {

@@ -55,7 +55,7 @@ public class MachineFEL extends BlockDummyable {
 			if(pos == null)
 				return false;
 			
-			player.openGui(MainRegistry.instance, ModBlocks.guiID_fel, world, pos[0], pos[1], pos[2]);
+			player.openGui(MainRegistry.instance, 0, world, pos[0], pos[1], pos[2]);
 			return true;
 		} else {
 			return false;

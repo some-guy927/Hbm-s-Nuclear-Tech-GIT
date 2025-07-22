@@ -49,7 +49,7 @@ public class MachineUUCreator extends BlockDummyable {
 			TileEntityMachineUUCreator entity = (TileEntityMachineUUCreator) world.getTileEntity(new BlockPos(pos1[0], pos1[1], pos1[2]));
 			if(entity != null)
 			{
-				player.openGui(MainRegistry.instance, ModBlocks.guiID_uu_creator, world, pos1[0], pos1[1], pos1[2]);
+				player.openGui(MainRegistry.instance, 0, world, pos1[0], pos1[1], pos1[2]);
 			}
 			return true;
 		} else {

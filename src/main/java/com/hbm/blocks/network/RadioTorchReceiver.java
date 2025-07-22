@@ -49,7 +49,7 @@ public class RadioTorchReceiver extends BlockContainer {
 		} else if(!player.isSneaking())	{
 			TileEntityRadioTorchReceiver entity = (TileEntityRadioTorchReceiver) world.getTileEntity(pos);
 			if(entity != null){
-				player.openGui(MainRegistry.instance, ModBlocks.guiID_radio_torch_receiver, world, pos.getX(), pos.getY(), pos.getZ());
+				player.openGui(MainRegistry.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
 			}
 			return true;
 		} else {

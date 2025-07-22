@@ -63,21 +63,8 @@ public class CoreComponent extends BlockContainer {
 		if(world.isRemote) {
 			return true;
 		} else if(!player.isSneaking()) {
-			
-			if(this == ModBlocks.dfc_emitter)
-				player.openGui(MainRegistry.instance, ModBlocks.guiID_dfc_emitter, world, pos.getX(), pos.getY(), pos.getZ());
-			
-			if(this == ModBlocks.dfc_receiver)
-				player.openGui(MainRegistry.instance, ModBlocks.guiID_dfc_receiver, world, pos.getX(), pos.getY(), pos.getZ());
-			
-			if(this == ModBlocks.dfc_injector)
-				player.openGui(MainRegistry.instance, ModBlocks.guiID_dfc_injector, world, pos.getX(), pos.getY(), pos.getZ());
-			
-			if(this == ModBlocks.dfc_stabilizer)
-				player.openGui(MainRegistry.instance, ModBlocks.guiID_dfc_stabilizer, world, pos.getX(), pos.getY(), pos.getZ());
-			
+			player.openGui(MainRegistry.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
 			return true;
-			
 		} else {
 			return false;
 		}

@@ -80,7 +80,7 @@ public class NukePrototype extends BlockContainer implements IBomb {
 			TileEntityNukePrototype entity = (TileEntityNukePrototype) world.getTileEntity(pos);
 			if(entity != null)
 			{
-				player.openGui(MainRegistry.instance, ModBlocks.guiID_nuke_prototype, world, pos.getX(), pos.getY(), pos.getZ());
+				player.openGui(MainRegistry.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
 			}
 			return true;
 		} else {

@@ -16,6 +16,9 @@ import com.hbm.items.armor.ItemModLens;
 import com.hbm.tileentity.network.*;
 import com.hbm.world.feature.OreLayer3D;
 import net.minecraft.block.*;
+import net.minecraft.util.datafix.FixTypes;
+import net.minecraftforge.common.util.ModFixs;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import org.apache.logging.log4j.Logger;
 
 import com.hbm.blocks.ModBlocks;
@@ -23,6 +26,7 @@ import com.hbm.blocks.generic.BlockCrate;
 import com.hbm.blocks.network.energy.CableDiode.TileEntityDiode;
 import com.hbm.blocks.network.energy.BlockCableGauge.TileEntityCableGauge;
 import com.hbm.blocks.generic.BlockBedrockOreTE.TileEntityBedrockOre;
+import com.hbm.blocks.generic.BlockBobble.TileEntityBobble;
 import com.hbm.capability.HbmCapability;
 import com.hbm.capability.HbmLivingCapability;
 import com.hbm.command.CommandHbm;
@@ -479,7 +483,10 @@ public class MainRegistry {
 		MinecraftForge.EVENT_BUS.register(new ModEventHandler());
 		MinecraftForge.TERRAIN_GEN_BUS.register(new ModEventHandler());
 		MinecraftForge.ORE_GEN_BUS.register(new ModEventHandler());
-		
+
+		ModFixs fixer = FMLCommonHandler.instance().getDataFixer().init("hbm", 1); //Missing mappings
+		fixer.registerFix(FixTypes.ITEM_INSTANCE, new ItemMetaHandler());
+
 		if(event.getSide() == Side.CLIENT) {
 			HbmKeybinds keyHandler = new HbmKeybinds();
 			MinecraftForge.EVENT_BUS.register(keyHandler);
@@ -667,7 +674,9 @@ public class MainRegistry {
 		GameRegistry.registerTileEntity(TileEntityMachineSatDock.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_sat_dock"));
 		GameRegistry.registerTileEntity(TileEntityMachineDiesel.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_diesel"));
 		GameRegistry.registerTileEntity(TileEntityForceField.class, new ResourceLocation(RefStrings.MODID, "tileentity_force_field"));
-		GameRegistry.registerTileEntity(TileEntityMachineRadar.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_radar"));
+		GameRegistry.registerTileEntity(TileEntityMachineRadarNT.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_radar"));
+		GameRegistry.registerTileEntity(TileEntityMachineRadarLarge.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_radar_large"));
+		GameRegistry.registerTileEntity(TileEntityMachineRadarScreen.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_radar_screen"));
 		GameRegistry.registerTileEntity(TileEntityDecoPoleSatelliteReceiver.class, new ResourceLocation(RefStrings.MODID, "tileentity_deco_pole_satellite_receiver"));
 		GameRegistry.registerTileEntity(TileEntityDeuteriumExtractor.class, new ResourceLocation(RefStrings.MODID, "tileentity_deuterium_extractor"));
 		GameRegistry.registerTileEntity(TileEntityDeuteriumTower.class, new ResourceLocation(RefStrings.MODID, "tileentity_deuterium_tower"));
@@ -799,7 +808,8 @@ public class MainRegistry {
 		GameRegistry.registerTileEntity(TileEntityCraneUnboxer.class, new ResourceLocation(RefStrings.MODID, "tileentity_craneunboxer"));
 		GameRegistry.registerTileEntity(TileEntityCraneRouter.class, new ResourceLocation(RefStrings.MODID, "tileentity_cranerouter"));
 		GameRegistry.registerTileEntity(TileEntityCraneGrabber.class, new ResourceLocation(RefStrings.MODID, "tileentity_cranegrabber"));
-		
+		GameRegistry.registerTileEntity(TileEntityBobble.class, new ResourceLocation(RefStrings.MODID, "tileentity_ntm_bobblehead"));
+
 		int i = 0;
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_nuke_mk5"), EntityNukeExplosionMK5.class, "entity_nuke_mk5", i++, MainRegistry.instance, 1000, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_d_smoke_fx"), EntityDSmokeFX.class, "entity_d_smoke_fx", i++, MainRegistry.instance, 1000, 1, true);
@@ -979,15 +989,15 @@ public class MainRegistry {
 
 			@Override
 			public void ticketsLoaded(List<Ticket> tickets, World world) {
-				for(Ticket ticket : tickets) {
+				for (Ticket ticket : tickets) {
 
-					if(ticket.getEntity() instanceof IChunkLoader) {
+					if (ticket.getEntity() instanceof IChunkLoader) {
 						((IChunkLoader) ticket.getEntity()).init(ticket);
 					}
 				}
 			}
 		});
-		
+
 		registerDispenserBehaviors();
 	}
 

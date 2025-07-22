@@ -12,6 +12,7 @@ import com.hbm.entity.projectile.EntityBulletBase;
 import com.hbm.handler.BulletConfigSyncingUtil;
 import com.hbm.handler.BulletConfiguration;
 import com.hbm.interfaces.IControlReceiver;
+import com.hbm.inventory.container.ContainerTurretBase;
 import com.hbm.inventory.control_panel.ControlEvent;
 import com.hbm.inventory.control_panel.ControlEventSystem;
 import com.hbm.inventory.control_panel.IControllable;
@@ -20,9 +21,10 @@ import com.hbm.items.machine.ItemTurretBiometry;
 import com.hbm.lib.Library;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.render.amlfrom1710.Vec3;
+import com.hbm.tileentity.IGUIProvider;
 import com.hbm.tileentity.TileEntityMachineBase;
-
 import api.hbm.energy.IEnergyUser;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.INpc;
@@ -33,6 +35,7 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -48,7 +51,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class TileEntityTurretBaseNT extends TileEntityMachineBase implements IEnergyUser, IControllable, IControlReceiver, ITickable {
+public abstract class TileEntityTurretBaseNT extends TileEntityMachineBase implements IEnergyUser, IControllable, IControlReceiver, ITickable, IGUIProvider {
 
 	@Override
 	public boolean hasPermission(EntityPlayer player){
@@ -841,4 +844,10 @@ public abstract class TileEntityTurretBaseNT extends TileEntityMachineBase imple
 		super.invalidate();
 		ControlEventSystem.get(world).removeControllable(this);
 	}
+
+	@Override
+	public Container provideContainer(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new ContainerTurretBase(player.inventory, this);
+	}
+
 }
