@@ -550,22 +550,20 @@ public class ModEventHandler {
 			BossSpawnHandler.rollTheDice(event.world);
 			TimedGenerator.automaton(event.world, 100);
 		}
-
-		if(event.phase == Phase.END) {
-			// As ByteBufs are added to the queue in `com.hbm.packet.toclient.PacketThreading`, they are processed by the packet thread.
-			// This waits until the thread is finished, which most of the time will be instantly since it has plenty of time to process in parallel to everything else.
-			PacketThreading.waitUntilThreadFinished();
-
-			NetworkHandler.flush(); // Flush ALL network packets.
-		}
 	}
 	
 	@SubscribeEvent
 	public void serverTick(ServerTickEvent e){
-		if(e.phase == Phase.START){
+		if(e.phase == Phase.START) {
 			JetpackHandler.serverTick();
 			RTTYSystem.updateBroadcastQueue();
 			TileEntityMachineRadarNT.updateSystem();
+		}else if(e.phase == Phase.END) {
+				// As ByteBufs are added to the queue in `com.hbm.packet.toclient.PacketThreading`, they are processed by the packet thread.
+				// This waits until the thread is finished, which most of the time will be instantly since it has plenty of time to process in parallel to everything else.
+				PacketThreading.waitUntilThreadFinished();
+
+				NetworkHandler.flush(); // Flush ALL network packets.
 		} else {
 			EntityHitDataHandler.updateSystem();
 		}

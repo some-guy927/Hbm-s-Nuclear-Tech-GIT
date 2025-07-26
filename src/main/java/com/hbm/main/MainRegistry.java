@@ -809,6 +809,8 @@ public class MainRegistry {
 		GameRegistry.registerTileEntity(TileEntityCraneRouter.class, new ResourceLocation(RefStrings.MODID, "tileentity_cranerouter"));
 		GameRegistry.registerTileEntity(TileEntityCraneGrabber.class, new ResourceLocation(RefStrings.MODID, "tileentity_cranegrabber"));
 		GameRegistry.registerTileEntity(TileEntityBobble.class, new ResourceLocation(RefStrings.MODID, "tileentity_ntm_bobblehead"));
+		TileEntityMachineRadarNT.registerEntityClasses();
+		TileEntityMachineRadarNT.registerConverters();
 
 		int i = 0;
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_nuke_mk5"), EntityNukeExplosionMK5.class, "entity_nuke_mk5", i++, MainRegistry.instance, 1000, 1, true);

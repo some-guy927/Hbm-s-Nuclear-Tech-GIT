@@ -335,16 +335,6 @@ public class TileEntityMachineRadarNT extends TileEntityMachineBase implements I
 
 		IRadarDetectableNT.RadarScanParams params = new IRadarDetectableNT.RadarScanParams(this.scanMissiles, this.scanShells, this.scanPlayers, this.smartMode);
 		
-		this.matchingEntities = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(
-			    pos.getX() - scan, pos.getY() , pos.getZ() - scan,
-			    pos.getX() + scan, pos.getY() + scan, pos.getZ() + scan
-			));
-		
-		
-		converters.clear();
-		//prevent memory leak
-		registerConverters();
-		
 		for(Entity e : matchingEntities) {
 
 			if(e.dimension == world.provider.getDimension() && Math.abs(e.posX - (pos.getX() + 0.5)) <= scan && Math.abs(e.posZ - (pos.getZ() + 0.5)) <= scan && e.posY - pos.getY() > radarBuffer) {
