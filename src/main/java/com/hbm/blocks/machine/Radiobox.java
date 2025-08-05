@@ -152,7 +152,7 @@ public class Radiobox extends BlockContainer {
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return (((EnumFacing) state.getValue(FACING)).getIndex() << 1) + (state.getValue(STATE) == true ? 1 : 0);
+		return (((EnumFacing) state.getValue(FACING)).getIndex() << 1) + (state.getValue(STATE) ? 1 : 0);
 	}
 
 	@Override

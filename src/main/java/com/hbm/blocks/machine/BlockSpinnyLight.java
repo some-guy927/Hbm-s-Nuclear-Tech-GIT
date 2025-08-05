@@ -166,8 +166,8 @@ public class BlockSpinnyLight extends BlockContainer {
             world.setBlockToAir(pos);
             return;
         }
-		if(world.getRedstonePowerFromNeighbors(pos) > 0) {
-			if(state.getValue(POWERED) == false){
+		if(world.getStrongPower(pos) > 0) {
+			if(!state.getValue(POWERED)){
 				TileEntity te = world.getTileEntity(pos);
 				world.setBlockState(pos, state.withProperty(POWERED, true));
 				if(te != null){
@@ -176,7 +176,7 @@ public class BlockSpinnyLight extends BlockContainer {
 				}
 			}
 		} else {
-			if(state.getValue(POWERED) == true){
+			if(state.getValue(POWERED)){
 				TileEntity te = world.getTileEntity(pos);
 				world.setBlockState(pos, state.withProperty(POWERED, false));
 				if(te != null){

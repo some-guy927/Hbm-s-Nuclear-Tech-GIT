@@ -309,11 +309,9 @@ public class SubElementNodeEditor extends SubElement {
 			// doing this here for now cus i want buttons to be able to make gui changes
 			NodeElement pressed = currentSystem.getNodeElementPressed(mouseX, mouseY);
 			if (pressed != null) {
-				switch (pressed.name) {
-					case "Edit Body": {
-						descendSubsystem(pressed.parent);
-					}
-				}
+                if (pressed.name.equals("Edit Body")) {
+                    descendSubsystem(pressed.parent);
+                }
 			}
 			currentSystem.onClick(mouseX, mouseY);
 		}

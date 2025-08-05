@@ -47,23 +47,12 @@ public class ItemRenderMissile extends TEISRBase {
 			
 			GL11.glTranslated(height / 2 * scale, 0, 0);
 			GL11.glTranslated(-9.2, 0.2, 0);
-			//System.out.println(scale/14.285714285714285);
 			GL11.glRotated(45, 0, 0, 1);
 			GL11.glRotated(45, 1, 0, 0);
 			
 			//Drillgon200: This number is what I got when I found a decent scale number (0.14) for one part, then divided scale by it.
 			//It seems to work pretty well
 			GL11.glScaled(scale/14.285714285714285, scale/14.285714285714285, scale/14.285714285714285);
-			//GL11.glRotated(135, 0, 0, 1);
-			//GL11.glRotated(215, 1, 0, 0);
-			
-			
-			//GL11.glScaled(-scale, -scale, -scale);
-			
-			/*if(part.type.name().equals(PartType.FINS.name())) {
-				GL11.glTranslated(0, 0, 0);
-				//GL11.glRotated(-45, 1, 0, 0);
-			}*/
 
 			GL11.glRotatef(System.currentTimeMillis() / 25 % 360, 0, -1, 0);
 			MissilePronter.prontMissile(missile, Minecraft.getMinecraft().renderEngine);

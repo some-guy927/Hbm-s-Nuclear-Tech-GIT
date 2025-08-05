@@ -1075,18 +1075,25 @@ public class ItemRenderLibrary {
 	            GlStateManager.shadeModel(GL11.GL_FLAT);
 			}});
 
-//		renderers.put(Item.getItemFromBlock(ModBlocks.machine_radar), new ItemRenderBase() {
-//			public void renderInventory() {
-//				GL11.glTranslated(0, -4, 0);
-//				GL11.glScaled(6, 6, 6);
-//			}
-//			public void renderCommon() {
-//	            GlStateManager.disableCull();
-//		        bindTexture(ResourceManager.radar_base_tex); ResourceManager.radar.renderPart("Base");
-//				GL11.glTranslated(-0.125, 0, 0);
-//				bindTexture(ResourceManager.radar_dish_tex); ResourceManager.radar.renderPart("Dish");
-//	            GlStateManager.enableCull();
-//			}});
+		renderers.put(Item.getItemFromBlock(ModBlocks.machine_uf6_tank), new ItemRenderBase() {
+			public void renderInventory() {
+				GL11.glTranslated(0, -4, 0);
+				GL11.glScaled(6, 6, 6);
+			}
+			public void renderCommon() {
+				GL11.glRotated(90, 0, -1, 0);
+		        bindTexture(ResourceManager.uf6_tex); ResourceManager.tank.renderAll();
+			}});
+
+		renderers.put(Item.getItemFromBlock(ModBlocks.machine_puf6_tank), new ItemRenderBase() {
+			public void renderInventory() {
+				GL11.glTranslated(0, -4, 0);
+				GL11.glScaled(6, 6, 6);
+			}
+			public void renderCommon() {
+				GL11.glRotated(90, 0, -1, 0);
+		        bindTexture(ResourceManager.puf6_tex); ResourceManager.tank.renderAll();
+			}});
 
 		renderers.put(Item.getItemFromBlock(ModBlocks.sat_dock), new ItemRenderBase() {
 			public void renderInventory() {
@@ -1500,12 +1507,27 @@ public class ItemRenderLibrary {
 				GL11.glTranslated(0, -5.5, 0);
 				GL11.glScaled(3.65, 3.65, 3.65);
 			}
-			public void renderCommon(ItemStack stack){
-				bindTexture(((RBMKBase)Block.getBlockFromItem(stack.getItem())).columnTexture);
-				Tessellator tes = Tessellator.instance;
-				tes.startDrawing(GL11.GL_TRIANGLES);
-				ResourceManager.rbmk_element.tessellatePartSplit(tes, "Column", 0.5F, 3);
-				tes.draw();
+			public void renderCommon(ItemStack stack) {
+				Block block = Block.getBlockFromItem(stack.getItem());
+				if (!(block instanceof RBMKBase)) return;
+				Minecraft.getMinecraft()
+						.getTextureManager()
+						.bindTexture(((RBMKBase) block).columnTexture);
+
+				GlStateManager.pushMatrix();
+				for (int i = 0; i < 4; i++) {
+					ResourceManager.rbmk_element.renderPart("Column");
+					GlStateManager.translate(0, 1, 0);
+				}
+				GlStateManager.popMatrix();
+
+				// Render lid if needed
+				if (block != ModBlocks.rbmk_boiler && block != ModBlocks.rbmk_heater) {
+					GlStateManager.pushMatrix();
+					GlStateManager.translate(0, 3, 0);
+					ResourceManager.rbmk_element.renderPart("Lid");
+					GlStateManager.popMatrix();
+				}
 			}
 			public boolean doNullTransform(){
 				return true;
@@ -1516,15 +1538,28 @@ public class ItemRenderLibrary {
 				GL11.glTranslated(0, -5.5, 0);
 				GL11.glScaled(3.65, 3.65, 3.65);
 			}
-			public void renderCommon(ItemStack stack){
-				bindTexture(((RBMKBase)Block.getBlockFromItem(stack.getItem())).columnTexture);
-				Tessellator tes = Tessellator.instance;
-				tes.startDrawing(GL11.GL_TRIANGLES);
-				ResourceManager.rbmk_rods.tessellatePartSplit(tes, "Column", 0.5F, 3);
-				tes.addTranslation(0, 3, 0);
-				if(Block.getBlockFromItem(stack.getItem()) != ModBlocks.rbmk_boiler && Block.getBlockFromItem(stack.getItem()) != ModBlocks.rbmk_heater)
-					ResourceManager.rbmk_rods.tessellatePart(tes, "Lid");
-				tes.draw();
+			public void renderCommon(ItemStack stack) {
+				Block block = Block.getBlockFromItem(stack.getItem());
+				if (!(block instanceof RBMKBase)) return;
+				Minecraft.getMinecraft()
+						.getTextureManager()
+						.bindTexture(((RBMKBase) block).columnTexture);
+
+				// Rende column base
+				GlStateManager.pushMatrix();
+				for (int i = 0; i < 4; i++) {
+					ResourceManager.rbmk_rods.renderPart("Column");
+					GlStateManager.translate(0, 1, 0);
+				}
+				GlStateManager.popMatrix();
+
+				// Render lid if needed
+				if (block != ModBlocks.rbmk_boiler && block != ModBlocks.rbmk_heater) {
+					GlStateManager.pushMatrix();
+					GlStateManager.translate(0, 3, 0);
+					ResourceManager.rbmk_rods.renderPart("Lid");
+					GlStateManager.popMatrix();
+				}
 			}
 			public boolean doNullTransform(){
 				return true;
@@ -1535,12 +1570,28 @@ public class ItemRenderLibrary {
 				GL11.glTranslated(0, -5.5, 0);
 				GL11.glScaled(3.65, 3.65, 3.65);
 			}
-			public void renderCommon(ItemStack stack){
-				bindTexture(((RBMKBase)Block.getBlockFromItem(stack.getItem())).columnTexture);
-				Tessellator tes = Tessellator.instance;
-				tes.startDrawing(GL11.GL_TRIANGLES);
-				ResourceManager.rbmk_reflector.tessellatePartSplit(tes, "Column", 0.5F, 3);
-				tes.draw();
+			public void renderCommon(ItemStack stack) {
+				Block block = Block.getBlockFromItem(stack.getItem());
+				if (!(block instanceof RBMKBase)) return;
+
+				// Bind texture properly
+				Minecraft.getMinecraft()
+						.getTextureManager()
+						.bindTexture(((RBMKBase) block).columnTexture);
+
+				GlStateManager.pushMatrix();
+				for (int i = 0; i < 4; i++) {
+					ResourceManager.rbmk_reflector.renderPart("Column");
+					GlStateManager.translate(0, 1, 0);
+				}
+				GlStateManager.popMatrix();
+
+				if (block != ModBlocks.rbmk_boiler) {
+					GlStateManager.pushMatrix();
+					GlStateManager.translate(0, 3F, 0);
+					ResourceManager.rbmk_reflector.renderPart("Lid");
+					GlStateManager.popMatrix();
+				}
 			}
 			public boolean doNullTransform(){
 				return true;
@@ -1685,7 +1736,7 @@ public class ItemRenderLibrary {
 				bindTexture(ResourceManager.condenser_tex); ResourceManager.condenser.renderAll();
 				GlStateManager.shadeModel(GL11.GL_FLAT);
 			}});
-		
+
 		renderers.put(Item.getItemFromBlock(ModBlocks.machine_storage_drum), new ItemRenderBase() {
 			public void renderInventory() {
 				GL11.glTranslated(0, -3, 0);

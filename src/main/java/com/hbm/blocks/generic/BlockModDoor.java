@@ -62,17 +62,12 @@ public class BlockModDoor extends Block {
 		boolean flag = !(Boolean) state.getValue(OPEN);
 		boolean flag1 = state.getValue(HINGE) == BlockDoor.EnumHingePosition.RIGHT;
 
-		switch(enumfacing) {
-		case EAST:
-		default:
-			return flag ? EAST_AABB : (flag1 ? NORTH_AABB : SOUTH_AABB);
-		case SOUTH:
-			return flag ? SOUTH_AABB : (flag1 ? EAST_AABB : WEST_AABB);
-		case WEST:
-			return flag ? WEST_AABB : (flag1 ? SOUTH_AABB : NORTH_AABB);
-		case NORTH:
-			return flag ? NORTH_AABB : (flag1 ? WEST_AABB : EAST_AABB);
-		}
+        return switch (enumfacing) {
+            case SOUTH -> flag ? SOUTH_AABB : (flag1 ? EAST_AABB : WEST_AABB);
+            case WEST -> flag ? WEST_AABB : (flag1 ? SOUTH_AABB : NORTH_AABB);
+            case NORTH -> flag ? NORTH_AABB : (flag1 ? WEST_AABB : EAST_AABB);
+            default -> flag ? EAST_AABB : (flag1 ? NORTH_AABB : SOUTH_AABB);
+        };
 	}
 
 	/**

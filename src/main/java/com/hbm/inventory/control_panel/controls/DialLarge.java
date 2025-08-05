@@ -46,11 +46,8 @@ public class DialLarge extends Control {
         super.applyConfigs(configs);
 
         for (Map.Entry<String, DataValue> e : configMap.entrySet()) {
-            switch (e.getKey()) {
-                case "label": {
-                    label = e.getValue().toString();
-                    break;
-                }
+            if (e.getKey().equals("label")) {
+                label = e.getValue().toString();
             }
         }
     }

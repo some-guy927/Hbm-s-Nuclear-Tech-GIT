@@ -1,5 +1,8 @@
 package com.hbm.render.tileentity;
 
+import com.hbm.render.amlfrom1710.IModelCustom;
+import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.blocks.ModBlocks;
@@ -32,25 +35,21 @@ public class RenderRBMKLid extends TileEntitySpecialRenderer<TileEntityRBMKBase>
 	public boolean isGlobalRenderer(TileEntityRBMKBase te){
 		return true;
 	}
-	
+
 	@Override
-	public void render(TileEntityRBMKBase control, double x, double y, double z, float partialTicks, int destroyStage, float alpha){
+	public void render(TileEntityRBMKBase control, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		boolean hasRod = false;
 		boolean cherenkov = false;
 		float fuelR = 0F;
 		float fuelG = 0F;
 		float fuelB = 0F;
-
 		float cherenkovR = 0F;
 		float cherenkovG = 0F;
 		float cherenkovB = 0F;
 		float cherenkovA = 0.1F;
-		
-		if(control instanceof TileEntityRBMKRod) {
-			
-			TileEntityRBMKRod rod = (TileEntityRBMKRod) control;
-			
-			if(rod.hasRod){
+
+		if(control instanceof TileEntityRBMKRod rod) {
+			if(rod.hasRod) {
 				hasRod = true;
 				fuelR = rod.fuelR;
 				fuelG = rod.fuelG;
@@ -59,112 +58,128 @@ public class RenderRBMKLid extends TileEntitySpecialRenderer<TileEntityRBMKBase>
 				cherenkovG = rod.cherenkovG;
 				cherenkovB = rod.cherenkovB;
 			}
-
-			if(rod.fluxFast + rod.fluxSlow > 5){
+			if(rod.fluxFast + rod.fluxSlow > 5) {
 				cherenkov = true;
-				cherenkovA = (float)Math.max(0.25F, Math.log(rod.fluxFast + rod.fluxSlow)*0.01);
+				cherenkovA = (float) Math.max(0.25F, Math.log(rod.fluxFast + rod.fluxSlow) * 0.01F);
 			}
 		}
+		int offset = 1;
+		for (int o = 1; o < 16; o++){
+			if (control.getWorld().getBlockState(control.getPos().up(o)).getBlock() == control.getBlockType()) {
+				offset = o;
+				int meta = control.getWorld().getBlockState(control.getPos().up(o)).getBlock().getMetaFromState(control.getWorld().getBlockState(control.getPos().up(o)));
+				if (meta > 5 && meta < 12) break;
+			} else break;
+		}
+		GlStateManager.pushMatrix();
+		GlStateManager.translate(x + 0.5, y, z + 0.5);
 
-		GL11.glPushMatrix();
-		GL11.glTranslated(x + 0.5, y, z + 0.5);
-		if(!(control.getBlockType() instanceof RBMKBase))
+		if(!(control.getBlockType() instanceof RBMKBase block)) {
+			GlStateManager.popMatrix();
 			return;
+		}
 
-		RBMKBase block = (RBMKBase)control.getBlockType();
-		WavefrontObject columnModel = ResourceManager.rbmk_reflector;
-		if(block == ModBlocks.rbmk_boiler || block == ModBlocks.rbmk_heater)
-			columnModel = ResourceManager.rbmk_rods;
-		else if(block instanceof RBMKRod)
-			columnModel = ResourceManager.rbmk_element;
+		Minecraft.getMinecraft().getTextureManager().bindTexture(block.columnTexture);
+		renderColumnStack(control, offset + 1);
 
-		bindTexture(block.columnTexture);
-		com.hbm.render.amlfrom1710.Tessellator tes = com.hbm.render.amlfrom1710.Tessellator.instance;
-		tes.startDrawing(GL11.GL_TRIANGLES);
-		boolean doJump = control.jumpheight > 0;
-		
-		columnModel.tessellatePartSplit(tes, "Column", 0.5F, (float)control.jumpheight+TileEntityRBMKBase.rbmkHeight);
-			
-		tes.draw();
-		
-		
-		int offset = TileEntityRBMKBase.rbmkHeight;
-		
+		if(control.hasLid()) {
+			renderLid(control, offset);
+		}
+
+		if(hasRod) {
+			renderFuelRodStack(control, fuelR, fuelG, fuelB, offset + 1);
+		}
+
+		if(cherenkov) {
+			renderCherenkovEffect(control, cherenkovR, cherenkovG, cherenkovB, cherenkovA, offset);
+		}
+
+		GlStateManager.popMatrix();
+	}
+
+	// New helper methods
+	private void renderColumnStack(TileEntityRBMKBase control, int offset) {
+		GlStateManager.pushMatrix();
+
+		// Get the correct model from the main render method
+		IModelCustom columnModel = getColumnModelForBlock(control.getBlockType());
+
+		for(int i = 0; i < offset; i++) {
+			columnModel.renderPart("Column");  // Use the selected model
+			GlStateManager.translate(0, 1, 0);
+		}
+
+		GlStateManager.popMatrix();
+	}
+
+	private IModelCustom getColumnModelForBlock(Block block) {
+		if(block == ModBlocks.rbmk_boiler || block == ModBlocks.rbmk_heater) {
+			return ResourceManager.rbmk_rods;
+		} else if(block instanceof RBMKRod) {
+			return ResourceManager.rbmk_element;
+		}
+		return ResourceManager.rbmk_reflector;  // Default
+	}
+
+	private void renderFuelRodStack(TileEntityRBMKBase control, float r, float g, float b, int offset) {
+		GlStateManager.pushMatrix();
+		try {
+			GlStateManager.color(r, g, b, 1);
+			Minecraft.getMinecraft().getTextureManager().bindTexture(texture_rods);
+
+			// Render full segments
+			for (int i = 0; i < offset; i++) {
+				ResourceManager.rbmk_element.renderPart("Rods");
+				GlStateManager.translate(0, 1, 0);
+			}
+			GlStateManager.color(1, 1, 1, 1);
+		}finally {
+			GlStateManager.popMatrix();
+		}
+	}
+
+	private void renderLid(TileEntityRBMKBase control, int offset) {
+		GlStateManager.pushMatrix();
+		GlStateManager.translate(0, offset + control.jumpheight, 0);
+
+		int meta = control.getBlockMetadata() - RBMKBase.offset;
+		ResourceLocation lidTexture = (meta == RBMKBase.DIR_GLASS_LID.ordinal()) ?
+				texture_glass : ((RBMKBase) control.getBlockType()).coverTexture;
+
+		Minecraft.getMinecraft().getTextureManager().bindTexture(lidTexture);
+
+		if((control instanceof TileEntityRBMKBoiler || control instanceof TileEntityRBMKHeater) && meta != RBMKBase.DIR_GLASS_LID.ordinal()) {
+			ResourceManager.rbmk_rods.renderPart("Lid");
+		}
+		ResourceManager.rbmk_element.renderPart("Lid");
+
+		GlStateManager.popMatrix();
+	}
+
+	private void renderCherenkovEffect(TileEntityRBMKBase control, float r, float g, float b, float a, int offset) {
+		GlStateManager.pushMatrix();
+		GlStateManager.translate(0, 0.75, 0);
+		GlStateManager.disableCull();
+		GlStateManager.disableLighting();
+		GlStateManager.enableBlend();
+		GlStateManager.disableTexture2D();
+		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
+
+		BufferBuilder buf = Tessellator.getInstance().getBuffer();
+		buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
+
+		for(double j = 0; j <= offset; j += 0.25) {
+			buf.pos(-0.5, j, -0.5).color(r, g, b, a).endVertex();
+			buf.pos(-0.5, j, 0.5).color(r, g, b, a).endVertex();
+			buf.pos(0.5, j, 0.5).color(r, g, b, a).endVertex();
+			buf.pos(0.5, j, -0.5).color(r, g, b, a).endVertex();
+		}
+		Tessellator.getInstance().draw();
+
+		GlStateManager.enableTexture2D();
+		GlStateManager.disableBlend();
 		GlStateManager.enableLighting();
 		GlStateManager.enableCull();
-		
-		if(control.hasLid()) {
-			GL11.glPushMatrix();
-			GL11.glTranslated(0, offset, 0);
-			
-			int meta = control.getBlockMetadata() - RBMKBase.offset;
-			
-			if(meta == RBMKBase.DIR_GLASS_LID.ordinal()) {
-				bindTexture(texture_glass);
-			} else {
-				
-				if(control.getBlockType() instanceof RBMKBase) {
-					bindTexture(((RBMKBase)control.getBlockType()).coverTexture);
-				} else {
-					bindTexture(texture);
-				}
-				cherenkov = false;
-			}
-
-			if(doJump){
-				GL11.glTranslated(0, control.jumpheight, 0);
-			}
-			
-			if((control instanceof TileEntityRBMKBoiler || control instanceof TileEntityRBMKHeater) && meta != RBMKBase.DIR_GLASS_LID.ordinal())
-				ResourceManager.rbmk_rods.renderPart("Lid");
-			ResourceManager.rbmk_element.renderPart("Lid");
-			GL11.glPopMatrix();
-		}
-		
-		if(hasRod) {
-			GL11.glPushMatrix();
-			GlStateManager.color(fuelR, fuelG, fuelB, 1);
-			bindTexture(texture_rods);
-			
-			com.hbm.render.amlfrom1710.Tessellator tesss = com.hbm.render.amlfrom1710.Tessellator.instance;
-			tes.startDrawing(GL11.GL_TRIANGLES);
-			
-			ResourceManager.rbmk_element.tessellatePartSplit(tesss, "Rods", 0.5F, offset);
-			tesss.draw();
-			GlStateManager.color(1, 1, 1, 1);
-			GL11.glPopMatrix();
-		}
-		
-		if(cherenkov) {
-			
-			Tessellator tess = Tessellator.getInstance();
-			BufferBuilder buf = tess.getBuffer();
-			GL11.glTranslated(0, 0.75, 0);
-
-			GlStateManager.disableCull();
-			GlStateManager.disableLighting();
-			GlStateManager.enableBlend();
-			GlStateManager.disableTexture2D();
-			GlStateManager.disableAlpha();
-			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
-			
-			buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
-			
-			for(double j = 0; j <= offset; j += 0.25) {
-				buf.pos(-0.5, j, -0.5).color(cherenkovR, cherenkovG, cherenkovB, cherenkovA).endVertex();
-				buf.pos(-0.5, j, 0.5).color(cherenkovR, cherenkovG, cherenkovB, cherenkovA).endVertex();
-				buf.pos(0.5, j, 0.5).color(cherenkovR, cherenkovG, cherenkovB, cherenkovA).endVertex();
-				buf.pos(0.5, j, -0.5).color(cherenkovR, cherenkovG, cherenkovB, cherenkovA).endVertex();
-			}
-			tess.draw();
-
-			GlStateManager.enableAlpha();
-			GlStateManager.enableTexture2D();
-			GlStateManager.disableBlend();
-			GlStateManager.enableLighting();
-			GlStateManager.enableCull();
-		}
-
-		GL11.glPopMatrix();
+		GlStateManager.popMatrix();
 	}
 }

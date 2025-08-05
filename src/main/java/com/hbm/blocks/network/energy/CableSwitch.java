@@ -65,7 +65,7 @@ public class CableSwitch extends BlockContainer {
 	
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return state.getValue(STATE).booleanValue() == true ? 1 : 0;
+		return state.getValue(STATE).booleanValue() ? 1 : 0;
 	}
 
 	@Override

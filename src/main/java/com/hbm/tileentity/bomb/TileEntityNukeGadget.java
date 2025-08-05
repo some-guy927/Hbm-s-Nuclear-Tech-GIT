@@ -87,7 +87,7 @@ public class TileEntityNukeGadget extends TileEntity implements IGUIProvider {
     }
 	
 	public boolean isReady() {
-		if(this.exp1() == true && this.exp2() == true && this.exp3() == true && this.exp4() == true)
+		if(this.exp1() && this.exp2() && this.exp3() && this.exp4())
 		{
             return inventory.getStackInSlot(0).getItem() == ModItems.gadget_wireing && inventory.getStackInSlot(5).getItem() == ModItems.gadget_core;
 		}

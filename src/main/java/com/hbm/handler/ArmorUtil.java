@@ -236,7 +236,7 @@ public class ArmorUtil {
     public static void damageGasMaskFilter(EntityLivingBase entity, float damage) {
         damageGasMaskFilter(entity, Library.getStatisticalInt(entity.world.rand, damage));
     }
-	
+
 	public static void damageGasMaskFilter(EntityLivingBase entity, int damage) {
 		if(damage <= 0) return;
 		ItemStack mask = entity.getItemStackFromSlot(EntityEquipmentSlot.HEAD);

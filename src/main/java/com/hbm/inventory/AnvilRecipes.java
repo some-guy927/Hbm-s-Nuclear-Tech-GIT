@@ -673,7 +673,7 @@ public class AnvilRecipes {
 						new AnvilOutput(new ItemStack(ModItems.nugget_tantalium, 1), 0.75F)
 				}
 		).setTier(4));
-		
+
 		constructionRecipes.add(new AnvilConstructionRecipe(
 				new ComparableStack(ModItems.circuit_bismuth_raw),
 				new AnvilOutput[] {

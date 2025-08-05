@@ -1,11 +1,11 @@
 package com.hbm.render.tileentity;
 
+import com.hbm.hfr.render.loader.HFRWavefrontObject;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import com.hbm.render.amlfrom1710.AdvancedModelLoader;
 import com.hbm.render.amlfrom1710.IModelCustom;
 import com.hbm.blocks.generic.BlockBobble.BobbleType;
 import com.hbm.blocks.generic.BlockBobble.TileEntityBobble;
@@ -23,7 +23,7 @@ public class RenderBobble extends TileEntitySpecialRenderer<TileEntityBobble> {
 	
 	public static RenderBobble instance = new RenderBobble();
 	
-	public static final IModelCustom bobble = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/trinkets/bobble.obj"));
+	public static final IModelCustom bobble = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/trinkets/bobble.obj")).asVBO();
 	public static final ResourceLocation socket = new ResourceLocation(RefStrings.MODID, "textures/models/trinkets/socket.png");
 	public static final ResourceLocation glow = new ResourceLocation(RefStrings.MODID, "textures/models/trinkets/glow.png");
 	public static final ResourceLocation lamp = new ResourceLocation(RefStrings.MODID, "textures/blocks/fluorescent_lamp.png");
@@ -416,8 +416,7 @@ public class RenderBobble extends TileEntitySpecialRenderer<TileEntityBobble> {
 			
 			GL11.glTranslated(0.3, 1.4, -0.2);
 			GL11.glRotated(-100, 1, 0, 0);
-			GL11.glScaled(0.5, 0.5, 0.5);
-			renderItem(new ItemStack(ModItems.coin_maskman, 1, 5));
+			renderItem(new ItemStack(ModItems.coin_maskman));
 			break;
 		case ADAM29:
 			GL11.glTranslated(0.4, 1.15, 0.4);

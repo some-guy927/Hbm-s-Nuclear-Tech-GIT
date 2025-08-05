@@ -568,7 +568,7 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 		}
 	}
 
-	public class RBMKScreen {
+	public static class RBMKScreen {
 		public ScreenType type = ScreenType.NONE;
 		public Integer[] columns = new Integer[0];
 		public String display = null;
@@ -581,7 +581,7 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 		}
 	}
 
-	public class RBMKGraph {
+	public static class RBMKGraph {
 		public ScreenType type = ScreenType.NONE;
 		public Integer[] columns = new Integer[0];
 		public int[] dataBuffer = new int[lookbackLength];

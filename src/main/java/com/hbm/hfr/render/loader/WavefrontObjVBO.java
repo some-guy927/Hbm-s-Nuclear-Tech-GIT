@@ -25,7 +25,7 @@ public class WavefrontObjVBO implements IModelCustom {
     List<VBOBufferData> groups = new ArrayList<VBOBufferData>();
 
     static int VERTEX_SIZE = 3;
-    static int UV_SIZE = 3;
+    static int UV_SIZE = 2;
 
     public WavefrontObjVBO(HFRWavefrontObject obj) {
         for(S_GroupObject g : obj.groupObjects) {
@@ -33,7 +33,7 @@ public class WavefrontObjVBO implements IModelCustom {
             data.name = g.name;
 
             FloatBuffer vertexData = BufferUtils.createFloatBuffer(g.faces.size() * 3 * VERTEX_SIZE);
-            FloatBuffer uvData = BufferUtils.createFloatBuffer(g.faces.size() * 3 * UV_SIZE); //TODO: I think we can save some memory here
+            FloatBuffer uvData = BufferUtils.createFloatBuffer(g.faces.size() * 3 * UV_SIZE);
             FloatBuffer normalData = BufferUtils.createFloatBuffer(g.faces.size() * 3 * VERTEX_SIZE);
 
             for(S_Face face : g.faces) {
@@ -48,7 +48,7 @@ public class WavefrontObjVBO implements IModelCustom {
 
                     data.vertices++;
                     vertexData.put(new float[] { vert.x, vert.y, vert.z });
-                    uvData.put(new float[] { tex.u, tex.v, tex.w });
+                    uvData.put(new float[] { tex.u, tex.v });
                     normalData.put(new float[] { normal.x, normal.y, normal.z });
                 }
             }

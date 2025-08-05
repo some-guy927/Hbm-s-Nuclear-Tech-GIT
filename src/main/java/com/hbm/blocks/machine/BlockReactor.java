@@ -35,7 +35,7 @@ public class BlockReactor extends Block implements IFluidVisualConnectable {
 			return super.onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
 
 		if(playerIn.isSneaking()) {
-			if(state.getValue(ACTIVATED) == false) {
+			if(!state.getValue(ACTIVATED)) {
 				worldIn.setBlockState(pos, state.withProperty(ACTIVATED, true), 3);
 			} else {
 				worldIn.setBlockState(pos, state.withProperty(ACTIVATED, false), 3);

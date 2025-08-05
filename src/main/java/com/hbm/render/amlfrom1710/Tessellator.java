@@ -120,7 +120,7 @@ public class Tessellator
         {
             int j = ((Integer)priorityqueue.remove()).intValue();
 
-            System.arraycopy(this.rawBuffer, j + 0, aint, i + 0, b0);
+            System.arraycopy(this.rawBuffer, j, aint, i, b0);
         }
 
         System.arraycopy(aint, 0, this.rawBuffer, 0, aint.length);

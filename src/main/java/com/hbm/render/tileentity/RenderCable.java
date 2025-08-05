@@ -1,5 +1,7 @@
 package com.hbm.render.tileentity;
 
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.main.ResourceManager;
@@ -11,23 +13,25 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 
 public class RenderCable extends TileEntitySpecialRenderer<TileEntityCableBaseNT> {
-	
+
 	@Override
 	public void render(TileEntityCableBaseNT te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		if(te.getBlockType() != ModBlocks.red_cable)
 			return;
+
+		BlockPos pos = te.getPos();
+		boolean pX = Library.canConnect(te.getWorld(), pos.add(1, 0, 0), Library.POS_X);
+		boolean nX = Library.canConnect(te.getWorld(), pos.add(-1, 0, 0), Library.NEG_X);
+		boolean pY = Library.canConnect(te.getWorld(), pos.add(0, 1, 0), Library.POS_Y);
+		boolean nY = Library.canConnect(te.getWorld(), pos.add(0, -1, 0), Library.NEG_Y);
+		boolean pZ = Library.canConnect(te.getWorld(), pos.add(0, 0, 1), Library.POS_Z);
+		boolean nZ = Library.canConnect(te.getWorld(), pos.add(0, 0, -1), Library.NEG_Z);
+
 		GL11.glPushMatrix();
 		GL11.glTranslated(x + 0.5F, y + 0.5F, z + 0.5F);
 		GlStateManager.enableLighting();
 		GlStateManager.enableCull();
 		bindTexture(ResourceManager.cable_neo_tex);
-
-		boolean pX = Library.canConnect(te.getWorld(), te.getPos().add(1, 0, 0), Library.POS_X);
-		boolean nX = Library.canConnect(te.getWorld(), te.getPos().add(-1, 0, 0), Library.NEG_X);
-		boolean pY = Library.canConnect(te.getWorld(), te.getPos().add(0, 1, 0), Library.POS_Y);
-		boolean nY = Library.canConnect(te.getWorld(), te.getPos().add(0, -1, 0), Library.NEG_Y);
-		boolean pZ = Library.canConnect(te.getWorld(), te.getPos().add(0, 0, 1), Library.POS_Z);
-		boolean nZ = Library.canConnect(te.getWorld(), te.getPos().add(0, 0, -1), Library.NEG_Z);
 
 		if(pX && nX && !pY && !nY && !pZ && !nZ)
 			ResourceManager.cable_neo.renderPart("CX");

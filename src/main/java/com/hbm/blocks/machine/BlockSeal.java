@@ -243,7 +243,7 @@ public class BlockSeal extends Block implements IBomb {
 	
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return (((EnumFacing)state.getValue(FACING)).getIndex() << 1) + (state.getValue(ACTIVATED) == true ? 1 : 0);
+		return (((EnumFacing)state.getValue(FACING)).getIndex() << 1) + (state.getValue(ACTIVATED) ? 1 : 0);
 	}
 	
 	@Override

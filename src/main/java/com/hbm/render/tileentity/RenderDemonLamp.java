@@ -19,7 +19,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class RenderDemonLamp extends TileEntitySpecialRenderer<TileEntityDemonLamp> {
 
-	public static final IModelCustom demon_lamp = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/blocks/demon_lamp.obj"));
+	public static final IModelCustom demon_lamp = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/blocks/demon_lamp.obj")).asVBO();
 	public static final ResourceLocation tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/demon_lamp.png");
 	
 	@Override

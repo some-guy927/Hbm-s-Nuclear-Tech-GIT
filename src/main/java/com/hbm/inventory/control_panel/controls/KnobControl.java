@@ -47,11 +47,8 @@ public class KnobControl extends Control {
         super.applyConfigs(configs);
 
         for (Map.Entry<String, DataValue> e : configMap.entrySet()) {
-            switch (e.getKey()) {
-                case "positions": {
-                    positions = (int) e.getValue().getNumber();
-                    break;
-                }
+            if (e.getKey().equals("positions")) {
+                positions = (int) e.getValue().getNumber();
             }
         }
     }
