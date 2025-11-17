@@ -10,6 +10,7 @@ import com.hbm.interfaces.IControlReceiver;
 import com.hbm.inventory.container.ContainerMachineRadarNT;
 import com.hbm.inventory.gui.GUIMachineRadarNT;
 import com.hbm.inventory.gui.GUIMachineRadarNTSlots;
+import com.hbm.items.ISatChip;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemSatChip;
 import com.hbm.items.tool.ItemCoordinateBase;
@@ -439,7 +440,7 @@ public class TileEntityMachineRadarNT extends TileEntityMachineBase implements I
 
 			if(!link.isEmpty() && link.getItem() == ModItems.sat_relay) {
 				World world = player.getEntityWorld();
-				Satellite sat = SatelliteSavedData.getData(world).getSatFromFreq(ItemSatChip.getFreq(link));
+				Satellite sat = SatelliteSavedData.getData(world).getSatFromFreq(ISatChip.getFreqS(link));
 				if(sat instanceof SatelliteLaser) {
 					if(data.hasKey("launchPosX")) {
 						int x = data.getInteger("launchPosX");

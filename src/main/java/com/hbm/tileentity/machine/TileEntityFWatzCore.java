@@ -7,13 +7,15 @@ import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.inventory.SAFERecipes;
 import com.hbm.inventory.container.ContainerFWatzCore;
+import com.hbm.inventory.container.ContainerMachineAssembler;
 import com.hbm.inventory.gui.GUIFWatzCore;
+import com.hbm.inventory.gui.GUIMachineAssembler;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemFWatzCore;
 import com.hbm.lib.Library;
-import com.hbm.tileentity.IGUIProvider;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.render.amlfrom1710.Vec3;
+import com.hbm.tileentity.IGUIProvider;
 import com.hbm.tileentity.TileEntityMachineBase;
 import com.hbm.world.FWatz;
 import com.hbm.tileentity.INBTPacketReceiver;
@@ -31,7 +33,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
@@ -43,11 +44,10 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.items.ItemStackHandler;
 
 import java.util.List;
 
-public class TileEntityFWatzCore extends TileEntityMachineBase implements IControlReceiver, ITickable, IEnergyGenerator, IFluidHandler, ITankPacketAcceptor, IGuiProvider {
+public class TileEntityFWatzCore extends TileEntityMachineBase implements IControlReceiver, ITickable, IEnergyGenerator, IFluidHandler, ITankPacketAcceptor, IGUIProvider {
 
 	public long power;
 	public final static long maxPower = 1000000000000L;
@@ -57,8 +57,8 @@ public class TileEntityFWatzCore extends TileEntityMachineBase implements IContr
 	public Fluid[] tankTypes;
 	public boolean needsUpdate = true;
 	public boolean isOn = false;
-    public boolean isOk = true;
-    public boolean isDoingSomething = false;
+	public boolean isOk = true;
+	public boolean isDoingSomething = false;
 
 	public TileEntityFWatzCore() {
 		super(7);
@@ -76,7 +76,7 @@ public class TileEntityFWatzCore extends TileEntityMachineBase implements IContr
 	public boolean hasPermission(EntityPlayer player){
 		return true;
 	}
-	
+
 	@Override
 	public void receiveControl(NBTTagCompound data){
 		this.isOn = !this.isOn;
@@ -95,13 +95,13 @@ public class TileEntityFWatzCore extends TileEntityMachineBase implements IContr
 		return 0;
 	}
 
-    public int getType(){
-        Item item = inventory.getStackInSlot(2).getItem();
-        if(item instanceof ItemFWatzCore core){
-            return core.type * (core.isBaby ? -1 : 1);
-        }
-        return 0;
-    }
+	public int getType(){
+		Item item = inventory.getStackInSlot(2).getItem();
+		if(item instanceof ItemFWatzCore core){
+			return core.type * (core.isBaby ? -1 : 1);
+		}
+		return 0;
+	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
@@ -125,113 +125,113 @@ public class TileEntityFWatzCore extends TileEntityMachineBase implements IContr
 
 	@Override
 	public void update() {
-        if(inventory.getStackInSlot(2).getItem() instanceof ItemFWatzCore core) {
-            doGravityStuff(world, isOk ? 6 : 30, 1, pos.getX()+0.5F, pos.getY()+2.5F, pos.getZ()+0.5F, (core.type / 2D + 2) * (core.isBaby ? 0.2 : 1));
-        }
+		if(inventory.getStackInSlot(2).getItem() instanceof ItemFWatzCore core) {
+			doGravityStuff(world, isOk ? 6 : 30, 1, pos.getX()+0.5F, pos.getY()+2.5F, pos.getZ()+0.5F, (core.type / 2D + 2) * (core.isBaby ? 0.2 : 1));
+		}
 		if(!world.isRemote){
-            if(this.isStructureValid(this.world)) {
-                isOk = true;
-                sendSAFEPower();
+			if(this.isStructureValid(this.world)) {
+				isOk = true;
+				sendSAFEPower();
 
-                if(isDoingSomething){
-                    doElse();
-                }
+				if(isDoingSomething){
+					doElse();
+				}
 
-                if(inventory.getStackInSlot(2).getItem() instanceof ItemFWatzCore itemCore && this.isOn) {
-                    if(cooldown) {
+				if(inventory.getStackInSlot(2).getItem() instanceof ItemFWatzCore itemCore && this.isOn) {
+					if(cooldown) {
 
-                        tanks[0].fill(new FluidStack(tankTypes[0], itemCore.coolantRefill), true);
+						tanks[0].fill(new FluidStack(tankTypes[0], itemCore.coolantRefill), true);
 
-                        if (tanks[0].getFluidAmount() >= tanks[0].getCapacity()) {
-                            cooldown = false;
-                        }
-                        isDoingSomething = false;
+						if (tanks[0].getFluidAmount() >= tanks[0].getCapacity()) {
+							cooldown = false;
+						}
+						isDoingSomething = false;
 
-                    } else {
+					} else {
 
-                        if (tanks[1].getFluidAmount() > itemCore.amatDrain && tanks[2].getFluidAmount() > itemCore.aschrabDrain) {
-                            tanks[0].drain(itemCore.coolantDrain, true);
-                            tanks[1].drain(itemCore.amatDrain, true);
-                            tanks[2].drain(itemCore.aschrabDrain, true);
-                            needsUpdate = true;
-                            power += itemCore.powerOutput;
-                            isDoingSomething = true;
-                            if (world.rand.nextInt(2048) == 0)
-                                tryGrowCore();
-                        }
+						if (tanks[1].getFluidAmount() > itemCore.amatDrain && tanks[2].getFluidAmount() > itemCore.aschrabDrain) {
+							tanks[0].drain(itemCore.coolantDrain, true);
+							tanks[1].drain(itemCore.amatDrain, true);
+							tanks[2].drain(itemCore.aschrabDrain, true);
+							needsUpdate = true;
+							power += itemCore.powerOutput;
+							isDoingSomething = true;
+							if (world.rand.nextInt(2048) == 0)
+								tryGrowCore();
+						}
 
-                        if (power > maxPower)
-                            power = maxPower;
+						if (power > maxPower)
+							power = maxPower;
 
-                        if (tanks[0].getFluidAmount() <= 0) {
-                            cooldown = true;
-                        }
-                    }
-                } else {
-                    isDoingSomething = false;
-                }
+						if (tanks[0].getFluidAmount() <= 0) {
+							cooldown = true;
+						}
+					}
+				} else {
+					isDoingSomething = false;
+				}
 
-                if(power > maxPower)
-                    power = maxPower;
+				if(power > maxPower)
+					power = maxPower;
 
-                power = Library.chargeItemsFromTE(inventory, 0, power, maxPower);
+				power = Library.chargeItemsFromTE(inventory, 0, power, maxPower);
 
-                if(this.inputValidForTank(1, 3))
-                    if(FFUtils.fillFromFluidContainer(inventory, tanks[1], 3, 5))
-                        needsUpdate = true;
-                if(this.inputValidForTank(2, 4))
-                    if(FFUtils.fillFromFluidContainer(inventory, tanks[2], 4, 6))
-                        needsUpdate = true;
+				if(this.inputValidForTank(1, 3))
+					if(FFUtils.fillFromFluidContainer(inventory, tanks[1], 3, 5))
+						needsUpdate = true;
+				if(this.inputValidForTank(2, 4))
+					if(FFUtils.fillFromFluidContainer(inventory, tanks[2], 4, 6))
+						needsUpdate = true;
 
 
-                NBTTagCompound data = new NBTTagCompound();
-                data.setLong("power", power);
-                data.setTag("tanks", FFUtils.serializeTankArray(tanks));
-                data.setBoolean("isOn", isOn);
-                data.setBoolean("isOk", true);
-                data.setBoolean("isDo", isDoingSomething);
-                if(needsUpdate) data.setTag("inventory", inventory.serializeNBT());
-                networkPack(data, 50);
+				NBTTagCompound data = new NBTTagCompound();
+				data.setLong("power", power);
+				data.setTag("tanks", FFUtils.serializeTankArray(tanks));
+				data.setBoolean("isOn", isOn);
+				data.setBoolean("isOk", true);
+				data.setBoolean("isDo", isDoingSomething);
+				if(needsUpdate) data.setTag("inventory", inventory.serializeNBT());
+				networkPack(data, 50);
 
-                if(needsUpdate) {
-                    needsUpdate = false;
-                    this.markDirty();
-                }
-            } else {
-                if(isOk){
-                    NBTTagCompound data = new NBTTagCompound();
-                    data.setLong("power", power);
-                    data.setTag("tanks", FFUtils.serializeTankArray(tanks));
-                    data.setBoolean("isOn", isOn);
-                    data.setBoolean("isOk", false);
-                    data.setBoolean("isDo", isDoingSomething);
-                    INBTPacketReceiver.networkPack(this, data, 50);
-                }
-                isOk = false;
-            }
-        }
+				if(needsUpdate) {
+					needsUpdate = false;
+					this.markDirty();
+				}
+			} else {
+				if(isOk){
+					NBTTagCompound data = new NBTTagCompound();
+					data.setLong("power", power);
+					data.setTag("tanks", FFUtils.serializeTankArray(tanks));
+					data.setBoolean("isOn", isOn);
+					data.setBoolean("isOk", false);
+					data.setBoolean("isDo", isDoingSomething);
+					INBTPacketReceiver.networkPack(this, data, 50);
+				}
+				isOk = false;
+			}
+		}
 	}
 
-    public void doElse(){
-        ItemStack stack = inventory.getStackInSlot(2);
-        if(stack.getItem() == ModItems.meteorite_sword_baleful){
-            inventory.setStackInSlot(2, new ItemStack(ModItems.meteorite_sword_warped));
-        } else if(stack.hasTagCompound()){
-            NBTTagCompound nbt = stack.getTagCompound();
-            if(nbt.getBoolean("ntmContagion")) nbt.removeTag("ntmContagion");
-            if(nbt.isEmpty()) stack.setTagCompound(null);
-        }
-    }
+	public void doElse(){
+		ItemStack stack = inventory.getStackInSlot(2);
+		if(stack.getItem() == ModItems.meteorite_sword_baleful){
+			inventory.setStackInSlot(2, new ItemStack(ModItems.meteorite_sword_warped));
+		} else if(stack.hasTagCompound()){
+			NBTTagCompound nbt = stack.getTagCompound();
+			if(nbt.getBoolean("ntmContagion")) nbt.removeTag("ntmContagion");
+			if(nbt.isEmpty()) stack.setTagCompound(null);
+		}
+	}
 
 	@Override
 	public void networkUnpack(NBTTagCompound data) {
 		this.power = data.getLong("power");
 		this.isOn = data.getBoolean("isOn");
-        this.isOk = data.getBoolean("isOk");
-        this.isDoingSomething = data.getBoolean("isDo");
-        if(data.hasKey("inventory"))
-            this.inventory.deserializeNBT(data.getCompoundTag("inventory"));
-        if(data.hasKey("tanks"))
+		this.isOk = data.getBoolean("isOk");
+		this.isDoingSomething = data.getBoolean("isDo");
+		if(data.hasKey("inventory"))
+			this.inventory.deserializeNBT(data.getCompoundTag("inventory"));
+		if(data.hasKey("tanks"))
 			FFUtils.deserializeTankArray(data.getTagList("tanks", 10), tanks);
 	}
 
@@ -240,10 +240,10 @@ public class TileEntityFWatzCore extends TileEntityMachineBase implements IContr
 		this.sendPower(world, pos.add(-7, 1, 0), Library.NEG_X);
 		this.sendPower(world, pos.add(0,  1, 7), Library.POS_Z);
 		this.sendPower(world, pos.add(0, 1, -7), Library.NEG_Z);
-        this.sendPower(world, pos.add(7, -3, 0), Library.POS_X);
-        this.sendPower(world, pos.add(-7, -3, 0), Library.NEG_X);
-        this.sendPower(world, pos.add(0, -3, 7), Library.POS_Z);
-        this.sendPower(world, pos.add(0, -3, -7), Library.NEG_Z);
+		this.sendPower(world, pos.add(7, -3, 0), Library.POS_X);
+		this.sendPower(world, pos.add(-7, -3, 0), Library.NEG_X);
+		this.sendPower(world, pos.add(0, -3, 7), Library.POS_Z);
+		this.sendPower(world, pos.add(0, -3, -7), Library.NEG_Z);
 	}
 
 	private void tryGrowCore(){
@@ -263,7 +263,7 @@ public class TileEntityFWatzCore extends TileEntityMachineBase implements IContr
 
 	protected boolean inputValidForTank(int tank, int slot) {
 		if(tanks[tank] != null) {
-            return inventory.getStackInSlot(slot).getItem() == ModItems.fluid_barrel_infinite || isValidFluidForTank(tank, FluidUtil.getFluidContained(inventory.getStackInSlot(slot)));
+			return inventory.getStackInSlot(slot).getItem() == ModItems.fluid_barrel_infinite || isValidFluidForTank(tank, FluidUtil.getFluidContained(inventory.getStackInSlot(slot)));
 		}
 		return false;
 	}
@@ -316,35 +316,35 @@ public class TileEntityFWatzCore extends TileEntityMachineBase implements IContr
 		}
 	}
 
-    @Override
-    public int[] getAccessibleSlotsFromSide(EnumFacing e) {
-        return new int[] {0, 2, 3, 4, 5, 6};
-    }
+	@Override
+	public int[] getAccessibleSlotsFromSide(EnumFacing e) {
+		return new int[] {0, 2, 3, 4, 5, 6};
+	}
 
-    @Override
-    public boolean isItemValidForSlot(int i, ItemStack stack) {
-        if(stack.getItem() instanceof ItemFWatzCore){
-            return i == 2;
-        }
-        return true;
-    }
+	@Override
+	public boolean isItemValidForSlot(int i, ItemStack stack) {
+		if(stack.getItem() instanceof ItemFWatzCore){
+			return i == 2;
+		}
+		return true;
+	}
 
-    @Override
-    public boolean canExtractItem(int slot, ItemStack itemStack, int amount) {
-        if(slot == 2 && itemStack.getItem() instanceof ItemFWatzCore core && !core.isBaby) return true;
-        return slot == 5 || slot == 6;
-    }
+	@Override
+	public boolean canExtractItem(int slot, ItemStack itemStack, int amount) {
+		if(slot == 2 && itemStack.getItem() instanceof ItemFWatzCore core && !core.isBaby) return true;
+		return slot == 5 || slot == 6;
+	}
 
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
 		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
 	}
-	
+
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
 		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY ? CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(this) : super.getCapability(capability, facing);
 	}
-	
+
 	public long getPower() {
 		return power;
 	}
@@ -357,6 +357,58 @@ public class TileEntityFWatzCore extends TileEntityMachineBase implements IContr
 		return maxPower;
 	}
 
+	AxisAlignedBB bb = null;
+
+	@Override
+	public AxisAlignedBB getRenderBoundingBox() {
+		if(bb == null) {
+			bb = new AxisAlignedBB(pos.getX() + 0.5 - 8, pos.getY() + 0.5 - 3, pos.getZ() + 0.5 - 8, pos.getX() + 0.5 + 8, pos.getY() + 0.5 + 3, pos.getZ() + 0.5 + 8);
+		}
+
+		return bb;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public double getMaxRenderDistanceSquared() {
+		return 65536.0D;
+	}
+
+	public static void doGravityStuff(World world, float range, float deathRadius, float posX, float posY, float posZ, double strength){
+		List<Entity> entities = world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(posX - range, posY - range, posZ - range, posX + range, posY + range, posZ + range));
+
+		for(Entity e : entities) {
+			if(Library.isCreative(e))
+				continue;
+
+			Vec3 vec = Vec3.createVectorHelper(posX - e.posX, posY - e.posY, posZ - e.posZ);
+
+			double dist = vec.length();
+
+			if(dist > range)
+				continue;
+
+			vec = vec.normalize();
+
+			if(!(e instanceof EntityItem))
+				vec.rotateAroundY((float)Math.toRadians(15));
+			double r2 = Math.max(dist * dist, 1);
+			e.motionX += vec.xCoord * strength / r2;
+			e.motionY += vec.yCoord * strength * 2 / r2;
+			e.motionZ += vec.zCoord * strength / r2;
+
+			if(e instanceof EntityBlackHole)
+				continue;
+
+			if(dist < deathRadius) {
+				e.attackEntityFrom(ModDamageSource.blackhole, 1000);
+
+				if(!(e instanceof EntityLivingBase))
+					e.setDead();
+			}
+		}
+	}
+
 	@Override
 	public Container provideContainer(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		return new ContainerFWatzCore(player.inventory, this);
@@ -367,56 +419,4 @@ public class TileEntityFWatzCore extends TileEntityMachineBase implements IContr
 	public GuiScreen provideGUI(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		return new GUIFWatzCore(player.inventory, this);
 	}
-
-    AxisAlignedBB bb = null;
-
-    @Override
-    public AxisAlignedBB getRenderBoundingBox() {
-        if(bb == null) {
-            bb = new AxisAlignedBB(pos.getX() + 0.5 - 8, pos.getY() + 0.5 - 3, pos.getZ() + 0.5 - 8, pos.getX() + 0.5 + 8, pos.getY() + 0.5 + 3, pos.getZ() + 0.5 + 8);
-        }
-
-        return bb;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public double getMaxRenderDistanceSquared() {
-        return 65536.0D;
-    }
-
-    public static void doGravityStuff(World world, float range, float deathRadius, float posX, float posY, float posZ, double strength){
-        List<Entity> entities = world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(posX - range, posY - range, posZ - range, posX + range, posY + range, posZ + range));
-
-        for(Entity e : entities) {
-            if(Library.isCreative(e))
-                continue;
-
-            Vec3 vec = Vec3.createVectorHelper(posX - e.posX, posY - e.posY, posZ - e.posZ);
-
-            double dist = vec.length();
-
-            if(dist > range)
-                continue;
-
-            vec = vec.normalize();
-
-            if(!(e instanceof EntityItem))
-                vec.rotateAroundY((float)Math.toRadians(15));
-            double r2 = Math.max(dist * dist, 1);
-            e.motionX += vec.xCoord * strength / r2;
-            e.motionY += vec.yCoord * strength * 2 / r2;
-            e.motionZ += vec.zCoord * strength / r2;
-
-            if(e instanceof EntityBlackHole)
-                continue;
-
-            if(dist < deathRadius) {
-                e.attackEntityFrom(ModDamageSource.blackhole, 1000);
-
-                if(!(e instanceof EntityLivingBase))
-                    e.setDead();
-            }
-        }
-    }
 }

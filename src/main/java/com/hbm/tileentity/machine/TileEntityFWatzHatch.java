@@ -14,9 +14,9 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties;
 
 public class TileEntityFWatzHatch extends TileEntityLoadedBase implements IFluidHandler {
 
-    TileEntityFWatzCore fwatz;
+	TileEntityFWatzCore fwatz;
 
-    @Override
+	@Override
 	public IFluidTankProperties[] getTankProperties() {
 		TileEntityFWatzCore fillable = this.getReactorTE(world, pos);
 		if(fillable != null && fillable.isOk)
@@ -47,46 +47,46 @@ public class TileEntityFWatzHatch extends TileEntityLoadedBase implements IFluid
 			return fillable.drain(maxDrain, doDrain);
 		return null;
 	}
-	
+
 	private TileEntityFWatzCore getReactorTE(World world, BlockPos pos) {
-        if(fwatz != null && fwatz.isOk){
-            return fwatz;
-        }
+		if(fwatz != null && fwatz.isOk){
+			return fwatz;
+		}
 		EnumFacing e = world.getBlockState(pos).getValue(BlockHorizontal.FACING);
-        TileEntity te = world.getTileEntity(pos.add(e.getXOffset()*-6, -1, e.getZOffset()*-6));
-        if(te instanceof TileEntityFWatzCore core) {
-            if(core.isOk) {
-                fwatz = core;
-                return core;
-            } else {
-                return null;
-            }
-        }
-        te = world.getTileEntity(pos.add(e.getXOffset()*-6, 3, e.getZOffset()*-6));
-        if(te instanceof TileEntityFWatzCore core) {
-            if(core.isOk) {
-                fwatz = core;
-                return core;
-            } else {
-                return null;
-            }
-        }
-        return null;
+		TileEntity te = world.getTileEntity(pos.add(e.getXOffset()*-6, -1, e.getZOffset()*-6));
+		if(te instanceof TileEntityFWatzCore core) {
+			if(core.isOk) {
+				fwatz = core;
+				return core;
+			} else {
+				return null;
+			}
+		}
+		te = world.getTileEntity(pos.add(e.getXOffset()*-6, 3, e.getZOffset()*-6));
+		if(te instanceof TileEntityFWatzCore core) {
+			if(core.isOk) {
+				fwatz = core;
+				return core;
+			} else {
+				return null;
+			}
+		}
+		return null;
 	}
-	
+
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-        TileEntityFWatzCore core = this.getReactorTE(world, pos);
-        if(core != null && core.isOk)
-            return core.hasCapability(capability, facing);
-        return super.hasCapability(capability, facing);
+		TileEntityFWatzCore core = this.getReactorTE(world, pos);
+		if(core != null && core.isOk)
+			return core.hasCapability(capability, facing);
+		return super.hasCapability(capability, facing);
 	}
-	
+
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-        TileEntityFWatzCore core = this.getReactorTE(world, pos);
-        if(core != null && core.isOk)
-            return core.getCapability(capability, facing);
-        return super.getCapability(capability, facing);
+		TileEntityFWatzCore core = this.getReactorTE(world, pos);
+		if(core != null && core.isOk)
+			return core.getCapability(capability, facing);
+		return super.getCapability(capability, facing);
 	}
 }

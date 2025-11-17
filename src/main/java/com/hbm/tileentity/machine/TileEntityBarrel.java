@@ -34,6 +34,7 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.NotNull;
 
 public class TileEntityBarrel extends TileEntityMachineBase implements ITickable, IFluidHandler, ITankPacketAcceptor, IGUIProvider {
 

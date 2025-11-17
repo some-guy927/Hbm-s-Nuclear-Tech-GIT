@@ -1,7 +1,5 @@
 package com.hbm.entity.missile;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import api.hbm.entity.IRadarDetectable;
 import com.hbm.blocks.ModBlocks;
@@ -42,7 +40,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarDetectableNT, IConstantRenderer, IRadarDetectable {
+public class EntityMissileCustom extends EntityChunky implements IRadarDetectableNT, IConstantRenderer, IRadarDetectable {
 
 	public static final DataParameter<Integer> HEALTH = EntityDataManager.createKey(EntityMissileCustom.class, DataSerializers.VARINT);
 	public static final DataParameter<MissileStruct> TEMPLATE = EntityDataManager.createKey(EntityMissileCustom.class, MissileStruct.SERIALIZER);

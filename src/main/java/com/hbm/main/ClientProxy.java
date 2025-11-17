@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
 
-import com.hbm.blocks.machine.WatzPump;
 import com.hbm.entity.item.EntityMovingPackage;
 import com.hbm.entity.mob.*;
 import com.hbm.items.IAnimatedItem;
@@ -611,6 +610,8 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySubstation.class, new RenderSubstation());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineCentrifuge.class, new RenderCentrifuge());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineGasCent.class, new RenderGasCent());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineUF6Tank.class, new RenderUF6Tank());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachinePuF6Tank.class, new RenderPuF6Tank());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRailgun.class, new RenderRailgun());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineFluidTank.class, new RenderFluidTank());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineRefinery.class, new RenderRefinery());
@@ -737,9 +738,7 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBMPowerBox.class, new RenderBMPowerBox());
 		
 		//WATZ
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWatz.class, new RenderWatz());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWatzStruct.class, new RenderWatzMultiblock());
-		ClientRegistry.bindTileEntitySpecialRenderer(WatzPump.TileEntityWatzPump.class, new RenderWatzPump());
+
 
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineBAT9000.class, new RenderBAT9000());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineOrbus.class, new RenderOrbus());
@@ -2191,7 +2190,7 @@ public class ClientProxy extends ServerProxy {
 		ModItems.forge_fluid_identifier.setTileEntityItemStackRenderer(FFIdentifierRender.INSTANCE);
 		ModItems.gun_revolver_nightmare.setTileEntityItemStackRenderer(new ItemRenderRevolverNightmare());
 		ModItems.gun_revolver_nightmare2.setTileEntityItemStackRenderer(new ItemRenderRevolverNightmare());
-		ModItems.gun_revolver.setTileEntityItemStackRenderer(new ItemRenderWeaponFFColt(ResourceManager.ff_gun_bright, ResourceManager.ff_gun_bright, ResourceManager.ff_wood));
+        ModItems.gun_revolver.setTileEntityItemStackRenderer(new ItemRenderWeaponFFColt(ResourceManager.ff_gun_bright, ResourceManager.ff_gun_bright, ResourceManager.ff_wood));
 		ModItems.gun_revolver_saturnite.setTileEntityItemStackRenderer(new ItemRenderWeaponFFColt(ResourceManager.ff_saturnite, ResourceManager.ff_iron, ResourceManager.ff_wood));
 		ModItems.gun_revolver_iron.setTileEntityItemStackRenderer(new ItemRenderWeaponFFColt(ResourceManager.ff_iron, ResourceManager.ff_iron, ResourceManager.ff_wood));
 		ModItems.gun_revolver_gold.setTileEntityItemStackRenderer(new ItemRenderWeaponFFColt(ResourceManager.ff_gold, ResourceManager.ff_gold, ResourceManager.ff_wood_red));
@@ -2334,7 +2333,6 @@ public class ClientProxy extends ServerProxy {
                 }
             }
         }
-	}
 
         ModItems.titanium_shield.setTileEntityItemStackRenderer(new ItemRenderShield("S1", ResourceManager.titanium_shield_tex, ResourceManager.titanium_shield_blank_tex));
         ModItems.steel_shield.setTileEntityItemStackRenderer(new ItemRenderShield("S2", ResourceManager.steel_shield_tex, ResourceManager.steel_shield_blank_tex));

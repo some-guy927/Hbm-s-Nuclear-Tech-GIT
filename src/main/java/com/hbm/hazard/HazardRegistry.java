@@ -13,7 +13,6 @@ import com.hbm.inventory.OreDictManager.DictFrame;
 import com.hbm.items.ModItems;
 import com.hbm.forgefluid.FluidTypeHandler;
 
-import com.hbm.items.machine.ItemWatzPellet;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraft.init.Blocks;
@@ -493,14 +492,14 @@ public class HazardRegistry {
 		registerRBMKPellet(rbmk_pellet_zfb_am_mix, zfb_am_mix * billet, wst * billet * 10F);
 		registerRBMKPellet(rbmk_pellet_drx, bf * billet * 1.2F, bf * billet * 10F, true, 0F, 1F/24F);
 
-		HazardSystem.register(DictFrame.fromOne(ModItems.watz_pellet, ItemWatzPellet.EnumWatzType.SCHRABIDIUM), makeData(RADIATION, sa326 * ingot * 4));
-		HazardSystem.register(DictFrame.fromOne(ModItems.watz_pellet, ItemWatzPellet.EnumWatzType.HES), makeData(RADIATION, hes * ingot * 4));
-		HazardSystem.register(DictFrame.fromOne(ModItems.watz_pellet, ItemWatzPellet.EnumWatzType.MES), makeData(RADIATION, mes * ingot * 4));
-		HazardSystem.register(DictFrame.fromOne(ModItems.watz_pellet, ItemWatzPellet.EnumWatzType.LES), makeData(RADIATION, les * ingot * 4));
-		HazardSystem.register(DictFrame.fromOne(ModItems.watz_pellet, ItemWatzPellet.EnumWatzType.HEN), makeData(RADIATION, np237 * ingot * 4));
-		HazardSystem.register(DictFrame.fromOne(ModItems.watz_pellet, ItemWatzPellet.EnumWatzType.MEU), makeData(RADIATION, uf * ingot * 4));
-		HazardSystem.register(DictFrame.fromOne(ModItems.watz_pellet, ItemWatzPellet.EnumWatzType.MEP), makeData(RADIATION, purg * ingot * 4));
-		HazardSystem.register(DictFrame.fromOne(ModItems.watz_pellet, ItemWatzPellet.EnumWatzType.DU), makeData(RADIATION, u238 * ingot * 4));
+		registerHazItem(pellet_schrabidium, ts * 2 + sa326 * 5, 0, 50);
+		registerHazItem(pellet_hes, ts * 2 + hes * 5, 0, 50);
+		registerHazItem(pellet_mes, ts * 2 + mes * 5, 0, 50);
+		registerHazItem(pellet_les, ts * 2 + les * 5, 0, 50);
+		registerHazItem(pellet_beryllium, ts * 2);
+		registerHazItem(pellet_neptunium, ts * 2 + np237 * 5);
+		registerHazItem(pellet_lead, ts * 2);
+		registerHazItem(pellet_advanced, ts * 2);
 		
 		registerHazItem(powder_yellowcake, yc * powder);
 		registerHazItem(block_yellowcake, yc * block * powder_mult);

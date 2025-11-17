@@ -10,9 +10,10 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import org.jetbrains.annotations.NotNull;
 
 public class TileEntityLoadedBase extends TileEntity implements ILoadedTile, IBufPacketReceiver {
-	
+
 	public boolean isLoaded = false;
-	
+	public boolean muffled = false;
+
 	@Override
 	public boolean isLoaded() {
 		return isLoaded;
@@ -24,9 +25,42 @@ public class TileEntityLoadedBase extends TileEntity implements ILoadedTile, IBu
 		this.isLoaded = false;
 	}
 
-    @Override
-    public void onLoad() {
-        super.onLoad();
-        this.isLoaded = true;
-    }
+	@Override
+	public void onLoad() {
+		super.onLoad();
+		this.isLoaded = true;
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound nbt) {
+		super.readFromNBT(nbt);
+		this.muffled = nbt.getBoolean("muffled");
+	}
+
+	@Override
+	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+		nbt.setBoolean("muffled", muffled);
+		return super.writeToNBT(nbt);
+	}
+
+	public float getVolume(float baseVolume) {
+		return muffled ? baseVolume * 0.1F : baseVolume;
+	}
+	private ByteBuf lastPackedBuf;
+
+	@Override
+	public void serialize(ByteBuf buf) {
+		buf.writeBoolean(muffled);
+	}
+
+	@Override
+	public void deserialize(ByteBuf buf) {
+		this.muffled = buf.readBoolean();
+	}
+
+	/** Sends a sync packet that uses ByteBuf for efficient information-cramming */
+	public void networkPackNT(int range) {
+		if (!world.isRemote)
+			PacketThreading.createAllAroundThreadedPacket(new BufPacket(pos.getX(), pos.getY(), pos.getZ(), this), new NetworkRegistry.TargetPoint(this.world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), range));
+	}
 }

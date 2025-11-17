@@ -19,24 +19,24 @@ public class FWatzCore extends BlockContainer {
 		super(materialIn);
 		this.setTranslationKey(s);
 		this.setRegistryName(s);
-		
+
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
 
-    @Override
-    public void breakBlock(World world, BlockPos pos, IBlockState state) {
-        TileEntity tileentity = world.getTileEntity(pos);
-        if(tileentity instanceof TileEntityFWatzCore) {
-            InventoryHelper.dropInventoryItems(world, pos, tileentity);
-        }
-        super.breakBlock(world, pos, state);
-    }
+	@Override
+	public void breakBlock(World world, BlockPos pos, IBlockState state) {
+		TileEntity tileentity = world.getTileEntity(pos);
+		if(tileentity instanceof TileEntityFWatzCore) {
+			InventoryHelper.dropInventoryItems(world, pos, tileentity);
+		}
+		super.breakBlock(world, pos, state);
+	}
 
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
 		return new TileEntityFWatzCore();
 	}
-	
+
 	@Override
 	public EnumBlockRenderType getRenderType(IBlockState state) {
 		return EnumBlockRenderType.MODEL;

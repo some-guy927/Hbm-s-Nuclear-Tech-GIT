@@ -31,12 +31,12 @@ import net.minecraft.world.World;
 public class FWatzHatch extends BlockContainer implements IEnergyConnectorBlock {
 
 	public static final PropertyDirection FACING = BlockHorizontal.FACING;
-	
+
 	public FWatzHatch(Material materialIn, String s) {
 		super(materialIn);
 		this.setTranslationKey(s);
 		this.setRegistryName(s);
-		
+
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
 
@@ -48,85 +48,85 @@ public class FWatzHatch extends BlockContainer implements IEnergyConnectorBlock 
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
 		return new TileEntityFWatzHatch();
 	}
-	
+
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()));
 	}
-	
+
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if(world.isRemote)
 		{
 			return true;
 		} else if(!player.isSneaking()) {
-            EnumFacing e = world.getBlockState(pos).getValue(BlockHorizontal.FACING);
-            BlockPos corePos = pos.add(e.getXOffset()*-6, -1, e.getZOffset()*-6);
-            TileEntity te = world.getTileEntity(corePos);
-            if(te instanceof TileEntityFWatzCore core) {
-                if(core.isOk) {
-                    player.openGui(MainRegistry.instance, ModBlocks.guiID_fwatz_multiblock, world, corePos.getX(), corePos.getY(), corePos.getZ());
-                } else {
-                    player.sendMessage(new TextComponentTranslation("chat.fwatz.structurebad"));
-                }
-            } else {
-                corePos = pos.add(e.getXOffset()*-6, 3, e.getZOffset()*-6);
-                te = world.getTileEntity(corePos);
-                if(te instanceof TileEntityFWatzCore core) {
-                    if(core.isOk) {
-                        player.openGui(MainRegistry.instance, ModBlocks.guiID_fwatz_multiblock, world, corePos.getX(), corePos.getY(), corePos.getZ());
-                    } else {
-                        player.sendMessage(new TextComponentTranslation("chat.fwatz.structurebad"));
-                    }
-                } else {
-                    player.sendMessage(new TextComponentTranslation("chat.fwatz.corebad"));
-                }
-            }
+			EnumFacing e = world.getBlockState(pos).getValue(BlockHorizontal.FACING);
+			BlockPos corePos = pos.add(e.getXOffset()*-6, -1, e.getZOffset()*-6);
+			TileEntity te = world.getTileEntity(corePos);
+			if(te instanceof TileEntityFWatzCore core) {
+				if(core.isOk) {
+					player.openGui(MainRegistry.instance, 0, world, corePos.getX(), corePos.getY(), corePos.getZ());
+				} else {
+					player.sendMessage(new TextComponentTranslation("chat.fwatz.structurebad"));
+				}
+			} else {
+				corePos = pos.add(e.getXOffset()*-6, 3, e.getZOffset()*-6);
+				te = world.getTileEntity(corePos);
+				if(te instanceof TileEntityFWatzCore core) {
+					if(core.isOk) {
+						player.openGui(MainRegistry.instance, 0, world, corePos.getX(), corePos.getY(), corePos.getZ());
+					} else {
+						player.sendMessage(new TextComponentTranslation("chat.fwatz.structurebad"));
+					}
+				} else {
+					player.sendMessage(new TextComponentTranslation("chat.fwatz.corebad"));
+				}
+			}
 
 			return true;
 		} else {
 			return false;
 		}
 	}
-	
+
 	@Override
 	public EnumBlockRenderType getRenderType(IBlockState state) {
 		return EnumBlockRenderType.MODEL;
 	}
-	
+
 	@Override
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, new IProperty[]{FACING});
 	}
-	
+
 	@Override
 	public int getMetaFromState(IBlockState state) {
 		return ((EnumFacing)state.getValue(FACING)).getIndex();
 	}
-	
+
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		EnumFacing enumfacing = EnumFacing.byIndex(meta);
 
-        if (enumfacing.getAxis() == EnumFacing.Axis.Y)
-        {
-            enumfacing = EnumFacing.NORTH;
-        }
+		if (enumfacing.getAxis() == EnumFacing.Axis.Y)
+		{
+			enumfacing = EnumFacing.NORTH;
+		}
 
-        return this.getDefaultState().withProperty(FACING, enumfacing);
+		return this.getDefaultState().withProperty(FACING, enumfacing);
 	}
-	
-	
-	
+
+
+
 	@Override
 	public IBlockState withRotation(IBlockState state, Rotation rot) {
 		return state.withProperty(FACING, rot.rotate((EnumFacing)state.getValue(FACING)));
 	}
-	
+
 	@Override
 	public IBlockState withMirror(IBlockState state, Mirror mirrorIn)
 	{
-	   return state.withRotation(mirrorIn.toRotation((EnumFacing)state.getValue(FACING)));
+		return state.withRotation(mirrorIn.toRotation((EnumFacing)state.getValue(FACING)));
 	}
 
 }

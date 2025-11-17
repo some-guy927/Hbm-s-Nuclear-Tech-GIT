@@ -3,7 +3,6 @@ package com.hbm.blocks;
 import java.util.ArrayList;
 import java.util.List;
 
-import api.hbm.energy.IBatteryItem;
 import com.hbm.blocks.bomb.Balefire;
 import com.hbm.blocks.bomb.BlockCloudResidue;
 import com.hbm.blocks.bomb.BlockCrashedBomb;
@@ -107,11 +106,9 @@ import com.hbm.hazard.HazardRegistry;
 import com.hbm.hazard.HazardSystem;
 
 import com.hbm.tileentity.machine.TileEntityMultiblock;
-import com.hbm.tileentity.machine.TileEntityWatzStruct;
 import net.minecraft.block.*;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
@@ -1141,8 +1138,8 @@ public class ModBlocks {
 	public static final Block plasma_heater = new MachinePlasmaHeater("plasma_heater").setHardness(5.0F).setResistance(6000.0F).setCreativeTab(MainRegistry.machineTab);
 	
 	//Watz Components
-	public static final Block struct_watz_core = new BlockStruct(Material.IRON, "struct_watz_core", TileEntityWatzStruct.class).setLightLevel(1F).setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
-	public static final Block watz_element = new BlockBase(Material.IRON, "watz_element").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final Block watz_element = new BlockReactor(Material.IRON, "watz_element").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final Block watz_control = new BlockReactor(Material.IRON, "watz_control").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final Block watz_cooler = new BlockBase(Material.IRON, "watz_cooler").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final Block watz_end = new BlockBase(Material.IRON, "watz_end").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final Block watz_hatch = new WatzHatch(Material.IRON, "watz_hatch").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);

@@ -42,7 +42,7 @@ public class ItemAssemblyTemplate extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public String getItemStackDisplayName(ItemStack stack) {
-		String s = ("" + I18n.format(this.getTranslationKey() + ".name")).trim();
+		String s = (I18n.format(this.getTranslationKey() + ".name")).trim();
 		int damage = getTagWithRecipeNumber(stack).getInteger("type");
 		ItemStack out = damage < AssemblerRecipes.recipeList.size() ? AssemblerRecipes.recipeList.get(damage).toStack() : ItemStack.EMPTY;
 		String s1 = out!=null ? out.getDisplayName() : "ERROR";
@@ -88,21 +88,21 @@ public class ItemAssemblyTemplate extends Item {
 		int i = getTagWithRecipeNumber(stack).getInteger("type");
 		
 		if(i < 0 || i >= AssemblerRecipes.recipeList.size()) {
-    		list.add("I AM ERROR");
+    		list.add("I AM ERROR - Out of Bounds Type");
     		return;
     	}
 
     	ComparableStack out = AssemblerRecipes.recipeList.get(i);
 
     	if(out == null) {
-    		list.add("I AM ERROR");
+    		list.add("I AM ERROR - Type Not Found");
     		return;
     	}
 
     	Object[] in = AssemblerRecipes.recipes.get(out);
 
     	if(in == null) {
-    		list.add("I AM ERROR");
+    		list.add("I AM ERROR - Type Not Found");
     		return;
     	}
 

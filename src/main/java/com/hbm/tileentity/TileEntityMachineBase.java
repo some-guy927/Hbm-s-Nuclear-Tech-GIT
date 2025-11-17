@@ -41,14 +41,14 @@ public abstract class TileEntityMachineBase extends TileEntityLoadedBase impleme
 				super.onContentsChanged(slot);
 				markDirty();
 			}
-			
+
 			@Override
 			public int getSlotLimit(int slot) {
 				return slotlimit;
 			}
 		};
 	}
-	
+
 	public String getInventoryName() {
 		return this.hasCustomInventoryName() ? this.customName : getName();
 	}
@@ -58,11 +58,11 @@ public abstract class TileEntityMachineBase extends TileEntityLoadedBase impleme
 	public boolean hasCustomInventoryName() {
 		return this.customName != null && !this.customName.isEmpty();
 	}
-	
+
 	public void setCustomName(String name) {
 		this.customName = name;
 	}
-	
+
 	public boolean isUseableByPlayer(EntityPlayer player) {
 		if(world.getTileEntity(pos) != this)
 		{
@@ -71,7 +71,7 @@ public abstract class TileEntityMachineBase extends TileEntityLoadedBase impleme
 			return player.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <=128;
 		}
 	}
-	
+
 	public int[] getAccessibleSlotsFromSide(EnumFacing e) {
 		return new int[] {};
 	}
@@ -81,28 +81,28 @@ public abstract class TileEntityMachineBase extends TileEntityLoadedBase impleme
 		if(!world.isRemote)
 			PacketDispatcher.wrapper.sendToAllAround(new NBTPacket(nbt, pos), new TargetPoint(this.world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), range));
 	}
-	
+
 	public void networkUnpack(NBTTagCompound nbt) { }
-	
+
 	public void handleButtonPacket(int value, int meta) { }
-	
+
 	@Override
 	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setTag("inventory", inventory.serializeNBT());
 		return super.writeToNBT(compound);
 	}
-	
+
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		if(compound.hasKey("inventory"))
 			inventory.deserializeNBT(compound.getCompoundTag("inventory"));
 		super.readFromNBT(compound);
 	}
-	
+
 	public boolean isItemValidForSlot(int i, ItemStack stack) {
 		return true;
 	}
-	
+
 	public boolean canInsertItem(int slot, ItemStack itemStack, int amount) {
 		return this.isItemValidForSlot(slot, itemStack);
 	}
@@ -110,14 +110,14 @@ public abstract class TileEntityMachineBase extends TileEntityLoadedBase impleme
 	public boolean canExtractItem(int slot, ItemStack itemStack, int amount) {
 		return true;
 	}
-	
+
 	public int countMufflers() {
 		int count = 0;
 		for(EnumFacing dir : EnumFacing.VALUES) {
-            if (world.getBlockState(pos.offset(dir)).getBlock() == ModBlocks.muffler) {
-                count++;
-            }
-        }
+			if (world.getBlockState(pos.offset(dir)).getBlock() == ModBlocks.muffler) {
+				count++;
+			}
+		}
 		return count;
 	}
 
@@ -127,7 +127,7 @@ public abstract class TileEntityMachineBase extends TileEntityLoadedBase impleme
 
 		return Math.max(volume, 0);
 	}
-	
+
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
 		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && inventory != null){
@@ -140,7 +140,7 @@ public abstract class TileEntityMachineBase extends TileEntityLoadedBase impleme
 						return super.extractItem(slot, amount, simulate);
 					return ItemStack.EMPTY;
 				}
-				
+
 				@Override
 				public @NotNull ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
 					if(canInsertItem(slot, stack, stack.getCount()))
@@ -151,7 +151,7 @@ public abstract class TileEntityMachineBase extends TileEntityLoadedBase impleme
 		}
 		return super.getCapability(capability, facing);
 	}
-	
+
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
 		return (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && inventory != null) || super.hasCapability(capability, facing);

@@ -31,76 +31,78 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockMarker extends BlockContainer {
 
-	protected static final AxisAlignedBB STANDING_AABB = new AxisAlignedBB(0.4D, 0.0D, 0.4D, 0.6D, 0.6D, 0.6D);
-	public static final PropertyDirection FACING = BlockTorch.FACING;
-	
-	public BlockMarker(Material materialIn, String s) {
-		super(materialIn);
-		this.setTranslationKey(s);
-		this.setRegistryName(s);
-		
-		ModBlocks.ALL_BLOCKS.add(this);
-	}
+    protected static final AxisAlignedBB STANDING_AABB = new AxisAlignedBB(0.4D, 0.0D, 0.4D, 0.6D, 0.6D, 0.6D);
+    public static final PropertyDirection FACING = BlockTorch.FACING;
 
-	@Override
-	public TileEntity createNewTileEntity(World worldIn, int meta) {
-		return new TileEntityStructureMarker();
-	}
-	
-	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if(world.isRemote)
-		{
-			int i = ((TileEntityStructureMarker)world.getTileEntity(pos)).type + 1;
-			if(i > 3)
-				i = 0;
-			if(i == 0)
-		        player.sendMessage(new TextComponentTranslation("chat.structuremarker.factory"));
-			if(i == 1)
-		        player.sendMessage(new TextComponentTranslation("chat.structuremarker.nuclear"));
-			if(i == 2)
-		        player.sendMessage(new TextComponentTranslation("chat.structuremarker.nuclearc"));
-			if(i == 3)
-		        player.sendMessage(new TextComponentTranslation("chat.structuremarker.safe"));
-			return true;
-		} else if(!player.isSneaking())
-		{
-			if(world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileEntityStructureMarker) {
-				((TileEntityStructureMarker)world.getTileEntity(pos)).type++;
-			}
-			return true;
-		} else {
-			return false;
-		}
-	}
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-	public BlockRenderLayer getRenderLayer() {
-		return BlockRenderLayer.CUTOUT;
-	}
-	
-	@Override
-	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
-		return BlockFaceShape.UNDEFINED;
-	}
-	
-	@Override
-	public EnumBlockRenderType getRenderType(IBlockState state) {
-		return EnumBlockRenderType.MODEL;
-	}
-	
-	@Override
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return STANDING_AABB;
-	}
-	
-	@Override
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
-		return NULL_AABB;
-	}
-	
-	public boolean isOpaqueCube(IBlockState state)
+    public BlockMarker(Material materialIn, String s) {
+        super(materialIn);
+        this.setTranslationKey(s);
+        this.setRegistryName(s);
+
+        ModBlocks.ALL_BLOCKS.add(this);
+    }
+
+    @Override
+    public TileEntity createNewTileEntity(World worldIn, int meta) {
+        return new TileEntityStructureMarker();
+    }
+
+    @Override
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        if(world.isRemote)
+        {
+            int i = ((TileEntityStructureMarker)world.getTileEntity(pos)).type + 1;
+            if(i > 4)
+                i = 0;
+            if(i == 0)
+                player.sendMessage(new TextComponentTranslation("chat.structuremarker.factory"));
+            if(i == 1)
+                player.sendMessage(new TextComponentTranslation("chat.structuremarker.nuclear"));
+            if(i == 2)
+                player.sendMessage(new TextComponentTranslation("chat.structuremarker.nuclearc"));
+            if(i == 3)
+                player.sendMessage(new TextComponentTranslation("chat.structuremarker.watz"));
+            if(i == 4)
+                player.sendMessage(new TextComponentTranslation("chat.structuremarker.safe"));
+            return true;
+        } else if(!player.isSneaking())
+        {
+            if(world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileEntityStructureMarker) {
+                ((TileEntityStructureMarker)world.getTileEntity(pos)).type ++;
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public BlockRenderLayer getRenderLayer() {
+        return BlockRenderLayer.CUTOUT;
+    }
+
+    @Override
+    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+        return BlockFaceShape.UNDEFINED;
+    }
+
+    @Override
+    public EnumBlockRenderType getRenderType(IBlockState state) {
+        return EnumBlockRenderType.MODEL;
+    }
+
+    @Override
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+        return STANDING_AABB;
+    }
+
+    @Override
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
+        return NULL_AABB;
+    }
+
+    public boolean isOpaqueCube(IBlockState state)
     {
         return false;
     }
@@ -109,7 +111,7 @@ public class BlockMarker extends BlockContainer {
     {
         return false;
     }
-    
+
     private boolean canPlaceOn(World worldIn, BlockPos pos)
     {
         IBlockState state = worldIn.getBlockState(pos);
@@ -143,7 +145,7 @@ public class BlockMarker extends BlockContainer {
      */
     public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer)
     {
-    	return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
+        return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
     }
 
     /**
@@ -222,12 +224,24 @@ public class BlockMarker extends BlockContainer {
     {
         IBlockState iblockstate = this.getDefaultState();
 
-        iblockstate = switch (meta) {
-            case 1 -> iblockstate.withProperty(FACING, EnumFacing.EAST);
-            case 2 -> iblockstate.withProperty(FACING, EnumFacing.WEST);
-            case 3 -> iblockstate.withProperty(FACING, EnumFacing.SOUTH);
-            default -> iblockstate.withProperty(FACING, EnumFacing.UP);
-        };
+        switch (meta)
+        {
+            case 1:
+                iblockstate = iblockstate.withProperty(FACING, EnumFacing.EAST);
+                break;
+            case 2:
+                iblockstate = iblockstate.withProperty(FACING, EnumFacing.WEST);
+                break;
+            case 3:
+                iblockstate = iblockstate.withProperty(FACING, EnumFacing.SOUTH);
+                break;
+            case 4:
+                iblockstate = iblockstate.withProperty(FACING, EnumFacing.NORTH);
+                break;
+            case 5:
+            default:
+                iblockstate = iblockstate.withProperty(FACING, EnumFacing.UP);
+        }
 
         return iblockstate;
     }
@@ -236,25 +250,37 @@ public class BlockMarker extends BlockContainer {
     {
         int i = 0;
 
-        i = switch (state.getValue(FACING)) {
-            case EAST -> i | 1;
-            case WEST -> i | 2;
-            case SOUTH -> i | 3;
-            case NORTH -> i | 4;
-            default -> i | 5;
-        };
+        switch ((EnumFacing)state.getValue(FACING))
+        {
+            case EAST:
+                i = i | 1;
+                break;
+            case WEST:
+                i = i | 2;
+                break;
+            case SOUTH:
+                i = i | 3;
+                break;
+            case NORTH:
+                i = i | 4;
+                break;
+            case DOWN:
+            case UP:
+            default:
+                i = i | 5;
+        }
 
         return i;
     }
 
     public IBlockState withRotation(IBlockState state, Rotation rot)
     {
-        return state.withProperty(FACING, rot.rotate(state.getValue(FACING)));
+        return state.withProperty(FACING, rot.rotate((EnumFacing)state.getValue(FACING)));
     }
 
     public IBlockState withMirror(IBlockState state, Mirror mirrorIn)
     {
-        return state.withRotation(mirrorIn.toRotation(state.getValue(FACING)));
+        return state.withRotation(mirrorIn.toRotation((EnumFacing)state.getValue(FACING)));
     }
 
     protected BlockStateContainer createBlockState()

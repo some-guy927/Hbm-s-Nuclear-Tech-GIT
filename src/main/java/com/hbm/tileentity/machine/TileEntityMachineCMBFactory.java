@@ -45,7 +45,7 @@ public class TileEntityMachineCMBFactory extends TileEntityMachineBase implement
 	public static final long maxPower = 100000000;
 	public static final int processSpeed = 200;
 	public FluidTank tank;
-	public Fluid tankType = ModForgeFluids.WATZ;
+	public Fluid tankType = ModForgeFluids.MUD_FLUID;
 	public boolean needsUpdate = false;
 
 	private static final int[] slots_top = new int[] {1, 3};
@@ -81,7 +81,7 @@ public class TileEntityMachineCMBFactory extends TileEntityMachineBase implement
 			if (itemStack.getItem() instanceof IBatteryItem && ((IBatteryItem)itemStack.getItem()).getCharge(itemStack) == 0)
 				return true;
 		if(i == 2)
-			if(FFUtils.containsFluid(itemStack, ModForgeFluids.WATZ))
+			if(FFUtils.containsFluid(itemStack, ModForgeFluids.MUD_FLUID))
 				return true;
 		return false;
 	}
@@ -99,7 +99,7 @@ public class TileEntityMachineCMBFactory extends TileEntityMachineBase implement
 				return true;
 			break;
 		case 2:
-			if(FFUtils.containsFluid(stack, ModForgeFluids.WATZ))
+			if(FFUtils.containsFluid(stack, ModForgeFluids.MUD_FLUID))
 				return true;
 			break;
 		case 3:
@@ -243,7 +243,7 @@ public class TileEntityMachineCMBFactory extends TileEntityMachineBase implement
 	private boolean isValidFluid(FluidStack stack) {
 		if(stack == null)
 			return false;
-		return stack.getFluid() == ModForgeFluids.WATZ;
+		return stack.getFluid() == ModForgeFluids.MUD_FLUID;
 	}
 	
 	@Override

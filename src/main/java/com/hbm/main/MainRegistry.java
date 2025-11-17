@@ -3,17 +3,19 @@ package com.hbm.main;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import com.hbm.blocks.machine.WatzPump;
 import com.hbm.entity.item.EntityMovingPackage;
 import com.hbm.entity.mob.*;
 import com.hbm.handler.*;
 import com.hbm.inventory.*;
 import com.hbm.items.armor.ItemModLens;
 import com.hbm.tileentity.network.*;
+import com.hbm.util.datafix.BedrockOreFix;
+import com.hbm.util.datafix.CircuitMetaFix;
+import com.hbm.util.datafix.FluidFix;
+import com.hbm.util.datafix.MatMetaFix;
 import com.hbm.world.feature.OreLayer3D;
 import net.minecraft.block.*;
 import net.minecraft.util.datafix.FixTypes;
@@ -484,8 +486,13 @@ public class MainRegistry {
 		MinecraftForge.TERRAIN_GEN_BUS.register(new ModEventHandler());
 		MinecraftForge.ORE_GEN_BUS.register(new ModEventHandler());
 
-		ModFixs fixer = FMLCommonHandler.instance().getDataFixer().init("hbm", 1); //Missing mappings
-		fixer.registerFix(FixTypes.ITEM_INSTANCE, new ItemMetaHandler());
+		ModFixs fixer = FMLCommonHandler.instance().getDataFixer().init("hbm", 2); //Missing mappings
+		fixer.registerFix(FixTypes.ITEM_INSTANCE, new MatMetaFix());
+		fixer.registerFix(FixTypes.ITEM_INSTANCE, new CircuitMetaFix());
+		fixer.registerFix(FixTypes.ITEM_INSTANCE, new BedrockOreFix());
+		fixer.registerFix(FixTypes.BLOCK_ENTITY, new CircuitMetaFix());
+		fixer.registerFix(FixTypes.BLOCK_ENTITY, new BedrockOreFix());
+		fixer.registerFix(FixTypes.BLOCK_ENTITY, new FluidFix());
 
 		if(event.getSide() == Side.CLIENT) {
 			HbmKeybinds keyHandler = new HbmKeybinds();
@@ -593,6 +600,8 @@ public class MainRegistry {
 		GameRegistry.registerTileEntity(TileEntitySubstation.class, new ResourceLocation(RefStrings.MODID, "tileentity_pylon_substation"));
 		GameRegistry.registerTileEntity(TileEntityMachineCentrifuge.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_centrifuge"));
 		GameRegistry.registerTileEntity(TileEntityMachineGasCent.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_gascent"));
+		GameRegistry.registerTileEntity(TileEntityMachineUF6Tank.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_uf6_tank"));
+		GameRegistry.registerTileEntity(TileEntityMachinePuF6Tank.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_puf6_tank"));
 		GameRegistry.registerTileEntity(TileEntityRailgun.class, new ResourceLocation(RefStrings.MODID, "tileentity_railgun"));
 		GameRegistry.registerTileEntity(TileEntityMachineReactor.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_reactor"));
 		GameRegistry.registerTileEntity(TileEntityMachineShredder.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_shredder"));
@@ -635,6 +644,7 @@ public class MainRegistry {
 		GameRegistry.registerTileEntity(TileEntityMachineGasFlare.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_gas_flare"));
 		GameRegistry.registerTileEntity(TileEntityMachineExcavator.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_excavator"));
 		GameRegistry.registerTileEntity(TileEntityMachineTurbofan.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_turbofan"));
+		GameRegistry.registerTileEntity(TileEntityMachineCMBFactory.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_cmb_factory"));
 		GameRegistry.registerTileEntity(TileEntityMachineTeleporter.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_teleporter"));
 		GameRegistry.registerTileEntity(TileEntityRadiobox.class, new ResourceLocation(RefStrings.MODID, "tileentity_radiobox"));
 		GameRegistry.registerTileEntity(TileEntityRadioRec.class, new ResourceLocation(RefStrings.MODID, "tileentity_radiorec"));
@@ -649,6 +659,8 @@ public class MainRegistry {
 		GameRegistry.registerTileEntity(TileEntityReactorHatch.class, new ResourceLocation(RefStrings.MODID, "tileentity_reactor_hatch"));
 		GameRegistry.registerTileEntity(TileEntityFactoryHatch.class, new ResourceLocation(RefStrings.MODID, "tileentity_factory_hatch"));
 		GameRegistry.registerTileEntity(TileEntityMachineReactorLarge.class, new ResourceLocation(RefStrings.MODID, "tileentity_reactor_large"));
+		GameRegistry.registerTileEntity(TileEntityWatzHatch.class, new ResourceLocation(RefStrings.MODID, "tileentity_watz_hatch"));
+		GameRegistry.registerTileEntity(TileEntityWatzCore.class, new ResourceLocation(RefStrings.MODID, "tileentity_watz_core"));
 		GameRegistry.registerTileEntity(TileEntityFWatzHatch.class, new ResourceLocation(RefStrings.MODID, "tileentity_fwatz_hatch"));
 		GameRegistry.registerTileEntity(TileEntityFWatzCore.class, new ResourceLocation(RefStrings.MODID, "tileentity_fwatz_core"));
 		GameRegistry.registerTileEntity(TileEntityNukeGadget.class, new ResourceLocation(RefStrings.MODID, "tileentity_nuke_gadget"));
@@ -724,9 +736,6 @@ public class MainRegistry {
 		GameRegistry.registerTileEntity(TileEntityHadron.class, new ResourceLocation(RefStrings.MODID, "tileentity_hadron"));
 		GameRegistry.registerTileEntity(TileEntitySolarBoiler.class, new ResourceLocation(RefStrings.MODID, "tileentity_solarboiler"));
 		GameRegistry.registerTileEntity(TileEntitySolarMirror.class, new ResourceLocation(RefStrings.MODID, "tileentity_solarmirror"));
-		GameRegistry.registerTileEntity(TileEntityWatz.class, new ResourceLocation(RefStrings.MODID, "tileentity_watz"));
-		GameRegistry.registerTileEntity(WatzPump.TileEntityWatzPump.class, new ResourceLocation(RefStrings.MODID, "tileentity_watz_pump"));
-		GameRegistry.registerTileEntity(TileEntityWatzStruct.class, new ResourceLocation(RefStrings.MODID, "tileentity_watz_struct"));
 		GameRegistry.registerTileEntity(TileEntityMachineDetector.class, new ResourceLocation(RefStrings.MODID, "tileentity_he_detector"));
 		GameRegistry.registerTileEntity(TileEntityFireworks.class, new ResourceLocation(RefStrings.MODID, "tileentity_firework_box"));
 		GameRegistry.registerTileEntity(TileEntityMachineIGenerator.class, new ResourceLocation(RefStrings.MODID, "tileentity_igenerator"));

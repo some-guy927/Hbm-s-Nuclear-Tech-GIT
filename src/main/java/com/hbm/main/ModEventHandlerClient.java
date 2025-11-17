@@ -18,11 +18,8 @@ import com.hbm.util.*;
 import com.hbm.items.IDynamicModels;
 import com.hbm.items.IModelRegister;
 import com.hbm.items.machine.*;
-import com.hbm.render.tileentity.RenderWatzMultiblock;
 import net.minecraft.block.*;
 import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.block.statemap.StateMap;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemLeaves;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
@@ -712,6 +709,23 @@ public class ModEventHandlerClient {
 		RenderStructureMarker.fusion[6][0] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/block_tungsten");
 		RenderStructureMarker.fusion[6][1] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/block_tungsten");
 
+		RenderStructureMarker.watz[0][0] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/reinforced_brick");
+		RenderStructureMarker.watz[0][1] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/reinforced_brick");
+		RenderStructureMarker.watz[1][0] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/reinforced_brick");
+		RenderStructureMarker.watz[1][1] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_hatch");
+		RenderStructureMarker.watz[2][0] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_control_top");
+		RenderStructureMarker.watz[2][1] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_control_side");
+		RenderStructureMarker.watz[3][0] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_end");
+		RenderStructureMarker.watz[3][1] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_end");
+		RenderStructureMarker.watz[4][0] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_conductor_top");
+		RenderStructureMarker.watz[4][1] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_conductor_side");
+		RenderStructureMarker.watz[5][0] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_computer");
+		RenderStructureMarker.watz[5][1] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_computer");
+		RenderStructureMarker.watz[6][0] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_cooler");
+		RenderStructureMarker.watz[6][1] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_cooler");
+		RenderStructureMarker.watz[7][0] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_element_top");
+		RenderStructureMarker.watz[7][1] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_element_side");
+
 		RenderStructureMarker.fwatz[0][0] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/fwatz_scaffold");
 		RenderStructureMarker.fwatz[0][1] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/fwatz_scaffold");
 		RenderStructureMarker.fwatz[1][0] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/fwatz_scaffold");
@@ -734,11 +748,6 @@ public class ModEventHandlerClient {
 		RenderSoyuzMultiblock.blockIcons[1] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/concrete");
 		RenderSoyuzMultiblock.blockIcons[2] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/struct_scaffold");
 
-		RenderWatzMultiblock.casingSprite = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_casing_tooled");
-		RenderWatzMultiblock.coolerSpriteSide = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_cooler_side");
-		RenderWatzMultiblock.coolerSpriteTop = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_cooler_top");
-		RenderWatzMultiblock.elementSpriteSide = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_element_side");
-		RenderWatzMultiblock.elementSpriteTop = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_element_top");
 	}
 
 	public static TextureAtlasSprite contrail;

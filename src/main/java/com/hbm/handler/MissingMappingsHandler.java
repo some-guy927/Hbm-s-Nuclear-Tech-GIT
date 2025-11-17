@@ -18,6 +18,10 @@ public class MissingMappingsHandler {
                     mapping.remap(ModItems.wire);
                 } else if (path.startsWith("bolt_")) {
                     mapping.remap(ModItems.bolt);
+                } else if (path.startsWith("circuit_")) {
+                    mapping.remap(ModItems.circuit);
+                } else {
+                    System.out.println("Item not remapped: " + path);
                 }
             }
         }

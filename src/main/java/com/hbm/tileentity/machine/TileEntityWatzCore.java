@@ -53,24 +53,24 @@ public class TileEntityWatzCore extends TileEntityLoadedBase implements ITickabl
 	public long power;
 	public final static long maxPower = 1000000000;
 	public int heat;
-	
+
 	public int heatMultiplier;
 	public int powerMultiplier;
 	public int decayMultiplier;
-	
+
 	public int heatList;
 	public int wasteList;
 	public int powerList;
 	public int age = 0;
 	Random rand = new Random();
-	
+
 	public ItemStackHandler inventory;
 	public FluidTank tank;
-	public Fluid tankType;
+	public Fluid tankType = ModForgeFluids.MUD_FLUID;
 	public boolean needsUpdate;
-	
+
 	private String customName;
-	
+
 	public TileEntityWatzCore() {
 		inventory = new ItemStackHandler(40){
 			@Override
@@ -80,10 +80,9 @@ public class TileEntityWatzCore extends TileEntityLoadedBase implements ITickabl
 			}
 		};
 		tank = new FluidTank(64000);
-		tankType = ModForgeFluids.WATZ;
 		needsUpdate = false;
 	}
-	
+
 	public String getInventoryName() {
 		return this.hasCustomInventoryName() ? this.customName : "container.watzPowerplant";
 	}
@@ -91,11 +90,11 @@ public class TileEntityWatzCore extends TileEntityLoadedBase implements ITickabl
 	public boolean hasCustomInventoryName() {
 		return this.customName != null && this.customName.length() > 0;
 	}
-	
+
 	public void setCustomName(String name) {
 		this.customName = name;
 	}
-	
+
 	public boolean isUseableByPlayer(EntityPlayer player) {
 		if(world.getTileEntity(pos) != this)
 		{
@@ -104,17 +103,17 @@ public class TileEntityWatzCore extends TileEntityLoadedBase implements ITickabl
 			return true;
 		}
 	}
-	
+
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		power = compound.getLong("power");
 		tank.readFromNBT(compound);
-		tankType = ModForgeFluids.WATZ;
+		tankType = ModForgeFluids.MUD_FLUID;
 		if(compound.hasKey("inventory"))
 			inventory.deserializeNBT(compound.getCompoundTag("inventory"));
 		super.readFromNBT(compound);
 	}
-	
+
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setLong("power", power);
@@ -122,7 +121,7 @@ public class TileEntityWatzCore extends TileEntityLoadedBase implements ITickabl
 		compound.setTag("inventory", inventory.serializeNBT());
 		return super.writeToNBT(compound);
 	}
-	
+
 	@Override
 	public void update() {
 		if (!world.isRemote && this.isStructureValid(this.world)) {
@@ -145,7 +144,7 @@ public class TileEntityWatzCore extends TileEntityLoadedBase implements ITickabl
 			heat = 0;
 
 			if (hasFuse()) {
-				
+
 				//Adds power and heat
 				for (int i = 0; i < 36; i++) {
 					surveyPellet(inventory.getStackInSlot(i));
@@ -176,16 +175,16 @@ public class TileEntityWatzCore extends TileEntityLoadedBase implements ITickabl
 
 			tank.fill(new FluidStack(tankType, ((decayMultiplier * heat) / 100) / 100), true);
 			needsUpdate = true;
-			
+
 			if(power > maxPower)
 				power = maxPower;
-			
+
 			//Gets rid of 1/4 of the total waste, if at least one access hatch is not occupied
 			if(tank.getFluidAmount() >= tank.getCapacity())
 				emptyWaste();
-			
+
 			power = Library.chargeItemsFromTE(inventory, 37, power, maxPower);
-			
+
 			if(FFUtils.fillFluidContainer(inventory, tank, 36, 39))
 				needsUpdate = true;
 
@@ -193,7 +192,7 @@ public class TileEntityWatzCore extends TileEntityLoadedBase implements ITickabl
 				//Removed you because selectively sending packets is buggy. Really this should only be sending packets when a gui is open, but whatever.
 				needsUpdate = false;
 			}
-			
+
 			PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos, new FluidTank[]{tank}), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 20));
 			PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos, power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 20));
 		}
@@ -210,7 +209,7 @@ public class TileEntityWatzCore extends TileEntityLoadedBase implements ITickabl
 	public long getPowerScaled(long i) {
 		return (power/100 * i) / (maxPower/100);
 	}
-	
+
 	public void surveyPellet(ItemStack stack) {
 		if(stack != null && stack.getItem() instanceof WatzFuel)
 		{
@@ -219,7 +218,7 @@ public class TileEntityWatzCore extends TileEntityLoadedBase implements ITickabl
 			this.heatList += fuel.heat;
 		}
 	}
-	
+
 	public void surveyPelletAgain(ItemStack stack) {
 		if(stack.getItem() instanceof WatzFuel)
 		{
@@ -229,7 +228,7 @@ public class TileEntityWatzCore extends TileEntityLoadedBase implements ITickabl
 			this.decayMultiplier *= fuel.decayMultiplier;
 		}
 	}
-	
+
 	public void decayPellet(int i) {
 		if(inventory.getStackInSlot(i).getItem() instanceof WatzFuel)
 		{
@@ -245,7 +244,7 @@ public class TileEntityWatzCore extends TileEntityLoadedBase implements ITickabl
 			}
 		}
 	}
-	
+
 	public void emptyWaste() {
 		MutableBlockPos mPos = new BlockPos.MutableBlockPos();
 		int x = pos.getX();
@@ -293,7 +292,7 @@ public class TileEntityWatzCore extends TileEntityLoadedBase implements ITickabl
 					entity.speed = 25;
 					entity.coefficient = 1.0F;
 					entity.waste = false;
-	    	
+
 					world.spawnEntity(entity);
 				}
 			}
@@ -350,12 +349,12 @@ public class TileEntityWatzCore extends TileEntityLoadedBase implements ITickabl
 			tank.readFromNBT(tags[0]);
 		}
 	}
-	
+
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
 		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY ? CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(this) : super.getCapability(capability, facing);
 	}
-	
+
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
 		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);

@@ -639,8 +639,4 @@ public class HFRWavefrontObject implements IModelCustom
 	public void tessellateAllExcept(com.hbm.render.amlfrom1710.Tessellator tes, String... excluded){
 		throw new RuntimeException("Tessellate not supported on HFR model");
 	}
-
-    public WavefrontObjVBO asVBO() {
-        return new WavefrontObjVBO(this);
-    }
 }

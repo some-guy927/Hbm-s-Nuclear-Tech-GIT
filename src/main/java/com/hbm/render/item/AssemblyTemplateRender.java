@@ -23,28 +23,32 @@ public class AssemblyTemplateRender extends TileEntityItemStackRenderer {
 
 	@Override
 	public void renderByItem(ItemStack stack) {
-		try{
-			if (stack.getItem() instanceof ItemAssemblyTemplate && type == TransformType.GUI) {
-				if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-					GL11.glPushMatrix();
-					GL11.glPushAttrib(GL11.GL_LIGHTING_BIT);
-					GL11.glTranslated(0.5, 0.5, 0);
-					GlStateManager.enableLighting();
+		if (stack.getItem() instanceof ItemAssemblyTemplate && type == TransformType.GUI) {
+			if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+				GL11.glPushMatrix();
+				GL11.glPushAttrib(GL11.GL_LIGHTING_BIT);
+				GL11.glTranslated(0.5, 0.5, 0);
+				GlStateManager.enableLighting();
+				try {
 					ItemStack item = AssemblerRecipes.recipeList.get(ItemAssemblyTemplate.getRecipeIndex(stack)).toStack();
 					IBakedModel model = Minecraft.getMinecraft().getRenderItem().getItemModelWithOverrides(item, Minecraft.getMinecraft().world, Minecraft.getMinecraft().player);
 					model = net.minecraftforge.client.ForgeHooksClient.handleCameraTransforms(model, ItemCameraTransforms.TransformType.GUI, false);
 					Minecraft.getMinecraft().getRenderItem().renderItem(item, model);
+				} catch(IndexOutOfBoundsException e){
+					ItemStack item = ItemStack.EMPTY;
+					IBakedModel model = Minecraft.getMinecraft().getRenderItem().getItemModelWithOverrides(item, Minecraft.getMinecraft().world, Minecraft.getMinecraft().player);
+					model = net.minecraftforge.client.ForgeHooksClient.handleCameraTransforms(model, ItemCameraTransforms.TransformType.GUI, false);
+					Minecraft.getMinecraft().getRenderItem().renderItem(item, model);
+				} finally {
 					GL11.glPopAttrib();
 					GL11.glPopMatrix();
-				} else {
-					GL11.glTranslated(0.5, 0.5, 0);
-					Minecraft.getMinecraft().getRenderItem().renderItem(stack, itemModel);
 				}
 			} else {
+				GL11.glTranslated(0.5, 0.5, 0);
 				Minecraft.getMinecraft().getRenderItem().renderItem(stack, itemModel);
 			}
-		} catch(IndexOutOfBoundsException e){
-
+		} else {
+			Minecraft.getMinecraft().getRenderItem().renderItem(stack, itemModel);
 		}
 		super.renderByItem(stack);
 	}

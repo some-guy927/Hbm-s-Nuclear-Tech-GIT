@@ -524,8 +524,6 @@ public class ResourceManager {
 
 	//UU
 	public static final ResourceLocation uu_creator_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/uu_creator.png");
-	public static final ResourceLocation watz_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/watz.png");
-	public static final ResourceLocation watz_pump_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/watz_pump.png");
 
 	//FENSU
 	public static final ResourceLocation[] fensu_tex = new ResourceLocation[] { 
@@ -771,6 +769,10 @@ public class ResourceManager {
 
 	//Solderer
 	public static final ResourceLocation soldering_station_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/soldering_station.png");
+
+	//F6 TANKS
+	public static final ResourceLocation uf6_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/UF6Tank.png");
+	public static final ResourceLocation puf6_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/PUF6Tank.png");
 
 	//Centrifuge
 	public static final ResourceLocation centrifuge_new_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/centrifuge_new.png");

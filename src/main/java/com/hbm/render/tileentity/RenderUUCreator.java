@@ -16,13 +16,13 @@ public class RenderUUCreator extends TileEntitySpecialRenderer<TileEntityMachine
 		GL11.glTranslated(x + 0.5F, y, z + 0.5F);
 
 		GlStateManager.enableLighting();
-        GlStateManager.disableCull();
-		
+		GlStateManager.disableCull();
+
 		GlStateManager.shadeModel(GL11.GL_SMOOTH);
 		bindTexture(ResourceManager.uu_creator_tex);
-		ResourceManager.watz.renderAll();
+		ResourceManager.uu_creator.renderAll();
 		GlStateManager.shadeModel(GL11.GL_FLAT);
-		
+
 		GL11.glPopMatrix();
 	}
 }

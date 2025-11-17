@@ -20,25 +20,25 @@ public class TileEntityStructureMarker extends TileEntity implements ITickable {
 
 	@Override
 	public void update() {
-		if(this.type > 3)
+		if(this.type > 4)
 			type = 0;
 
 		if(!world.isRemote)
 			PacketDispatcher.wrapper.sendToAllAround(new TEStructurePacket(pos.getX(), pos.getY(), pos.getZ(), type), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 80));
 	}
-	
+
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		type = compound.getInteger("type");
 		super.readFromNBT(compound);
 	}
-	
+
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setInteger("type", type);
 		return super.writeToNBT(compound);
 	}
-	
+
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
 		return INFINITE_EXTENT_AABB;
